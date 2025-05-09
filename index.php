@@ -25,18 +25,27 @@
 
 <?php
     //ajoute le fichier qui gère les requette SQL
-    require_once('src/php/controller/config.php');
-    require_once('src/php/controller/database.php');
+    require_once('src/php/Model/config.php');
+    require_once('src/php/Model/database.php');
  
     //inclue le contenu de la page
-    include("src/php/view/login.php");
+    include("src/php/View/LoginPage.php");
 
     //création de la session
     $database = Database::getInstance();//->createSession
 
     $_SESSION["admin"] = 0;
 
-?>
+    //création de la session
+    //$tests=Database::getInstance()->GetAllCommunes(); 
 
+    var_dump($tests);
+
+?>
+<html>
+    <body>
+        
+
+    </body>
 
 </html>
