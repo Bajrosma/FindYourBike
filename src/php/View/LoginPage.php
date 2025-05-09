@@ -1,3 +1,14 @@
+<?php
+ //commence le système de session
+ session_start();
+
+ /**
+ * Auteur : Bajro Osmanovic
+ * Date : 09.95.2025 → Modif : 
+ * Description : page d'index/login
+ */
+?>
+
 <div class="login-container">
     <h2>Page de connexion</h2>
     <form action="src/php/controller/checkLogin.php" method="post">
@@ -14,8 +25,7 @@
         ?>
         <button type="submit" value="Login">Se connecter</button>
     </form>
-    <a href="#">
+    <a href="src/php/View/FormulaireInsciptionPage.php">
         <button type="submit" value="Login">S’inscrire...?</button>
-    </a>
-    
+    </a>  
 </div>

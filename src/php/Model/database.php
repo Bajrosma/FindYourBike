@@ -1,4 +1,9 @@
 <?php
+/**
+ * Auteur : Bajro Osmanovic
+ * Date : 09.95.2025 → Modif : 
+ * Description : page contenant toute la logique derrière concernant les interactions direct avec la Base de données
+ */
     class Database
     {  
  

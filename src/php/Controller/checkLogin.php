@@ -53,8 +53,6 @@
                             {
                                 $_SESSION["rights"] = 0;
                             }
-                            // vas sur la page d'acceuil
-                            header("Location:../View/Accueil.php");
                             $validConnection = true;
                             $_SESSION["MessageErrorLogin"] = "";
                             break;
@@ -79,5 +77,16 @@
     }
     if($validConnection)
     {
-        header("Location:../View/Accueil.php");
+        switch ($_SESSION["rights"])
+        {
+            case 0 :
+            // vas sur la page d'acceuil
+            header("Location:../View/AccueilCommune.php");
+            case 1 :
+            // vas sur la page d'acceuil
+            header("Location:../View/AccueilCommune.php");
+            case 2 :
+                // vas sur la page d'acceuil
+            header("Location:../View/AccueilAdmin.php");
+        }
     }
