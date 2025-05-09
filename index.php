@@ -34,12 +34,10 @@
     //création de la session
     $database = Database::getInstance();//->createSession
 
-    $_SESSION["admin"] = 0;
+    $_SESSION["rights"] = 0;
 
     //création de la session
-    //$tests=Database::getInstance()->GetAllCommunes(); 
-
-    var_dump($tests);
+    $tests=Database::getInstance()->Getusers(); 
 
 ?>
 <html>

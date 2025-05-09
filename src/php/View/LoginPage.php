@@ -1,9 +1,21 @@
-  <div class="login-container">
+<div class="login-container">
     <h2>Page de connexion</h2>
-    <form action="../controller/checkLogin.php" method="post">
-      <input type="username" placeholder="Nom d'utilisateur" required><br>
-      <input type="password" placeholder="Mot de passe" required><br>
-      <input type="submit" value="Login">
-      <a href="#">S’inscrire...?</a>
+    <form action="src/php/controller/checkLogin.php" method="post">
+        <input type="hidden" name="action" value="login">    
+        <p>Nom d'utilisateur</p>
+        <input name="username" type="username" required><br>
+        <p>Mot de passe</p>
+        <input name="password" type="password" required><br>
+        <?php 
+        if(isset($_SESSION["MessageErrorLogin"]))
+        {
+            echo $_SESSION["MessageErrorLogin"];
+        }
+        ?>
+        <button type="submit" value="Login">Se connecter</button>
     </form>
-  </div>
+    <a href="#">
+        <button type="submit" value="Login">S’inscrire...?</button>
+    </a>
+    
+</div>

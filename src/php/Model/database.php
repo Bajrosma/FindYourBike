@@ -115,5 +115,21 @@
    
             return $prepareTabTemp;
         }
+
+        /**
+         * test
+         * @return -- renvoie un tableau avec tous les bâtiments
+         */
+        public function CreateAccount($User, $password)
+        {
+            $query = "INSERT INTO t_user (useName, usePassword) VALUES (:username, :passwords)";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'username' => ['value' => $User, 'type' => PDO::PARAM_STR],
+            'passwords' => ['value' => $password, 'type' => PDO::PARAM_STR]
+            ];    
+            // Exécution sécurisée de la requête préparée
+            $this->queryPrepareExecute($query, $binds);
+        }
 }
 ?>
