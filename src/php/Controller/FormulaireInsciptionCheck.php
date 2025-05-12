@@ -8,8 +8,8 @@ session_start();
  */
 
 // Inclusion des fichiers de configuration et de gestion de la base de données
-require_once('../../../controller/config.php');
-require_once('../../../controller/database.php');
+require_once('../Model/config.php');
+require_once('../Model/database.php');
 
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
@@ -87,12 +87,16 @@ if (!isset($_GET["Update"])) {
     // Si tous les champs sont valides
     if ($isValid) {
         // Appelle la méthode pour ajouter un bâtiment dans la base de données
-        $db->AddBuilding(
-            $_POST["buiAdress"],
-            $_POST["buiCity"],
-            $_POST["buiNPA"],
-            $_POST["buiECA"],
-            $_POST["buiParcelle"]
+        $db->InscriptionAdd(
+            $_POST["comName"],
+            $_POST["comAdress"],
+            $_POST["comCity"],
+            $_POST["comNPA"],
+            $_POST["comEmail"],
+            $_POST["comTel"],
+            $_POST["comLastName"],
+            $_POST["comFisrtName"],
+            $_POST["comFonction"]
         );
         // Message de confirmation d'ajout
         $_SESSION["MessageAdd"] = "Bâtiment ajouté avec succès !";
@@ -106,13 +110,13 @@ if (!isset($_GET["Update"])) {
     }
 
     // Redirection vers la page d'ajout de bâtiment avec le message approprié
-    header("Location: ../AddBuilding.php");
+    header("Location: ../View/FormulaireInsciptionPage.php");
     exit;
 } else {
     // Si le paramètre "Update" est présent, cela signifie qu'aucune donnée n'a été reçue
     $_SESSION["ErrorMessage"] = "Aucune donnée reçue !";
     $_SESSION["MessageAdd"] = "";
     // Redirige l'utilisateur vers la page d'ajout de bâtiment
-    header("Location: ../AddBuilding.php");
+    header("Location: ../View/FormulaireInsciptionPage.php");
     exit;
 }

@@ -122,7 +122,7 @@
         }
 
         /**
-         * test
+         * recherche une commune
          * @return -- renvoie un tableau avec tous les bâtiments
          */
         public function CreateAccount($User, $password)
@@ -134,6 +134,83 @@
             'passwords' => ['value' => $password, 'type' => PDO::PARAM_STR]
             ];    
             // Exécution sécurisée de la requête préparée
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
+         * Fonction qui recherche une commune à l'aide de son nom
+         * @return -- renvoie l'ID de la commue rechercher
+         */
+        public function GetCommune($name)
+        {
+            $query = "SELECT ID_commune FROM t_communes WHERE comName=:nomCommune";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'nomCommune' => ['value' => $name, 'type' => PDO::PARAM_STR]
+            ];    
+            // Exécution sécurisée de la requête préparée
+            $prepareTemp =$this->queryPrepareExecute($query, $binds);
+            // en fait un tableau lisible
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui permet de sauver une inscription
+         */
+        public function InscriptionAdd($name,$adress,$city,$npa,$email,$tel,$lastname,$firstname,$fonction)
+        {
+            // ajout de la commune souhaitons s'inscrire
+            $this->AddCommune($name,$adress,$city,$npa,$email,$tel);
+            // rechercher l'ID de la nouvelle commune pour inscrire la personnes
+            $communeID = $this->GetCommune($name);
+            // ajout de la personne responsable
+            $this->AddPersonne($adress,$city,$npa,$email,$tel,$lastname,$firstname,$fonction,$communeID[0]["ID_commune"]);
+        }
+
+        /**
+         * Fonction qui permet de sauver des informations de la commune
+         */
+        public function AddCommune($name,$adress,$city,$npa,$email,$tel)
+        {
+            // première requête 
+            $query = "INSERT INTO t_communes (comName, comAdress, comNPA, comCity, comEmail, comTel) VALUES 
+            (:communeName, :communeAdress, :communeNPA, :CommuneLocalite, :communeEmail, :communeTel)";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'communeName' => ['value' => $name, 'type' => PDO::PARAM_STR],
+            'communeAdress' => ['value' => $adress, 'type' => PDO::PARAM_STR],
+            'communeNPA' => ['value' => $npa, 'type' => PDO::PARAM_STR],
+            'CommuneLocalite' => ['value' => $city, 'type' => PDO::PARAM_STR],
+            'communeEmail' => ['value' => $email, 'type' => PDO::PARAM_STR],
+            'communeTel' => ['value' => $tel, 'type' => PDO::PARAM_STR]
+            ];    
+            // Exécution sécurisée de la première requête préparée
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
+         * Fonction qui permet de sauver des informations de la personne
+         */
+        public function AddPersonne($adress,$city,$npa,$email,$tel,$lastname,$firstname,$fonction,$communeID)
+        {
+            // deuxième requête 
+            $query = "INSERT INTO t_personnes (perFirstName,perLastName,perEmail,perTel,perAdress,perCity,perNPA,perRole,FK_commune) VALUES 
+            (:firstName, :lastName, :email, :tel, :adress, :city, :npa, :roles, :commune)";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'firstName' => ['value' => $firstname, 'type' => PDO::PARAM_STR],
+            'lastName' => ['value' => $lastname, 'type' => PDO::PARAM_STR],
+            'email' => ['value' => $email, 'type' => PDO::PARAM_STR],
+            'tel' => ['value' => $tel, 'type' => PDO::PARAM_STR],
+            'city' => ['value' => $city, 'type' => PDO::PARAM_STR],
+            'adress' => ['value' => $adress, 'type' => PDO::PARAM_STR],
+            'npa' => ['value' => $npa, 'type' => PDO::PARAM_STR],
+            'roles' => ['value' => $fonction, 'type' => PDO::PARAM_STR],
+            'commune' => ['value' => $communeID, 'type' => PDO::PARAM_STR]
+            ];    
+            // Exécution sécurisée de la première requête préparée
             $this->queryPrepareExecute($query, $binds);
         }
 }

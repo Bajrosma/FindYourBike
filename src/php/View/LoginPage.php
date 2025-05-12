@@ -23,9 +23,10 @@
             echo $_SESSION["MessageErrorLogin"];
         }
         ?>
-        <button type="submit" value="Login">Se connecter</button>
+        <button type="submit" value="Login" class="btn">Se connecter</button>
+        <a href="src/php/View/FormulaireInsciptionPage.php">
+            <div class="btn">S’inscrire...?</div>
+        </a>  
     </form>
-    <a href="src/php/View/FormulaireInsciptionPage.php">
-        <button type="submit" value="Login">S’inscrire...?</button>
-    </a>  
+
 </div>

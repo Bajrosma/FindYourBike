@@ -7,6 +7,15 @@
  * Date : 09.95.2025 → Modif : 
  * Description : page du formulaire  d'inscription
  */
+// Inclusion des fichiers de configuration et de gestion de la base de données
+require_once('../Model/config.php');
+require_once('../Model/database.php');
+// Création d'une instance de la classe Database pour l'accès à la base de données
+$db = Database::getInstance();
+
+ $test = $db->GetCommune("Commune d'Aigle");
+
+ var_dump($test);
 ?>
 
 <html lang="fr">
@@ -30,28 +39,37 @@
 
   <div class="container">
     <h1>Page d'accueil</h1>
-    <form action="FormulaireInsciptionCheck.php">
-        <div class="grid">
-            <p>Nom de la comune</p>
-            <input name="comName" type="Commune">
-            <p>Adresse</p>
-            <input name="comAdress" type="username" required>
-            <p>Localité</p>
-            <input name="comCity" type="City" required>
-            <p>NPA</p>
-            <input name="comNPA" type="NPA" required>   
-            <p>Email</p>
-            <input name="comEmail" type="Email" required>  
-            <p>Tel</p>
-            <input name="comTel" type="comTel" required>  
-            <p>Nom du responsable</p>
-            <input name="comLastName" type="LastName" required>  
-            <p>Prénom du responsable</p>
-            <input name="comFisrtName" type="FisrtName" required>
-            <p>Fonction</p>
-            <input name="comFonction" type="Fonction" required> 
+    <form action="../Controller/FormulaireInsciptionCheck.php" method="post">
+    <?php 
+        $Champs = [
+            'comName' => 'Commune',
+            'comAdress' => 'Adresse',
+            'comCity' => 'Localité',
+            'comNPA' => 'NPA',
+            'comEmail' => 'Email',
+            'comTel' => 'Tel',
+            'comLastName' => 'Nom du responsable',
+            'comFisrtName' => 'Prénom du responsable',
+            'comFonction' => 'Fonction',
+        ];
+
+        foreach ($Champs as $Champ => $label) {
+            $errorMessage = isset($_SESSION["ErrorMessage" . ucfirst($Champ)]) ? $_SESSION["ErrorMessage" . ucfirst($field)] : '';
+            $value = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
+            echo "
+            <div class='form-group row mb-3'>
+                <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>
+                <div class='col-sm-8'>
+                    <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
+                    <small class='text-danger'>$errorMessage</small>
+                </div>
+            </div>";
+        }
+    ?>
+    <div class="text-center">
+        <button type="submit" class="btn">Soumettre le formulaire</button>
     </div>
-    <button type="submit" value="Login">Soumettre le formulaire</button>
 </form>
+
 </body>
 </html>
