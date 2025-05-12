@@ -1,11 +1,13 @@
-body{
+body
+{
 	margin: 0;
-    font-family: Arial, sans-serif;
+	font-family: Arial, sans-serif;
 	background-image: url("../../userContent/img/background-image.jpg");
 	background-size: cover;
 }
-
-.login-container {
+/* page de login */
+.login-container 
+{
 	background-color: #D5E8D4;
 	width: 800px;
 	margin: 60px auto;
@@ -15,45 +17,53 @@ body{
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 	border-style: solid 1px;
 	border: #82B366;
-  }
+}
 
-  .login-container h2 {
+.login-container h2 
+{
 	margin-bottom: 20px;
-  }
+}
 
-  .login-container input {
+.login-container input 
+{
 	width: 90%;
 	padding: 10px;
 	margin-bottom: 15px;
 	border: 2px solid #CBDECA;
 	border-radius: 5px;
 	outline: none;
-  }
+}
 
-  .login-container input[type="submit"] {
+.login-container input[type="submit"] 
+{
 	padding: 10px 20px;
 	background-color: #c8d6af;
 	border: 1px solid #82B366;
 	cursor: pointer;
 	border-radius: 5px;
-  }
+}
 
-  .login-container p
-  {
+.login-container p
+{
 	text-align: left;
 	padding-left: 20px
-  }
+}
 
-  .login-container a {
+.login-container a 
+{
 	display: block;
 	margin-top: 15px;
-  }
+}
 
-  .login-container a:hover {
+.login-container a:hover 
+{
 	text-decoration: underline;
-  }
+}
 
-  .container {
+/* page d'acceuil' */
+
+.container 
+{
 	width: 800px;
 	margin: 60px auto;
 	background-color: #d6eadf;
@@ -61,21 +71,24 @@ body{
 	border-radius: 12px;
 	text-align: center;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  }
+}
 
-  h1 {
+h1 
+{
 	font-size: 32px;
 	margin-bottom: 40px;
-  }
+}
 
-  .grid {
+.grid 
+{
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 30px;
 	margin-bottom: 40px;
-  }
+}
 
-  .btn {
+.btn 
+{
 	padding: 30px;
 	background-color: #cdeac0;
 	border: 2px solid #a0c49d;
@@ -83,13 +96,15 @@ body{
 	cursor: pointer;
 	font-size: 20px;
 	transition: background-color 0.3s ease;
-  }
+}
 
-  .btn:hover {
+.btn:hover 
+{
 	background-color: #b8dfb0;
-  }
+}
 
-  .logout {
+.logout 
+{
 	display: inline-block;
 	margin-top: 20px;
 	padding: 15px 30px;
@@ -99,8 +114,45 @@ body{
 	font-size: 18px;
 	border-radius: 8px;
 	transition: background-color 0.3s ease;
-  }
+}
 
-  .logout:hover {
+.logout:hover 
+{
 	background-color: #e74c3c;
-  }
+}
+
+/* page de liste */
+.table-container 
+{
+	background-color: #d8f1e1; /* Vert clair */
+	margin: 50px auto;
+	padding: 20px;
+	width: 80%;
+	border: 1px solid green;
+	border-radius: 12px;
+	text-align: center;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: transparent;
+}
+
+th, td 
+{
+	border: 1px solid green;
+	padding: 10px;
+	text-align: center;
+}
+
+th 
+{
+	background-color: #f0fff0;
+}

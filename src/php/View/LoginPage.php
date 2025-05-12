@@ -4,7 +4,7 @@
 
  /**
  * Auteur : Bajro Osmanovic
- * Date : 09.95.2025 → Modif : 
+ * Date : 09.05.2025 → Modif : 
  * Description : page d'index/login
  */
 ?>

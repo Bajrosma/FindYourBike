@@ -45,11 +45,15 @@
                         // contrôle si c'est le même mot de passe
                         if(password_verify($password,$user["usePassword"]))
                         {
-                            if($user["usePrivilage"] == 1)
+                            if($user["usePrivilage"] == 2)
                             {
-                                $_SESSION["rights"] = 1;
+                                $_SESSION["rights"] = $user["usePrivilage"];
                             }
-                            else
+                            else if ($user["usePrivilage"] == $user["usePrivilage"])
+                            {
+                                $_SESSION["rights"] = $user["usePrivilage"];
+                            }
+                            else 
                             {
                                 $_SESSION["rights"] = 0;
                             }
@@ -77,16 +81,14 @@
     }
     if($validConnection)
     {
-        switch ($_SESSION["rights"])
+        if($_SESSION["rights"] == 2)
         {
-            case 0 :
             // vas sur la page d'acceuil
-            header("Location:../View/AccueilCommune.php");
-            case 1 :
+            header("Location:../View/Accueil/AccueilAdmin.php");
+        }
+        else 
+        {
             // vas sur la page d'acceuil
-            header("Location:../View/AccueilCommune.php");
-            case 2 :
-                // vas sur la page d'acceuil
-            header("Location:../View/AccueilAdmin.php");
+            header("Location:../View/Accueil/AccueilCommune.php");
         }
     }

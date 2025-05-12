@@ -4,7 +4,7 @@
 
  /**
  * Auteur : Bajro Osmanovic
- * Date : 09.95.2025 → Modif : 
+ * Date : 09.95.2025 → Modif : 12.05.2025
  * Description : page du formulaire  d'inscription
  */
 // Inclusion des fichiers de configuration et de gestion de la base de données
@@ -21,25 +21,22 @@ $db = Database::getInstance();
 <html lang="fr">
     <head>
         <meta charset="utf-8" />
-        <!--liens avec le css de bootstrap-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--liens avec le css et css de bootstrap-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
         <link rel="stylesheet" href="../../../ressources/css/codepen.css">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Inclure Bootstrap JS et jQuery -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>FindYourBike</title>
-       
-        <!--Change l'icone de la page (celle a côté du titre)-->
-        <link rel="icon" href="userContent/img/Logo2.png" type="image/x-icon">
     </head>
 <body>
 
   <div class="container">
     <h1>Page d'accueil</h1>
-    <form action="../Controller/FormulaireInsciptionCheck.php" method="post">
+    <form action="../../Controller/FormulaireInsciptionCheck.php" method="post">
     <?php 
         $Champs = [
             'comName' => 'Commune',

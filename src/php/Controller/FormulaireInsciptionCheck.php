@@ -3,7 +3,7 @@ session_start();
 
 /**
  * Auteur : Bajro Osmanovic
- * Date : 09.95.2025 → Modif : 
+ * Date : 09.05.2025 → Modif : 12.05.2025
  * Description : Vérification et enregistrer le formulaire d'inscirption
  */
 

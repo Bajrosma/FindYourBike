@@ -1,7 +1,7 @@
 <?php
 /**
  * Auteur : Bajro Osmanovic
- * Date : 09.95.2025 → Modif : 
+ * Date : 09.05.2025 → Modif : 12.05.2025
  * Description : page contenant toute la logique derrière concernant les interactions direct avec la Base de données
  */
     class Database
@@ -113,7 +113,7 @@
          */
         public function Getusers()
         {
-            $query = "SELECT useName, usePassword FROM t_user ";
+            $query = "SELECT useName, usePassword, usePrivilage FROM t_user ";
    
             $prepareTemp = $this->querySimpleExecute($query);
             $prepareTabTemp = $this->formatData($prepareTemp);
@@ -139,7 +139,7 @@
 
         /**
          * Fonction qui recherche une commune à l'aide de son nom
-         * @return -- renvoie l'ID de la commue rechercher
+         * @return -- renvoie l'ID de la commune rechercher
          */
         public function GetCommune($name)
         {
@@ -151,6 +151,53 @@
             // Exécution sécurisée de la requête préparée
             $prepareTemp =$this->queryPrepareExecute($query, $binds);
             // en fait un tableau lisible
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+        /**
+         * Fonction qui recherche les commune 
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetAllCommunes()
+        {
+            // requête pour récuperer les communes
+            $query = "SELECT 1	ID_commune, comName, comAdress, comNPA, comCity, comEmail, comTel, comInscription FROM t_communes ";
+            // execute la commune
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche les personnes
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetAllUsers()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT ID_personne, perFirstName,perLastName,perEmail,perTel,perAdress,perCity,perNPA,perRole, ID_commune, comInscription FROM t_personnes JOIN t_communes ON FK_commune=ID_commune ";
+            // execute la commande
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche le responsable de l'inscription  
+         * @return -- renvoie les informations trouvé
+         */
+        public function GetResponsable()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT perFirstName, perLastName ,perRole, FK_Commune FROM t_personnes p INNER JOIN (SELECT MIN(ID_personne) AS min_id FROM t_personnes GROUP BY FK_commune) AS first_per_commune ON p.ID_personne = first_per_commune.min_id";
+            // execute la commune
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
             $prepareTabTemp = $this->formatData($prepareTemp);
             // retourne le tableau
             return $prepareTabTemp;

@@ -4,9 +4,11 @@
 
  /**
  * Auteur : Bajro Osmanovic
- * Date : 09.95.2025 → Modif : 
- * Description : page d'accueil en tant que membre de la commune
+ * Date : 09.05.2025 → Modif : 12.05.2025
+ * Description : page d'accueil en tant qu'Admin
  */
+
+ echo $_SESSION["rights"];
 ?>
 
 <html lang="fr">
@@ -14,7 +16,7 @@
         <meta charset="utf-8" />
         <!--liens avec le css de bootstrap-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
-        <link rel="stylesheet" href="../../../ressources/css/codepen.css">
+        <link rel="stylesheet" href="../../../../ressources/css/codepen.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Inclure Bootstrap JS et jQuery -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -31,12 +33,11 @@
   <div class="container">
     <h1>Page d'accueil</h1>
     <div class="grid">
-      <div class="btn">Liste des vélos</div>
-      <div class="btn">Ajouter un vélo retrouvé</div>
-      <div class="btn">Statistiques</div>
-      <div class="btn">Liste des communes / informations</div>
+      <a class="btn" href="../Listes/ListeCommunePage.php"><div>Liste des communes membres</div></a>
+      <a class="btn" href="../Listes/ListePersonnesPage.php"><div>Listes des personnes</div></a>
+      <a class="btn" href="../Listes/ListeInscriptionsPage.php"><div>Listes des formulaires d'inscription</div></a>
     </div>
-    <a href="../Controller/logout.php" class="logout">Déconnexion</a>
+    <a href="../../Controller/logout.php" class="logout">Déconnexion</a>
   </div>
 
 </body>
