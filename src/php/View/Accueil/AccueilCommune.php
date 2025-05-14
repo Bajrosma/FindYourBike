@@ -33,8 +33,8 @@ echo $_SESSION["rights"];
   <div class="container">
     <h1>Page d'accueil</h1>
     <div class="grid">
-      <a class="btn" href="../Listes/ListeBike.php"><div>Liste des vélos</div></a>
-      <div class="btn">Ajouter un vélo retrouvé</div>
+      <a class="btn" href="../Listes/ListeBike.php">Liste des vélos</a>
+      <a class="btn" href="../Formulaires/FormulaireBikePage.php">Ajouter un vélo retrouvé</a>
       <div class="btn">Statistiques</div>
       <div class="btn">Liste des communes / informations</div>
     </div>

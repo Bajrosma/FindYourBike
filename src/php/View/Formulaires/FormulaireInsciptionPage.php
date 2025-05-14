@@ -8,8 +8,8 @@
  * Description : page du formulaire  d'inscription
  */
 // Inclusion des fichiers de configuration et de gestion de la base de données
-require_once('../Model/config.php');
-require_once('../Model/database.php');
+require_once('../../Model/config.php');
+require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 
@@ -24,7 +24,7 @@ $db = Database::getInstance();
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--liens avec le css et css de bootstrap-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
-        <link rel="stylesheet" href="../../../ressources/css/codepen.css">
+        <link rel="stylesheet" href="../../../../ressources/css/codepen.css">
         <!-- Inclure Bootstrap JS et jQuery -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -36,7 +36,7 @@ $db = Database::getInstance();
 
   <div class="container">
     <h1>Page d'accueil</h1>
-    <form action="../../Controller/FormulaireInsciptionCheck.php" method="post">
+    <form action="../../Controller/ChecksFormulaires/FormulaireInsciptionCheck.php" method="post">
     <?php 
         $Champs = [
             'comName' => 'Commune',

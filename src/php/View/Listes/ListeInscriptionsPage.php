@@ -55,40 +55,21 @@ var_dump($Responsables);
                     foreach ($communes as $commune) {
                         if ($commune['comInscription'] == 0) 
                         {
-                            echo '<tr>';
-                    
                             // Nom de la commune
-                            echo '<td>' . $commune["comName"] . '</td>';
-                    
+                            echo '<tr><td>' . $commune["comName"] . '</td>';                    
                             // Adresse complète
-                            echo "<td>" . $commune["comAdress"] . ", " .  $commune["comCity"] . " " .  $commune["comNPA"]. "</td>";
-                    
+                            echo "<td>" . $commune["comAdress"] . ", " .  $commune["comCity"] . " " .  $commune["comNPA"]. "</td>";                    
                             // Email
                             echo "<td>" . $commune["comEmail"] . "</td>";
                     
                             // Téléphone
                             echo "<td>" . $commune["comTel"] . "</td>";
                     
-                            // Affiche une personne liée à la commune
-                            $personFound = false;
-                            foreach ($Responsables as $person) 
-                            {
-                                if ($commune["ID_commune"] == $person["FK_Commune"]) 
-                                {
-                                    echo "<td>" . $person["perFirstName"] . " " . 
-                                                 $person["perLastName"] . "</td>";
-                                    $personFound = true;
-                                }
-                            }
-                            if (!$personFound) 
-                            {
-                                echo "<td><em>Aucun responsable</em></td>";
-                            }
-                    
-                            // Liens modifier/supprimer
+                            echo "<td><em>Aucun responsable</em></td>";
+                            // options pour accepter ou refuser l'inscription
                             echo '<td>
-                                    <a class="LinksOptions" href="">Modifier</a><br>
-                                    <a class="LinksOptionsDel" href="" onclick="return deleteCheck();" style="color: #3D2C23;">Supprimer</a>
+                                    <a class="LinksOptions" href="../../Controller/AcceptInscription.php?ID=' . $commune["ID_commune"] . '">Accepter</a><br>
+                                    <a class="LinksOptionsDel" href="../../Controller/RefuseInscription.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();">Refuser</a>
                                   </td></tr>';
                         }
                     }

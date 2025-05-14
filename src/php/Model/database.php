@@ -162,7 +162,23 @@
         public function GetAllCommunes()
         {
             // requête pour récuperer les communes
-            $query = "SELECT 1	ID_commune, comName, comAdress, comNPA, comCity, comEmail, comTel, comInscription FROM t_communes ";
+            $query = "SELECT ID_commune, comName, comAdress, comNPA, comCity, comEmail, comTel, comInscription FROM t_communes ";
+            // execute la commune
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche les communes pour l'affichage d'une liste deroulante 
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetAllCommunesDropDown()
+        {
+            // requête pour récuperer les communes
+            $query = "SELECT 1	ID_commune, comName, comInscription FROM t_communes ";
             // execute la commune
             $prepareTemp = $this->querySimpleExecute($query);
             // transforme les données en tableau
@@ -188,6 +204,22 @@
         }
 
         /**
+         * Fonction qui recherche les personnes
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetAllBikes()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT ID_bike, bikDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune";
+            // execute la commande
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
          * Fonction qui recherche le responsable de l'inscription  
          * @return -- renvoie les informations trouvé
          */
@@ -195,6 +227,54 @@
         { 
             // requête pour récuperer les communes
             $query = "SELECT perFirstName, perLastName ,perRole, FK_Commune FROM t_personnes p INNER JOIN (SELECT MIN(ID_personne) AS min_id FROM t_personnes GROUP BY FK_commune) AS first_per_commune ON p.ID_personne = first_per_commune.min_id";
+            // execute la commune
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche les couleurs
+         * @return -- renvoie les couleurs trouvé
+         */
+        public function GetAllColors()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT ID_color, colName FROM t_color";
+            // execute la commune
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche les marques
+         * @return -- renvoie les marques trouvé
+         */
+        public function GetAllBrands()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT ID_brand, braName FROM t_brand";
+            // execute la commune
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche les couleurs
+         * @return -- renvoie les couleurs trouvé
+         */
+        public function GetAllSizes()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT ID_size, sizSize FROM t_size";
             // execute la commune
             $prepareTemp = $this->querySimpleExecute($query);
             // transforme les données en tableau
@@ -257,7 +337,59 @@
             'roles' => ['value' => $fonction, 'type' => PDO::PARAM_STR],
             'commune' => ['value' => $communeID, 'type' => PDO::PARAM_STR]
             ];    
-            // Exécution sécurisée de la première requête préparée
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
+         * Fonction qui permet de sauver les informations d'un nouveau vélo
+         */
+        public function AddBike($date, $place, $frameNumber, $color, $brand, $size, $commune)
+        {
+            // deuxième requête 
+            $query = "INSERT INTO t_bikes (bikDate, bikPlace, bikFrameNumber, FK_brand, FK_size, FK_color, FK_commune, FK_personne) VALUES 
+            (:FoundDate, :Place, :FrameNumber, :Brand, :Size, :Color, :Commune, NULL)";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'FoundDate' => ['value' => $date, 'type' => PDO::PARAM_STR],
+            'Place' => ['value' => $place, 'type' => PDO::PARAM_STR],
+            'FrameNumber' => ['value' => $frameNumber, 'type' => PDO::PARAM_STR],
+            'Brand' => ['value' => $brand, 'type' => PDO::PARAM_INT],
+            'Size' => ['value' => $size, 'type' => PDO::PARAM_INT],
+            'Color' => ['value' => $color, 'type' => PDO::PARAM_INT],
+            'Commune' => ['value' => $commune, 'type' => PDO::PARAM_INT]
+            ];    
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
+         * Fonction qui valide l'inscription de la commune 
+         */
+        public function AcceptInscription($id)
+        {
+            // requête pour récuperer les communes
+            $query = "UPDATE t_communes SET comInscription = 1 WHERE t_communes.ID_commune = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
+            ];
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
+         * Fonction qui supprime l'inscription de la commune 
+         */
+        public function RefuseInscription($id)
+        {
+            // requête pour récuperer les communes
+            $query = "DELETE FROM t_communes WHERE t_communes.ID_commune = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
+            ];
+            // Exécution sécurisée de la requête
             $this->queryPrepareExecute($query, $binds);
         }
 }

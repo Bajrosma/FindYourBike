@@ -66,14 +66,14 @@
                     {
                     // message d'erreur
                         $_SESSION["MessageErrorLogin"] = "faute de mot de passe";
-                        header("Location:../../../index.php");
+                        header("Location:../../../../index.php");
                     }
                     }
                     // si les conditions ne sont pas remplis, retourne en arrière
                     else
                     {
                         $_SESSION["MessageErrorLogin"] = "utilisateur n'as pas été trouvé";
-                        header("Location:../../../index.php");
+                        header("Location:../../../../index.php");
                     } 
                 }       
             }
