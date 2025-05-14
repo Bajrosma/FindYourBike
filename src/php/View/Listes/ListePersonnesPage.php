@@ -14,6 +14,8 @@ require_once('../../Model/database.php');
 $db = Database::getInstance();
 // récupèrer toute les communes 
 $poeple = $db->GetAllUsers();
+// reinitialise le message après une action 
+$_SESSION["MessageAdd"] = "";
 ?>
 
 <html lang="fr">

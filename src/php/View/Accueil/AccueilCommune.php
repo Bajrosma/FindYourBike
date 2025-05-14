@@ -9,6 +9,7 @@
  */
 
 echo $_SESSION["rights"];
+$_SESSION["MessageAdd"] = "";
 ?>
 
 <html lang="fr">

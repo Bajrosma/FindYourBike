@@ -13,7 +13,11 @@ require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 // récupère les informations du vélo sélectionner 
+$bike =  $db->GetOneBike($_GET["ID"]);
 
+foreach ($bike as $key => $value) {
+    $_SESSION[$key] = $value;
+}
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
 $brands = $db->GetAllBrands();
@@ -52,7 +56,7 @@ $communes = $db->GetAllCommunesDropDown();
             // récolte les informations sur d'éventuelle message d'erreurs
             $errorMessage = isset($_SESSION["ErrorMessage" . ucfirst($Champ)]) ? $_SESSION["ErrorMessage" . ucfirst($field)] : '';
             // vérifie si une entrée a été sauvée dans la session, si oui le champ reprend le même texte et si non, il laisse vide
-            $value = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
+            $sessivalue = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
             echo "
             <div class='form-group row mb-3'>
                 <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>

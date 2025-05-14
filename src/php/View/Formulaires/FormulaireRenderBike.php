@@ -13,7 +13,7 @@ require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 // récupère les informations du vélo sélectionner 
-
+$bike =  $db->GetOneBike($_GET["ID"]);
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
 $brands = $db->GetAllBrands();
@@ -35,110 +35,53 @@ $communes = $db->GetAllCommunesDropDown();
        
         <title>FindYourBike</title>
     </head>
-<body>
+    <body>
+        <div class="container">
+            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+            <h1>Restitution d'un vélo trouvé</h1>
+            <form action="../../Controller/ChecksFormulaires/FormulaireBikeCheck.php" method="post">
+                <?php 
+                    $Champs = [
+                        'perFirstName' => 'prénom du propriètaire',
+                        'perLastName' => 'Nom du propriètaire',
+                        'perAdress' => 'Adress du propriètaire',
+                        'perNPA' => 'NPA',
+                        'perCity' => 'Ville',
+                        'perEmail' => 'Adresse email du propriètaire',
+                        'perTel' => 'Téléphone du propriètaire'
 
-  <div class="container">
-    <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
-    <h1>Ajout d'un vélo trouvé</h1>
-    <form action="../../Controller/ChecksFormulaires/FormulaireBikeCheck.php" method="post">
-    <?php 
-        $Champs = [
-            'bikPlace' => 'lieu de découverte (adresse complète)',
-            'bikFrameNumber' => 'Numéro de série (cadre)'
-        ];
-        // parcours le tableau des champs de type text
-        foreach ($Champs as $Champ => $label) 
-        {
-            // récolte les informations sur d'éventuelle message d'erreurs
-            $errorMessage = isset($_SESSION["ErrorMessage" . ucfirst($Champ)]) ? $_SESSION["ErrorMessage" . ucfirst($field)] : '';
-            // vérifie si une entrée a été sauvée dans la session, si oui le champ reprend le même texte et si non, il laisse vide
-            $value = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
-            echo "
-            <div class='form-group row mb-3'>
-                <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>
-                <div class='col-sm-8'>
-                    <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
-                    <p class='text-danger'>$errorMessage</p> <!-- Affichage du message d'erreur si présent -->
+                    ];
+                    // parcours le tableau des champs de type text
+                    foreach ($Champs as $Champ => $label) 
+                    {
+                        // récolte les informations sur d'éventuelle message d'erreurs
+                        $errorMessage = isset($_SESSION["ErrorMessage" . ucfirst($Champ)]) ? $_SESSION["ErrorMessage" . ucfirst($field)] : '';
+                        // vérifie si une entrée a été sauvée dans la session, si oui le champ reprend le même texte et si non, il laisse vide
+                        $value = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
+                        echo "
+                        <div class='form-group row mb-3'>
+                            <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>
+                            <div class='col-sm-8'>
+                                <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
+                                <p class='text-danger'>$errorMessage</p> <!-- Affichage du message d'erreur si présent -->
+                            </div>
+                        </div>";
+                    }
+                ?>
+                <!-- Date de rendu -->
+                <div class='form-group row mb-3'>
+                    <label for="bikRestitutionDate" class='col-sm-4 col-form-label'>Date de rendu</label>
+                    <div class='col-sm-8'>
+                        <input class='form-control' type="date" id="bikRestitutionDate" name="bikRestitutionDate">
+                    </div>
                 </div>
-            </div>";
-        }
-    ?>
-    <!-- Date de découverte -->
-    <div class='form-group row mb-3'>
-        <label for="bikDate" class='col-sm-4 col-form-label'>Date de découverte</label>
-        <div class='col-sm-8'>
-            <input class='form-control' type="date" id="bikDate" name="bikDate">
+                <?php 
+                    echo  $_SESSION["MessageAdd"];
+                ?>
+                <div class="text-center">
+                    <button type="submit" class="btn">Soumettre le formulaire</button>
+                </div>
+            </form>
         </div>
-    </div>
-    <!-- Liste des couleurs de vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_color" class='col-sm-4 col-form-label'>Couleur du vélo</label>
-        <div class='col-sm-8'>
-        <select class='form-control' name="FK_color" id="FK_color">
-            <?php 
-                // parcours le tableau des couleurs
-                foreach($colors as $color )
-                {
-                    echo '<option value="'. $color["ID_color"] .'">'. $color["colName"] .'</option>"';
-                }
-            ?>
-        </select>
-        </div>
-    </div>
-    <!-- Liste des marques de vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_brand" class='col-sm-4 col-form-label'>Marque du vélo</label>
-        <div class='col-sm-8'>
-        <select class='form-control' name="FK_brand" id="FK_brand">
-            <?php 
-                // parcours le tableau des marques 
-                foreach($brands as $brand )
-                {
-                    echo '<option value="'. $brand["ID_brand"] .'">'. $brand["braName"] .'</option>"';
-                }
-            ?>
-        </select>
-        </div>
-    </div>
-    <!-- Liste des tailles de vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_size" class='col-sm-4 col-form-label'>Taille du vélo </label>
-        <div class='col-sm-8'>
-        <select class='form-control' name="FK_size" id="FK_size">
-            <?php 
-                // parcours le tableau des tailles         
-                foreach($sizes as $size )
-                {
-                    echo '<option value="'. $size["ID_size"] .'">'. $size["sizSize"] .'</option>"';
-                }
-            ?>
-        </select>
-        </div>
-    </div>
-    <!-- Liste des communes pouvant acceuilir le vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_commune" class='col-sm-4 col-form-label'>Commune</label>
-        <div class='col-sm-8'>
-        <select class='form-control' name="FK_commune" id="FK_commune">
-            <?php 
-                // parcours le tableau des communes 
-                foreach($communes as $commune )
-                {
-                    // si les communes ont une inscription valide, alors il crée un choix de plus pour la liste déroulante.
-                    if($commune["comInscription"] == 1)
-                    echo '<option value="'. $commune["ID_commune"] .'">'. $commune["comName"] .'</option>"';
-                }
-            ?>
-        </select>
-        </div>
-    </div>
-    <?php 
-        echo  $_SESSION["MessageAdd"];
-    ?>
-    <div class="text-center">
-        <button type="submit" class="btn">Soumettre le formulaire</button>
-    </div>
-</form>
-
-</body>
+    </body>
 </html>

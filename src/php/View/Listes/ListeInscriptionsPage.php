@@ -16,8 +16,8 @@ $db = Database::getInstance();
 $Responsables = $db->GetResponsable();
 // récupèrer toute les communes 
 $communes = $db->GetAllCommunes();
-
-var_dump($Responsables);
+// reinitialise le message après une action 
+$_SESSION["MessageAdd"] = "";
 ?>
 
 <html lang="fr">

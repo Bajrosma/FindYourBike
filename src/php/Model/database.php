@@ -156,6 +156,24 @@
             return $prepareTabTemp;
         }
         /**
+         * Fonction qui recherche une personne à l'aide de son prénom
+         * @return -- renvoie l'ID de la personne rechercher
+         */
+        public function GetPerson($firstname)
+        {
+            $query = "SELECT ID_personne FROM t_personnes WHERE perFirstName=:FirstName";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'FirstName' => ['value' => $firstname, 'type' => PDO::PARAM_STR]
+            ]; 
+            // Exécution sécurisée de la requête préparée
+            $prepareTemp =$this->queryPrepareExecute($query, $binds);
+            // en fait un tableau lisible
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+        /**
          * Fonction qui recherche les commune 
          * @return -- renvoie les informations des communes trouvé
          */
@@ -210,7 +228,7 @@
         public function GetAllBikes()
         { 
             // requête pour récuperer les communes
-            $query = "SELECT ID_bike, bikDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune";
+            $query = "SELECT ID_bike, bikDate, bikResitutionDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune";
             // execute la commande
             $prepareTemp = $this->querySimpleExecute($query);
             // transforme les données en tableau
@@ -379,6 +397,19 @@
         }
 
         /**
+         * Fonction qui valide l'inscription de la commune 
+         */
+        public function RestitutionUpdate($fistname, $lastname, $adress, $city, $npa, $email, $tel, $dateofrestitution)
+        {
+            // crée le nouvelle personne responsable du véloo
+            $this->creatNewPeople($firstname, $lastname, $adress, $city, $npa, $email, $tel);
+            // met à jour le vélo pour savoir qui est le propriètaire et ou il hanite
+            $this->GetLastPeople();
+            // met à jour le vélo pour savoir qui est le propriètaire et ou il hanite
+            $this->updateBikeDate($dateofrestitution);
+        }
+
+        /**
          * Fonction qui supprime l'inscription de la commune 
          */
         public function RefuseInscription($id)
@@ -391,6 +422,25 @@
             ];
             // Exécution sécurisée de la requête
             $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
+         * récupere les information d'un vélo pour le rendu
+         */
+        public function GetOneBike($id)
+        {
+            // requête pour récuperer les communes
+            $query = "SELECT ID_bike, bikDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune WHERE ID_commune = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
+            ];
+            // Exécution sécurisée de la requête
+            $prepareTemp = $this->queryPrepareExecute($query, $binds);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
         }
 }
 ?>

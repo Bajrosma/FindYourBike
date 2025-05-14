@@ -13,9 +13,8 @@ require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 
- $test = $db->GetCommune("Commune d'Aigle");
-
- var_dump($test);
+// reinitialise le message après une action 
+$_SESSION["MessageAdd"] = "";
 ?>
 
 <html lang="fr">

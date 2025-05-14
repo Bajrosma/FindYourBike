@@ -18,6 +18,8 @@ $bikes = $db->GetAllBikes();
 $sizes = $db->GetAllSizes();
 $brands = $db->GetAllBrands();
 $colors = $db->GetAllColors();
+// reinitialise le message après une action 
+$_SESSION["MessageAdd"] = "";
 ?>
 
 <html lang="fr">
@@ -100,23 +102,26 @@ $colors = $db->GetAllColors();
                     <?php
                         foreach($bikes as $bike)
                         {
-                            // Numéro de serie du cadre 
-                            echo '<tr><td>' . $bike["bikFrameNumber"] . '</td>';
-                            // Marque du vélo 
-                            echo '<td>' . $bike["braName"] . '</td>';
-                            // Taille du vélo 
-                            echo '<td>' . $bike["sizSize"] . '</td>';
-                            // Couleur du vélo 
-                            echo '<td>' . $bike["colName"] . '</td>';
-                            // lieu ou le vélo a été retrouvé
-                            echo '<td>' . $bike["bikPlace"] . '</td>';
-                            // date de la découverte du vélo 
-                            echo '<td>' . $bike["bikDate"] . '</td>';
-                            // Commune oû le vélo est stocker 
-                            echo '<td>' . $bike["comName"] . '</td>';
-                            // Affichage des options en fonctions de la sessions
-                            echo '<td><a class="LinksOptions" href="">Modifier</a><br>
-                            <a class="LinksOptionsDel" href="" onclick="return deleteCheck();">Supprimer</a>';
+                            if(!$bike["bikResitutionDate"] == NULL)
+                            {
+                                // Numéro de serie du cadre 
+                                echo '<tr><td>' . $bike["bikFrameNumber"] . '</td>';
+                                // Marque du vélo 
+                                echo '<td>' . $bike["braName"] . '</td>';
+                                // Taille du vélo 
+                                echo '<td>' . $bike["sizSize"] . '</td>';
+                                // Couleur du vélo 
+                                echo '<td>' . $bike["colName"] . '</td>';
+                                // lieu ou le vélo a été retrouvé
+                                echo '<td>' . $bike["bikPlace"] . '</td>';
+                                // date de la découverte du vélo 
+                                echo '<td>' . $bike["bikDate"] . '</td>';
+                                // Commune oû le vélo est stocker 
+                                echo '<td>' . $bike["comName"] . '</td>';
+                                // Affichage des options en fonctions de la sessions
+                                echo '<td><a class="LinksOptions" href="">Modifier</a><br>
+                                <a class="LinksOptionsDel" href="" onclick="return deleteCheck();">Supprimer</a>';
+                            }
                         }
                     ?>
                 </tbody>
