@@ -12,6 +12,8 @@ require_once('../../Model/config.php');
 require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
+// récupère les informations du vélo sélectionner 
+
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
 $brands = $db->GetAllBrands();

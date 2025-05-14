@@ -43,14 +43,12 @@ $fields = [
         // Vérification si le champ est vide
         if (empty($value)) {
             // Si le champ est vide, ajoute un message d'erreur dans la session
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] =
-                "<li>Veuillez ne pas laisser le champ " . ucfirst(str_replace("bui", "", $field)) . " vide !</li>";
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "<li>Veuillez ne pas laisser le champ " . ucfirst(str_replace("bui", "", $field)) . " vide !</li>";
             $isValid = false;
         // Vérification de la correspondance avec l'expression régulière
         } elseif (!preg_match($config['regex'], $value)) {
             // Si la validation échoue, ajoute un message d'erreur spécifique
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] =
-                "<li>{$config['error']}</li>";
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "<li>{$config['error']}</li>";
             $isValid = false;
         } else {
             // Si la validation est réussie, efface le message d'erreur

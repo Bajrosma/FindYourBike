@@ -33,9 +33,9 @@
   <div class="container">
     <h1>Page d'accueil</h1>
     <div class="grid">
-      <a class="btn" href="../Listes/ListeCommunePage.php"><div>Liste des communes membres</div></a>
-      <a class="btn" href="../Listes/ListePersonnesPage.php"><div>Listes des personnes</div></a>
-      <a class="btn" href="../Listes/ListeInscriptionsPage.php"><div>Listes des formulaires d'inscription</div></a>
+      <a class="btn" href="../Listes/ListeCommunePage.php">Liste des communes membres</a>
+      <a class="btn" href="../Listes/ListePersonnesPage.php">Listes des personnes</a>
+      <a class="btn" href="../Listes/ListeInscriptionsPage.php">Listes des formulaires d'inscription</a>
     </div>
     <a href="../../Controller/logout.php" class="logout">Déconnexion</a>
   </div>

@@ -35,8 +35,8 @@ echo $_SESSION["rights"];
     <div class="grid">
       <a class="btn" href="../Listes/ListeBike.php">Liste des vélos</a>
       <a class="btn" href="../Formulaires/FormulaireBikePage.php">Ajouter un vélo retrouvé</a>
-      <div class="btn">Statistiques</div>
-      <div class="btn">Liste des communes / informations</div>
+      <a class="btn">Statistiques</a>
+      <a class="btn" href="../Listes/ListeCommunePage.php">Liste des communes membres</a>
     </div>
     <a href="../../Controller/logout.php" class="logout">Déconnexion</a>
   </div>

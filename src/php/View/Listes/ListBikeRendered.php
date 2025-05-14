@@ -89,8 +89,9 @@ $colors = $db->GetAllColors();
                         <th>Taille</th>
                         <th>couleur</th>
                         <th>Adresse où il a été retrouvé</th>
-                        <th>Date découverte</th>
+                        <th>Date de rendu</th>
                         <th>Commune de référence</th>
+                        <th>Propriètaire</th>
                         <th>Options</th>
                     </tr>
                 </thead>
@@ -115,7 +116,6 @@ $colors = $db->GetAllColors();
                             echo '<td>' . $bike["comName"] . '</td>';
                             // Affichage des options en fonctions de la sessions
                             echo '<td><a class="LinksOptions" href="">Modifier</a><br>
-                            <a class="LinksOptions" href="../Formulaires/FormulaireRenderBike.php?ID=' . $bike["ID_bike"] . '">rendre</a><br>
                             <a class="LinksOptionsDel" href="" onclick="return deleteCheck();">Supprimer</a>';
                         }
                     ?>
