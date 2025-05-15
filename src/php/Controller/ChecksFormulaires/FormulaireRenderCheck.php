@@ -3,13 +3,13 @@ session_start();
 
 /**
  * Auteur : Bajro Osmanovic
- * Date : 09.05.2025 → Modif : 12.05.2025
- * Description : Vérification et enregistrer le formulaire d'inscirption
+ * Date : 14.05.2025 → Modif : 
+ * Description : Vérification et enregistrer le formulaire de rendu
  */
 
 // Inclusion des fichiers de configuration et de gestion de la base de données
-require_once('../Model/config.php');
-require_once('../Model/database.php');
+require_once('../../Model/config.php');
+require_once('../../Model/database.php');
 
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
@@ -19,10 +19,6 @@ if (!isset($_GET["Update"])) {
 
     // Configuration des champs à valider avec leurs expressions régulières et messages d'erreur
     $fields = [
-        'bikDateRestitution' => [ // Doit être une date valide (format AAAA-MM-JJ si besoin)
-            'regex' => '/^\d{4}-\d{2}-\d{2}$/',
-            'error' => 'Veuillez entrer une date valide au format AAAA-MM-JJ !'
-        ],
         'perAdress' => [
             'regex' => '/^[A-Za-zÀ-ÿ0-9\s\-\,\.]{5,}$/u',
             'error' => 'Veuillez entrer une adresse complète valide (minimum 5 caractères, lettres/chiffres autorisés) !'
@@ -83,16 +79,17 @@ if (!isset($_GET["Update"])) {
 
     // Si tous les champs sont valides
     if ($isValid) {
-        // Appelle la méthode pour ajouter un bâtiment dans la base de données
+        // Appelle la méthode pour mettre à jour la BD 
         $db->RestitutionUpdate(
             $_POST["perFirstName"],
-            $_POST["perLasstName"],
+            $_POST["perLastName"],
             $_POST["perAdress"],
             $_POST["perCity"],
             $_POST["perNPA"],
             $_POST["perEmail"],
             $_POST["perTel"],
-            $_POST["bikDateRestitution"]
+            $_POST["bikDateRestitution"],
+            $_GET["ID"]
         );
         // Message de confirmation d'ajout
         $_SESSION["MessageAdd"] = "vélo rendu avec succès !";
@@ -106,13 +103,13 @@ if (!isset($_GET["Update"])) {
     }
 
     // Redirection vers la page d'ajout de bâtiment avec le message approprié
-    header("Location: ../View/FormulaireInsciptionPage.php");
+    header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
     exit;
 } else {
     // Si le paramètre "Update" est présent, cela signifie qu'aucune donnée n'a été reçue
     $_SESSION["ErrorMessage"] = "Aucune donnée reçue !";
     $_SESSION["MessageAdd"] = "";
-    // Redirige l'utilisateur vers la page d'ajout de bâtiment
-    header("Location: ../View/FormulaireInsciptionPage.php");
+    // Redirige l'utilisateur vers la page d'ajout de bâtiment 
+    header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
     exit;
 }

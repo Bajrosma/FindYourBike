@@ -13,7 +13,7 @@ require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 // récupèrer toute les communes 
-$bikes = $db->GetAllBikes();
+$bikes = $db->GetAllBikesRendered();
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
 $brands = $db->GetAllBrands();
@@ -118,6 +118,8 @@ $_SESSION["MessageAdd"] = "";
                                 echo '<td>' . $bike["bikDate"] . '</td>';
                                 // Commune oû le vélo est stocker 
                                 echo '<td>' . $bike["comName"] . '</td>';
+                                // Commune oû le vélo est stocker 
+                                echo '<td><a href="../DetailPersonne.php?ID=' . $bike["ID_personne"] . '">' . $bike["perLastName"] . " " . $bike["perFirstName"] . '</td>';
                                 // Affichage des options en fonctions de la sessions
                                 echo '<td><a class="LinksOptions" href="">Modifier</a><br>
                                 <a class="LinksOptionsDel" href="" onclick="return deleteCheck();">Supprimer</a>';

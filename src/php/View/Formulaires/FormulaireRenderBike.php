@@ -12,8 +12,6 @@ require_once('../../Model/config.php');
 require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
-// récupère les informations du vélo sélectionner 
-$bike =  $db->GetOneBike($_GET["ID"]);
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
 $brands = $db->GetAllBrands();
@@ -39,7 +37,7 @@ $communes = $db->GetAllCommunesDropDown();
         <div class="container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
             <h1>Restitution d'un vélo trouvé</h1>
-            <form action="../../Controller/ChecksFormulaires/FormulaireBikeCheck.php" method="post">
+            <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $_GET["ID"]?>" method="post">
                 <?php 
                     $Champs = [
                         'perFirstName' => 'prénom du propriètaire',
@@ -54,8 +52,6 @@ $communes = $db->GetAllCommunesDropDown();
                     // parcours le tableau des champs de type text
                     foreach ($Champs as $Champ => $label) 
                     {
-                        // récolte les informations sur d'éventuelle message d'erreurs
-                        $errorMessage = isset($_SESSION["ErrorMessage" . ucfirst($Champ)]) ? $_SESSION["ErrorMessage" . ucfirst($field)] : '';
                         // vérifie si une entrée a été sauvée dans la session, si oui le champ reprend le même texte et si non, il laisse vide
                         $value = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
                         echo "
@@ -63,7 +59,6 @@ $communes = $db->GetAllCommunesDropDown();
                             <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>
                             <div class='col-sm-8'>
                                 <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
-                                <p class='text-danger'>$errorMessage</p> <!-- Affichage du message d'erreur si présent -->
                             </div>
                         </div>";
                     }

@@ -159,7 +159,7 @@
          * Fonction qui recherche une personne à l'aide de son prénom
          * @return -- renvoie l'ID de la personne rechercher
          */
-        public function GetPerson($firstname)
+        public function GetLastPeople($firstname)
         {
             $query = "SELECT ID_personne FROM t_personnes WHERE perFirstName=:FirstName";
             // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
@@ -229,6 +229,22 @@
         { 
             // requête pour récuperer les communes
             $query = "SELECT ID_bike, bikDate, bikResitutionDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune";
+            // execute la commande
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche les vélor rendus
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetAllBikesRendered()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT ID_bike, bikDate, bikResitutionDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName, perFirstName, perLastName, ID_personne FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune JOIN t_personnes ON FK_personne=ID_personne";
             // execute la commande
             $prepareTemp = $this->querySimpleExecute($query);
             // transforme les données en tableau
@@ -399,14 +415,53 @@
         /**
          * Fonction qui valide l'inscription de la commune 
          */
-        public function RestitutionUpdate($fistname, $lastname, $adress, $city, $npa, $email, $tel, $dateofrestitution)
+        public function RestitutionUpdate($firstname, $lastname, $adress, $city, $npa, $email, $tel, $dateofrestitution, $id)
         {
             // crée le nouvelle personne responsable du véloo
             $this->creatNewPeople($firstname, $lastname, $adress, $city, $npa, $email, $tel);
             // met à jour le vélo pour savoir qui est le propriètaire et ou il hanite
-            $this->GetLastPeople();
+            $personne = $this->GetLastPeople($firstname);
             // met à jour le vélo pour savoir qui est le propriètaire et ou il hanite
-            $this->updateBikeDate($dateofrestitution);
+            $this->updateBikeDate($dateofrestitution, $personne, $id);
+        }
+
+        /**
+         * Fonction qui permet de sauver une inscription
+         */
+        public function creatNewPeople($firstname, $lastname, $adress, $city, $npa, $email, $tel)
+        {
+            // requête 
+            $query = "INSERT INTO t_personnes(perFirstName, perLastName, perEmail, perTel, perAdress, perCity, perNPA, perRole) 
+            VALUES (:firstname,:lastname,:email,:tel,:adress,:city,:npa,'Citoyen.ne')";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'firstname' => ['value' => $firstname, 'type' => PDO::PARAM_STR],
+            'lastname' => ['value' => $lastname, 'type' => PDO::PARAM_STR],
+            'email' => ['value' => $email, 'type' => PDO::PARAM_STR],
+            'tel' => ['value' => $tel, 'type' => PDO::PARAM_STR],
+            'adress' => ['value' => $adress, 'type' => PDO::PARAM_STR],
+            'city' => ['value' => $city, 'type' => PDO::PARAM_STR],
+            'npa' => ['value' => $npa, 'type' => PDO::PARAM_STR]
+            ];    
+            // Exécution sécurisée de la première requête préparée
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+                /**
+         * Fonction qui valide l'inscription de la commune 
+         */
+        public function updateBikeDate($dateofrestitution, $personne, $id)
+        {
+            // requête pour récuperer les communes
+            $query = "UPDATE t_bikes SET bikResitutionDate = :dateofrestitution, FK_personne = :personne WHERE t_bikes.ID_bike = :id";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'id' => ['value' => $id, 'type' => PDO::PARAM_INT],
+                'personne' => ['value' => $personne, 'type' => PDO::PARAM_INT],
+                'dateofrestitution' => ['value' => $dateofrestitution, 'type' => PDO::PARAM_STR]
+            ];
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
         }
 
         /**
@@ -430,7 +485,25 @@
         public function GetOneBike($id)
         {
             // requête pour récuperer les communes
-            $query = "SELECT ID_bike, bikDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune WHERE ID_commune = :ID";
+            $query = "SELECT bikDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune WHERE ID_bike = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
+            ];
+            // Exécution sécurisée de la requête
+            $prepareTemp = $this->queryPrepareExecute($query, $binds);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+        /**
+         * récupere les information d'une personne
+         */
+        public function GetOnePerson($id)
+        {
+            // requête pour récuperer les communes
+            $query = "SELECT perFirstName, perLastName, perEmail, perTel, perAdress, perCity, perNPA, perRole FROM t_personnes WHERE ID_personne = :ID";
             // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
             $binds = [
                 'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
