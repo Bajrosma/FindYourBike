@@ -68,8 +68,8 @@ $_SESSION["MessageAdd"] = "";
                             echo "<td><em>Aucun responsable</em></td>";
                             // options pour accepter ou refuser l'inscription
                             echo '<td>
-                                    <a class="LinksOptions" href="../../Controller/AcceptInscription.php?ID=' . $commune["ID_commune"] . '">Accepter</a><br>
-                                    <a class="LinksOptionsDel" href="../../Controller/RefuseInscription.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();">Refuser</a>
+                                    <a class="LinksOptions" href="../../Controller/AcceptInscription.php?ID=' . $commune["ID_commune"] . '"><img class="Logo" src="../../../../userContent/img/Logo/AcceptIcon.png" alt="Accepter"></a><br>
+                                    <a class="LinksOptionsDel" href="../../Controller/RefuseInscription.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/RefuseIcon.jpg" alt="Refuser"></a>
                                   </td></tr>';
                         }
                     }

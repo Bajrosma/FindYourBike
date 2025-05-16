@@ -204,3 +204,9 @@ h2 {
 .btn-back:hover {
 	background-color: #b8dfb0;
 }
+
+img.Logo
+{
+	height: 30px;
+	width: 30px;
+}

@@ -35,7 +35,15 @@ $_SESSION["MessageAdd"] = "";
     <h1>Page d'accueil</h1>
     <div class="grid">
       <a class="btn" href="../Listes/ListeBike.php">Liste des vélos</a>
+      <?php 
+        // Affichage des options en fonctions de la sessions
+        if($_SESSION["rights"] == 1)
+        {
+            ?>
       <a class="btn" href="../Formulaires/FormulaireBikePage.php">Ajouter un vélo retrouvé</a>
+      <?php 
+        }
+      ?>
       <a class="btn">Statistiques</a>
       <a class="btn" href="../Listes/ListeCommunePage.php">Liste des communes membres</a>
     </div>

@@ -45,7 +45,15 @@ $_SESSION["MessageAdd"] = "";
                     <th>Adresse complète</th>
                     <th>Email</th>
                     <th>Téléphone</th>
+                    <?php 
+                        // Affichage des options en fonctions de la sessions
+                        if($_SESSION["rights"] == 2)
+                        {
+                    ?>
                     <th>Options</th>
+                    <?php 
+                        }
+                    ?>
                 </tr>
                 <!-- données -->
                 <?php
@@ -53,17 +61,21 @@ $_SESSION["MessageAdd"] = "";
                     {
                         if($commune['comInscription'] == 1)
                         {
-                        // Nom de la commune
-                        echo '<tr><td>' . $commune["comName"] . '</td>';
-                        // commande pour afficher le l'adresse de l'communes
-                        echo "<td>" . $commune["comAdress"] . ", " . $commune["comCity"] . " " . $commune["comNPA"] . "</td>";
-                        // affiche l'email des communes 
-                        echo "<td>" . $commune["comEmail"] . "</td>";
-                        // affiche le numéro de telephone des communes
-                        echo "<td>" . $commune["comTel"] . "</td>";
-                        // Affichage des options en fonctions de la sessions
-                        echo '<td><a class="LinksOptions" href="../Modify/ModifyCommunePage.php?ID=' . $commune["ID_commune"] .'">Modifier</a><br>
-                        <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteCommune.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();">Supprimer</a>';
+                            // Nom de la commune
+                            echo '<tr><td>' . $commune["comName"] . '</td>';
+                            // commande pour afficher le l'adresse de l'communes
+                            echo "<td>" . $commune["comAdress"] . ", " . $commune["comCity"] . " " . $commune["comNPA"] . "</td>";
+                            // affiche l'email des communes 
+                            echo "<td>" . $commune["comEmail"] . "</td>";
+                            // affiche le numéro de telephone des communes
+                            echo "<td>" . $commune["comTel"] . "</td>";
+                            // Affichage des options en fonctions de la sessions
+                            // Affichage des options en fonctions de la sessions
+                            if($_SESSION["rights"] == 2)
+                            {
+                                echo '<td><a class="LinksOptions" href="../Modify/ModifyCommunePage.php?ID=' . $commune["ID_commune"] .'"><img href="../../userContent/img/Logo/modificationIcon.jpg"></a><br>
+                                <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteCommune.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Supprimer"></a>';
+                            }    
                         }
                     }
                 ?>

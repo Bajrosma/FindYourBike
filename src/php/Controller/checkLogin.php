@@ -49,7 +49,7 @@
                             {
                                 $_SESSION["rights"] = $user["usePrivilage"];
                             }
-                            else if ($user["usePrivilage"] == $user["usePrivilage"])
+                            else if ($user["usePrivilage"] == 1)
                             {
                                 $_SESSION["rights"] = $user["usePrivilage"];
                             }

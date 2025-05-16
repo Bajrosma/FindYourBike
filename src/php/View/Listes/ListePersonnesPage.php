@@ -65,9 +65,9 @@ $_SESSION["MessageAdd"] = "";
                         //  défini son rôle à la commune ou pas
                         echo "<td>" . $person["perRole"] . "</td>";
                         // Affichage des options en fonctions de la sessions
-                        echo '<td><a href="../DetailPersonne.php?ID=' . $person["ID_personne"] . '">Détails</a><br>
-                        <a class="LinksOptions" href="../Modify/ModifyPersonPage.php?ID=' . $person["ID_personne"] . '">Modifier</a><br>
-                        <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeletePerson.php?ID=' . $person["ID_personne"] . '" onclick="return deleteCheck();">Supprimer</a>';
+                        echo '<td><a href="../DetailPersonne.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/DetailIcon.png" alt="Détails"></a><br>
+                        <a class="LinksOptions" href="../Modify/ModifyPersonPage.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.png" alt="Modification"></a><br>
+                        <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeletePerson.php?ID=' . $person["ID_personne"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
                         }
                     }
                 ?>

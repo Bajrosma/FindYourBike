@@ -95,7 +95,15 @@ $_SESSION["MessageAdd"] = "";
                         <th>Adresse où il a été retrouvé</th>
                         <th>Date découverte</th>
                         <th>Commune de référence</th>
+                        <?php 
+                        // Affichage des options en fonctions de la sessions
+                        if($_SESSION["rights"] == 1)
+                        {
+                        ?>
                         <th>Options</th>
+                        <?php 
+                        }
+                        ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -161,12 +169,13 @@ $_SESSION["MessageAdd"] = "";
                                 echo '<td>' . $bike["bikDate"] . '</td>';
                                 // Commune oû le vélo est stocker 
                                 echo '<td>' . $bike["comName"] . '</td>';
-
-                                
                                 // Affichage des options en fonctions de la sessions
-                                echo '<td><a class="LinksOptions" href="">Modifier</a><br>
-                                <a class="LinksOptions" href="../Formulaires/FormulaireRenderBike.php?ID=' . $bike["ID_bike"] . '">rendre</a><br>
-                                <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteBike.php?ID=' . $bike["ID_bike"] . '" onclick="return deleteCheck();">Supprimer</a>';
+                                if($_SESSION["rights"] == 1)
+                                {
+                                echo '<td><a class="LinksOptions" href="../Modify/ModifyBikePage.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
+                                <a class="LinksOptions" href="../Formulaires/FormulaireRenderBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/Rendered.png" alt="Rendre"></a><br>
+                                <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteBike.php?ID=' . $bike["ID_bike"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                                }
                             }
                         }
                     ?>
@@ -192,10 +201,10 @@ $_SESSION["MessageAdd"] = "";
         rows.forEach(row => 
         {
             // Récupère les données des cellules correspondantes aux filtres
-            const serial = row.cells[0].textContent.toLowerCase(); // cellule 1 : numéro de série
-            const brand = row.cells[1].textContent.toLowerCase();  // cellule 2 : marque
-            const size = row.cells[2].textContent.toLowerCase();   // cellule 3 : taille
-            const color = row.cells[3].textContent.toLowerCase();  // cellule 4 : couleur
+            const serial = row.cells[1].textContent.toLowerCase(); // cellule 1 : numéro de série
+            const brand = row.cells[2].textContent.toLowerCase();  // cellule 2 : marque
+            const size = row.cells[3].textContent.toLowerCase();   // cellule 3 : taille
+            const color = row.cells[4].textContent.toLowerCase();  // cellule 4 : couleur
 
             // Vérifie si la ligne correspond à tous les filtres
             const show =
