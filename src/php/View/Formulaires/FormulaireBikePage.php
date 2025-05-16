@@ -130,6 +130,14 @@ $communes = $db->GetAllCommunesDropDown();
         </select>
         </div>
     </div>
+    <div  class='form-group row mb-3'>
+        <!-- Champ permettant de sélectionner plusieurs fichiers images -->
+        <label for="images" class='col-sm-4 col-form-label'>Choisir jusqu'à 3 images :</label>
+        <div class='col-sm-8'>
+            <!-- Le nom "images[]" indique un tableau d'images, et "multiple" permet d'en sélectionner plusieurs -->
+            <input class='form-control' type="file" name="images[]" accept="image/*" multiple required>
+        </div>
+    </div>
     <?php 
         echo  $_SESSION["MessageAdd"];
     ?>

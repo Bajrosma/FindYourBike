@@ -188,7 +188,25 @@
             // retourne le tableau
             return $prepareTabTemp;
         }
-
+        /**
+         * Fonction qui recherche la commune demandé 
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetOneCommune($id)
+        {
+            // requête pour récuperer les communes
+            $query = "SELECT comName, comAdress, comNPA, comCity, comEmail, comTel FROM t_communes WHERE ID_commune = :ID ";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_STR]
+                ]; 
+                // Exécution sécurisée de la requête préparée
+                $prepareTemp =$this->queryPrepareExecute($query, $binds);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
         /**
          * Fonction qui recherche les communes pour l'affichage d'une liste deroulante 
          * @return -- renvoie les informations des communes trouvé
@@ -229,6 +247,22 @@
         { 
             // requête pour récuperer les communes
             $query = "SELECT ID_bike, bikDate, bikResitutionDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune";
+            // execute la commande
+            $prepareTemp = $this->querySimpleExecute($query);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+
+        /**
+         * Fonction qui recherche les personnes
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetAllDataBikes()
+        { 
+            // requête pour récuperer les communes
+            $query = "SELECT bidPathFile, FK_bike FROM t_bikedata";
             // execute la commande
             $prepareTemp = $this->querySimpleExecute($query);
             // transforme les données en tableau
@@ -413,6 +447,51 @@
         }
 
         /**
+         * Fonction qui met à jour une commune
+         */
+        public function UpdateCommune($name, $adress, $city, $npa, $email, $tel, $id)
+        {
+            // requête pour récuperer les communes
+            $query = "UPDATE t_communes SET comName = :Name, comAdress = :Adress, comNPA = :NPA, comCity = :City, comEmail = :Email, comTel = :Tel WHERE ID_commune = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'Name' => ['value' => $name, 'type' => PDO::PARAM_STR],
+                'Adress' => ['value' => $adress, 'type' => PDO::PARAM_STR],
+                'City' => ['value' => $city, 'type' => PDO::PARAM_STR],
+                'NPA' => ['value' => $npa, 'type' => PDO::PARAM_STR],
+                'Email' => ['value' => $email, 'type' => PDO::PARAM_STR],
+                'Tel' => ['value' => $tel, 'type' => PDO::PARAM_STR],
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
+            ];
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
+         * Fonction qui met à jour une commune
+         */
+        public function UpdatePerson($firstname, $lastname, $adress, $city, $npa, $email, $tel, $role, $id)
+        {
+            // requête pour récuperer les communes
+            $query = "UPDATE t_personnes SET perFirstName = :FirstName, perLastName = :LastName, perEmail = :Email, perTel = :Tel, perAdress = :Adress, perCity = :City, perNPA = :NPA, perRole = :Roles WHERE ID_personne = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'FirstName' => ['value' => $firstname, 'type' => PDO::PARAM_STR],
+                'LastName' => ['value' => $lastname, 'type' => PDO::PARAM_STR],
+                'Adress' => ['value' => $adress, 'type' => PDO::PARAM_STR],
+                'City' => ['value' => $city, 'type' => PDO::PARAM_STR],
+                'NPA' => ['value' => $npa, 'type' => PDO::PARAM_STR],
+                'Email' => ['value' => $email, 'type' => PDO::PARAM_STR],
+                'Tel' => ['value' => $tel, 'type' => PDO::PARAM_STR],
+                'Roles' => ['value' => $role, 'type' => PDO::PARAM_STR],
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
+
+            ];
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+        /**
          * Fonction qui valide l'inscription de la commune 
          */
         public function RestitutionUpdate($firstname, $lastname, $adress, $city, $npa, $email, $tel, $dateofrestitution, $id)
@@ -515,5 +594,44 @@
             // retourne le tableau
             return $prepareTabTemp;
         }
+
+        /* 
+        * fonction qui permet la suppresion d'un bâtiment
+        */
+        public function DeleteOnePerson($id)
+        {
+            // requête sql incomplete en attente du binds
+            $query = "DELETE FROM t_personnes WHERE t_personnes.ID_personne = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = ['prepareId' => ['value' => $id, 'type' => PDO::PARAM_INT]];
+            // effectue la requête d'ajout en passant par une vérification  
+            $this->queryPrepareExecute($query, $binds);
+        }
+        /* 
+        * fonction qui permet la suppresion d'un bâtiment
+        */
+        public function DeleteOneCommune($id)
+        {
+            // requête sql incomplete en attente du binds
+            $query = "DELETE FROM t_communes WHERE t_communes.ID_building = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = ['prepareId' => ['value' => $id, 'type' => PDO::PARAM_INT]];
+            // effectue la requête d'ajout en passant par une vérification  
+            $this->queryPrepareExecute($query, $binds);
+        }
+        /* 
+        * fonction qui permet la suppresion d'un bâtiment
+        */
+        public function DeleteOneBike($id)
+        {
+            // requête sql incomplete en attente du binds
+            $query = "DELETE FROM t_bikes WHERE t_bikes.ID_bike = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = ['prepareId' => ['value' => $id, 'type' => PDO::PARAM_INT]];
+            // effectue la requête d'ajout en passant par une vérification  
+            $this->queryPrepareExecute($query, $binds);
+        }
+
+
 }
 ?>

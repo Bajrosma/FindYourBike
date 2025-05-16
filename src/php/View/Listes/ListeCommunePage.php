@@ -62,8 +62,8 @@ $_SESSION["MessageAdd"] = "";
                         // affiche le numéro de telephone des communes
                         echo "<td>" . $commune["comTel"] . "</td>";
                         // Affichage des options en fonctions de la sessions
-                        echo '<td><a class="LinksOptions" href="">Modifier</a><br>
-                        <a class="LinksOptionsDel" href="" onclick="return deleteCheck();" style="color: #3D2C23;">Supprimer</a>';
+                        echo '<td><a class="LinksOptions" href="../Modify/ModifyCommunePage.php?ID=' . $commune["ID_commune"] .'">Modifier</a><br>
+                        <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteCommune.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();">Supprimer</a>';
                         }
                     }
                 ?>

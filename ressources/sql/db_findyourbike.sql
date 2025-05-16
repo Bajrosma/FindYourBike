@@ -396,17 +396,17 @@ ALTER TABLE `t_user`
 -- Contraintes pour la table `t_bikes`
 --
 ALTER TABLE `t_bikes`
-  ADD CONSTRAINT `t_bikes_ibfk_1` FOREIGN KEY (`FK_brand`) REFERENCES `t_brand` (`ID_brand`),
-  ADD CONSTRAINT `t_bikes_ibfk_2` FOREIGN KEY (`FK_size`) REFERENCES `t_size` (`ID_size`),
-  ADD CONSTRAINT `t_bikes_ibfk_3` FOREIGN KEY (`FK_color`) REFERENCES `t_color` (`ID_color`),
-  ADD CONSTRAINT `t_bikes_ibfk_4` FOREIGN KEY (`FK_commune`) REFERENCES `t_communes` (`ID_commune`),
-  ADD CONSTRAINT `t_bikes_ibfk_5` FOREIGN KEY (`FK_personne`) REFERENCES `t_personnes` (`ID_personne`);
+  ADD CONSTRAINT `t_bikes_ibfk_1` FOREIGN KEY (`FK_brand`) REFERENCES `t_brand` (`ID_brand`) ON DELETE CASCADE,
+  ADD CONSTRAINT `t_bikes_ibfk_2` FOREIGN KEY (`FK_size`) REFERENCES `t_size` (`ID_size`) ON DELETE CASCADE,
+  ADD CONSTRAINT `t_bikes_ibfk_3` FOREIGN KEY (`FK_color`) REFERENCES `t_color` (`ID_color`) ON DELETE CASCADE,
+  ADD CONSTRAINT `t_bikes_ibfk_4` FOREIGN KEY (`FK_commune`) REFERENCES `t_communes` (`ID_commune`) ON DELETE CASCADE,
+  ADD CONSTRAINT `t_bikes_ibfk_5` FOREIGN KEY (`FK_personne`) REFERENCES `t_personnes` (`ID_personne`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `t_personnes`
 --
 ALTER TABLE `t_personnes`
-  ADD CONSTRAINT `t_personnes_ibfk_1` FOREIGN KEY (`FK_commune`) REFERENCES `t_communes` (`ID_commune`);
+  ADD CONSTRAINT `t_personnes_ibfk_1` FOREIGN KEY (`FK_commune`) REFERENCES `t_communes` (`ID_commune`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

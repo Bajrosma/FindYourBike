@@ -31,7 +31,7 @@
                 $_SESSION["MessageErrorLogin"] = "veuillez rentrer votre login et mot de passe";
 
                 //retour en arrière
-                header("Location:../../../index.php");
+                header("Location:../../index.php");
             }
             // si les cases ne sont pas vides il continue le processus de vérification
             else
@@ -66,14 +66,14 @@
                     {
                     // message d'erreur
                         $_SESSION["MessageErrorLogin"] = "faute de mot de passe";
-                        header("Location:../../../../index.php");
+                        header("Location:../../../index.php");
                     }
                     }
                     // si les conditions ne sont pas remplis, retourne en arrière
                     else
                     {
                         $_SESSION["MessageErrorLogin"] = "utilisateur n'as pas été trouvé";
-                        header("Location:../../../../index.php");
+                        header("Location:../../../index.php");
                     } 
                 }       
             }
