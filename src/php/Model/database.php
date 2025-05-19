@@ -125,13 +125,14 @@
          * recherche une commune
          * @return -- renvoie un tableau avec tous les bâtiments
          */
-        public function CreateAccount($User, $password)
+        public function CreateAccount($User, $password, $privilage)
         {
-            $query = "INSERT INTO t_user (useName, usePassword) VALUES (:username, :passwords)";
+            $query = "INSERT INTO t_user (useName, usePassword, usePrivilage) VALUES (:username, :passwords, :privilage)";
             // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
             $binds = [
             'username' => ['value' => $User, 'type' => PDO::PARAM_STR],
-            'passwords' => ['value' => $password, 'type' => PDO::PARAM_STR]
+            'passwords' => ['value' => $password, 'type' => PDO::PARAM_STR],
+            'privilage' => ['value' => $privilage, 'type' => PDO::PARAM_INT]
             ];    
             // Exécution sécurisée de la requête préparée
             $this->queryPrepareExecute($query, $binds);

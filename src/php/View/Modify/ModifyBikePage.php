@@ -15,8 +15,10 @@ $db = Database::getInstance();
 // récupère les informations du vélo sélectionner 
 $bike =  $db->GetOneBike($_GET["ID"]);
 
+var_dump($bike);
+
 foreach ($bike as $key => $value) {
-    $_SESSION[$key] = $value;
+    $_SESSION['Bike'][$key] = $value;
 }
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
@@ -43,37 +45,35 @@ $communes = $db->GetAllCommunesDropDown();
 
   <div class="container">
     <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
-    <h1>Ajout d'un vélo trouvé</h1>
+    <h1>Modification d'un vélo trouvé</h1>
     <form action="../../Controller/ChecksFormulaires/FormulaireBikeCheck.php" method="post">
     <?php 
-        $Champs = [
+        $fields = [
             'bikPlace' => 'lieu de découverte (adresse complète)',
             'bikFrameNumber' => 'Numéro de série (cadre)'
         ];
         // parcours le tableau des champs de type text
-        foreach ($Champs as $Champ => $label) 
-        {
-            // récolte les informations sur d'éventuelle message d'erreurs
-            $errorMessage = isset($_SESSION["ErrorMessage" . ucfirst($Champ)]) ? $_SESSION["ErrorMessage" . ucfirst($field)] : '';
-            // vérifie si une entrée a été sauvée dans la session, si oui le champ reprend le même texte et si non, il laisse vide
-            $sessivalue = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
-            echo "
-            <div class='form-group row mb-3'>
-                <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>
-                <div class='col-sm-8'>
-                    <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
-                    <p class='text-danger'>$errorMessage</p> <!-- Affichage du message d'erreur si présent -->
-                </div>
-            </div>";
+        foreach ($fields as $name => $label) {
+            $sessionValue = $_SESSION[$name] ?? $_SESSION['Bike'][0][$name] ?? '';
+            $errorKey = "ErrorMessage" . ucfirst(str_replace("bik", "", $name));
+            echo "<div class='form-group row mb-3'>";
+            echo "<label class='col-sm-4 col-form-label' for=\"$name\">$label</label><br>";
+            echo "<div class='col-sm-8'>";
+            echo "<input class='form-control' type=\"text\" name=\"$name\" id=\"$name\" value=\"" . htmlspecialchars($sessionValue) . "\" /><br>";
+            if (!empty($_SESSION[$errorKey])) {
+                echo '<p class="text-danger">' . $_SESSION[$errorKey] . '</p>';
+            }
+            echo '</div></div>';
         }
     ?>
     <!-- Date de découverte -->
     <div class='form-group row mb-3'>
         <label for="bikDate" class='col-sm-4 col-form-label'>Date de découverte</label>
         <div class='col-sm-8'>
-            <input class='form-control' type="date" id="bikDate" name="bikDate">
+            <input class='form-control' type="date" id="bikDate" name="bikDate" value="<?php echo $bike[0]['bikDate']; ?>">
         </div>
     </div>
+    <br>
     <!-- Liste des couleurs de vélo -->
     <div class='form-group row mb-3'>
         <label for="FK_color" class='col-sm-4 col-form-label'>Couleur du vélo</label>
@@ -87,6 +87,7 @@ $communes = $db->GetAllCommunesDropDown();
                 }
             ?>
         </select>
+        <br>
         </div>
     </div>
     <!-- Liste des marques de vélo -->
@@ -102,6 +103,7 @@ $communes = $db->GetAllCommunesDropDown();
                 }
             ?>
         </select>
+        <br>
         </div>
     </div>
     <!-- Liste des tailles de vélo -->
@@ -117,6 +119,7 @@ $communes = $db->GetAllCommunesDropDown();
                 }
             ?>
         </select>
+        <br>
         </div>
     </div>
     <!-- Liste des communes pouvant acceuilir le vélo -->

@@ -8,8 +8,8 @@ session_start();
  */
 
 // Inclusion des fichiers de configuration et de gestion de la base de données
-require_once('../Model/config.php');
-require_once('../Model/database.php');
+require_once('../../Model/config.php');
+require_once('../../Model/database.php');
 
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
@@ -110,13 +110,13 @@ if (!isset($_GET["Update"])) {
     }
 
     // Redirection vers la page d'ajout de bâtiment avec le message approprié
-    header("Location: ../View/FormulaireInsciptionPage.php");
+    header("Location: ../../View/Formulaires/FormulaireInsciptionPage.php");
     exit;
 } else {
     // Si le paramètre "Update" est présent, cela signifie qu'aucune donnée n'a été reçue
     $_SESSION["ErrorMessage"] = "Aucune donnée reçue !";
     $_SESSION["MessageAdd"] = "";
     // Redirige l'utilisateur vers la page d'ajout de bâtiment
-    header("Location: ../View/FormulaireInsciptionPage.php");
+    header("Location: ../../View/Formulaires/FormulaireInsciptionPage.php");
     exit;
 }

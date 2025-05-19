@@ -37,6 +37,7 @@
       <a class="btn" href="../Listes/ListeCommunePage.php">Liste des communes membres</a>
       <a class="btn" href="../Listes/ListePersonnesPage.php">Listes des personnes</a>
       <a class="btn" href="../Listes/ListeInscriptionsPage.php">Listes des formulaires d'inscription</a>
+      <a class="btn" href="../Formulaires/FormulaireCreateUsers.php">Formulaire de création de compte</a>
     </div>
     <a href="../../Controller/logout.php" class="logout">Déconnexion</a>
   </div>

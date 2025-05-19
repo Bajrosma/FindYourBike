@@ -73,6 +73,7 @@ $communes = $db->GetAllCommunesDropDown();
         <label for="FK_color" class='col-sm-4 col-form-label'>Couleur du vélo</label>
         <div class='col-sm-8'>
         <select class='form-control' name="FK_color" id="FK_color">
+            <option value=""></option>
             <?php 
                 // parcours le tableau des couleurs
                 foreach($colors as $color )
@@ -88,6 +89,7 @@ $communes = $db->GetAllCommunesDropDown();
         <label for="FK_brand" class='col-sm-4 col-form-label'>Marque du vélo</label>
         <div class='col-sm-8'>
         <select class='form-control' name="FK_brand" id="FK_brand">
+            <option value=""></option>
             <?php 
                 // parcours le tableau des marques 
                 foreach($brands as $brand )
@@ -103,6 +105,7 @@ $communes = $db->GetAllCommunesDropDown();
         <label for="FK_size" class='col-sm-4 col-form-label'>Taille du vélo </label>
         <div class='col-sm-8'>
         <select class='form-control' name="FK_size" id="FK_size">
+            <option value=""></option>
             <?php 
                 // parcours le tableau des tailles         
                 foreach($sizes as $size )
@@ -118,6 +121,7 @@ $communes = $db->GetAllCommunesDropDown();
         <label for="FK_commune" class='col-sm-4 col-form-label'>Commune</label>
         <div class='col-sm-8'>
         <select class='form-control' name="FK_commune" id="FK_commune">
+            <option value=""></option>
             <?php 
                 // parcours le tableau des communes 
                 foreach($communes as $commune )

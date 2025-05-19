@@ -63,11 +63,12 @@ foreach ($Person as $key => $value) {
             $errorKey = "ErrorMessage" . ucfirst(str_replace("per", "", $name));
             echo "<div class='form-group row mb-3'>";
             echo "<label class='col-sm-4 col-form-label' for=\"$name\">$label</label><br>";
-            echo "<input class='col-sm-8' type=\"text\" name=\"$name\" id=\"$name\" value=\"" . htmlspecialchars($sessionValue) . "\" /><br>";
+            echo "<div class='col-sm-8'>";
+            echo "<input class='form-control' type=\"text\" name=\"$name\" id=\"$name\" value=\"" . htmlspecialchars($sessionValue) . "\" /><br>";
             if (!empty($_SESSION[$errorKey])) {
                 echo '<p class="text-danger">' . $_SESSION[$errorKey] . '</p>';
             }
-            echo '</div>';
+            echo '</div></div>';
         }
         foreach($Communes as $Commune)
         {
