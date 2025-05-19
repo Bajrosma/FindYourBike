@@ -38,7 +38,7 @@ $communes = $db->GetAllCommunesDropDown();
   <div class="container">
     <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
     <h1>Ajout d'un vélo trouvé</h1>
-    <form action="../../Controller/ChecksFormulaires/FormulaireBikeCheck.php" method="post">
+    <form action="../../Controller/ChecksFormulaires/FormulaireBikeCheck.php" method="post" enctype="multipart/form-data">
     <?php 
         $Champs = [
             'bikPlace' => 'lieu de découverte (adresse complète)',
@@ -136,10 +136,10 @@ $communes = $db->GetAllCommunesDropDown();
     </div>
     <div  class='form-group row mb-3'>
         <!-- Champ permettant de sélectionner plusieurs fichiers images -->
-        <label for="images" class='col-sm-4 col-form-label'>Choisir jusqu'à 3 images :</label>
+        <label for="bidPathFile" class='col-sm-4 col-form-label'>Choisir jusqu'à 3 images :</label>
         <div class='col-sm-8'>
             <!-- Le nom "images[]" indique un tableau d'images, et "multiple" permet d'en sélectionner plusieurs -->
-            <input class='form-control' type="file" name="images[]" accept="image/*" multiple required>
+            <input class='form-control' id="bidPathFile" name="images[]" multiple required type="file">
         </div>
     </div>
     <?php 

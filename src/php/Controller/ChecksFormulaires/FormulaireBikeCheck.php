@@ -17,14 +17,12 @@ $db = Database::getInstance();
 // Vérification si l'utilisateur a soumis le formulaire (paramètre "Update" non défini dans l'URL)
 if (!isset($_GET["Update"])) {
 
-    // Dossier où les fichiers seront enregistrés
-    $uploadDir = __DIR__ . '../../../../userContent/img/ImageBike/';
+    // Définir le répertoire de téléchargement des images
+    $uploadDir = '../../../../userContent/img/ImageBike/';
     // Limite : maximum 3 fichiers
     $maxFiles = 3;
     // Types MIME autorisés
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    // Taille maximale de chaque fichier : 2 Mo
-    $maxSize = 2 * 1024 * 1024;
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     // Configuration des champs à valider avec leurs expressions régulières et messages d'erreur
     $fields = [
         'bikPlace' => [
@@ -40,58 +38,48 @@ if (!isset($_GET["Update"])) {
     ];
     // Variable de validation globale
     $isValid = true;  
-    // Vérifie si des fichiers ont été envoyés
-    if (isset($_FILES['images'])) 
+
+    $filesCount = count($_FILES['images']['name']);
+
+    if($filesCount > $maxFiles)
     {
-        $files = $_FILES['images'];
-        $fileCount = count($files['name']);
-        // Vérifie que le nombre de fichiers ne dépasse pas la limite
-        if ($fileCount > $maxFiles) 
+        $ErrorMessage = "vous ne pouvez qu'uploader jusqu'à 3 images maximum !";
+    }
+    else 
+    {
+        if(isset($_FILES))
         {
-            die("Vous ne pouvez uploader qu'un maximum de $maxFiles images.");
-            $isValid = false;
-        }
-        // Parcours chaque fichier
-        for ($i = 0; $i < $fileCount; $i++) 
-        {
-            // Vérifie qu'il n'y a pas d'erreur pour ce fichier
-            if ($files['error'][$i] === UPLOAD_ERR_OK) {
-                $tmpName = $files['tmp_name'][$i];         // Nom temporaire
-                $name = basename($files['name'][$i]);      // Nom original
-                $type = mime_content_type($tmpName);       // Type MIME réel
-                $size = filesize($tmpName);                // Taille du fichier
+            $files = $_FILES['images'];
 
-                // Vérifie que le type MIME est autorisé
-                if (!in_array($type, $allowedTypes)) {
-                    echo "Le fichier $name n'est pas une image valide.<br>";
+            foreach($_FILES['images']['name'] as $i => $fileName)
+            {
+                $tmpName = $files['tmp_name'][$i];
+                $type = mime_content_type($tmpName);
+                $name = basename($fileName);
+                // vérifie si l'extension du fichier et compatible
+                if(!in_array($type, $allowedTypes))
+                {
+                    $ErrorMessage = "le fichier $name n'est pas une image valide !";
                     $isValid = false;
                     continue;
                 }
-
-                // Vérifie que le fichier ne dépasse pas la taille maximale
-                if ($size > $maxSize) {
-                    echo "Le fichier $name dépasse la taille maximale de 2 Mo.<br>";
-                    $isValid = false;
-                    continue;
+                // préparation du chemin de stockage de l'image.
+                $uniqueName = uniqid()."-".$name;
+                $destination = $uploadDir . $name;
+                // si le déplacement réussi 
+                if(move_uploaded_file($tmpName, $destination))
+                {
+                    echo "image $name enregistrée avec succès.";
                 }
-
-                // Génère un nom de fichier unique pour éviter les conflits
-                $uniqueName = uniqid() . '-' . $name;
-                $destination = $uploadDir . $uniqueName;
-
-                // Déplace le fichier vers le dossier final
-                if (move_uploaded_file($tmpName, $destination)) {
-                    echo "Image $name enregistrée avec succès.<br>";
-                } else {
-                    echo "Erreur lors de l’envoi de l’image $name.<br>";
-                    $isValid = false;
+                // si le déplacement ne réussi pas 
+                else 
+                {
+                    $ErrorMessage = "le fichier $name n'a pas pu être enregistrer !";
                 }
-            } else {
-                echo "Erreur avec le fichier numéro " . ($i + 1) . "<br>";
-                $isValid = false;
             }
         }
     }
+
 
     // Boucle pour valider chaque champ
     foreach ($fields as $field => $config) {
@@ -113,20 +101,20 @@ if (!isset($_GET["Update"])) {
             $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "";
         }
     }
-    
-
     // Si tous les champs sont valides
     if ($isValid) {
         // Appelle la méthode pour ajouter un bâtiment dans la base de données
-        $db->AddBike(
+        /*$db->AddBike(
             $_POST["bikDate"],
             $_POST["bikPlace"],
             $_POST["bikFrameNumber"],
             $_POST["FK_color"],
             $_POST["FK_brand"],
             $_POST["FK_size"],
-            $_POST["FK_commune"]
+            $_POST["FK_commune"],
+            $uniqueName
         );
+        */
         // Message de confirmation d'ajout
         $_SESSION["MessageAdd"] = "vélo ajouté avec succès !";
         // Vider les données de la session après la mise à jour réussie
@@ -138,7 +126,7 @@ if (!isset($_GET["Update"])) {
         $_SESSION["MessageAdd"] = "";
     }
     // Redirection vers la page d'ajout d'un vélo avec le message approprié
-    header("Location: ../../View/Formulaires/FormulaireBikePage.php");
+    //header("Location: ../../View/Formulaires/FormulaireBikePage.php");
     exit;
 } 
 else 
@@ -147,6 +135,6 @@ else
     $_SESSION["ErrorMessage"] = "Aucune donnée reçue !";
     $_SESSION["MessageAdd"] = "";
     // Redirige l'utilisateur vers la page d'ajout d'un vélo
-    header("Location: ../../View/Formulaires/FormulaireBikePage.php");
+    //header("Location: ../../View/Formulaires/FormulaireBikePage.php");
     exit;
 }
