@@ -37,7 +37,7 @@ $communes = $db->GetAllCommunesDropDown();
         <div class="container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
             <h1>Restitution d'un vélo trouvé</h1>
-            <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $_GET["ID"]?>" method="post">
+            <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $_GET["ID"]?>" method="post" enctype="multipart/form-data">
                 <?php 
                     $Champs = [
                         'perFirstName' => 'prénom du propriètaire',
@@ -68,6 +68,14 @@ $communes = $db->GetAllCommunesDropDown();
                     <label for="bikRestitutionDate" class='col-sm-4 col-form-label'>Date de rendu</label>
                     <div class='col-sm-8'>
                         <input class='form-control' type="date" id="bikRestitutionDate" name="bikRestitutionDate">
+                    </div>
+                </div>
+                <div  class='form-group row mb-3'>
+                    <!-- Champ permettant de sélectionner plusieurs fichiers images -->
+                    <label for="proPathFile" class='col-sm-4 col-form-label'>Choisir jusqu'à 3 images :</label>
+                    <div class='col-sm-8'>
+                        <!-- Le nom "images[]" indique un tableau d'images, et "multiple" permet d'en sélectionner plusieurs -->
+                        <input class='form-control' id="proPathFile" name="images[]" multiple required type="file">
                     </div>
                 </div>
                 <?php 

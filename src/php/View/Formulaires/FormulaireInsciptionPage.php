@@ -12,9 +12,6 @@ require_once('../../Model/config.php');
 require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
-
-// reinitialise le message après une action 
-$_SESSION["MessageAdd"] = "";
 ?>
 
 <html lang="fr">
@@ -34,7 +31,8 @@ $_SESSION["MessageAdd"] = "";
 <body>
 
   <div class="container">
-    <h1>Page d'accueil</h1>
+  <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+    <h1>Inscription d'une commune</h1>
     <form action="../../Controller/ChecksFormulaires/FormulaireInsciptionCheck.php" method="post">
     <?php 
         $Champs = [
@@ -61,6 +59,8 @@ $_SESSION["MessageAdd"] = "";
                 </div>
             </div>";
         }
+        // montrer un message si l'ajout a fonctionner
+        echo  $_SESSION["MessageAdd"];    
     ?>
     <div class="text-center">
         <button type="submit" class="btn">Soumettre le formulaire</button>

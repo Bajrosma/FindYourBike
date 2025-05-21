@@ -160,12 +160,13 @@
          * Fonction qui recherche une personne à l'aide de son prénom
          * @return -- renvoie l'ID de la personne rechercher
          */
-        public function GetLastPeople($firstname)
+        public function GetLastPeople($firstname, $lastname)
         {
-            $query = "SELECT ID_personne FROM t_personnes WHERE perFirstName=:FirstName";
+            $query = "SELECT ID_personne FROM t_personnes WHERE perFirstName=:FirstName AND perLastName = :LastName";
             // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
             $binds = [
-            'FirstName' => ['value' => $firstname, 'type' => PDO::PARAM_STR]
+            'FirstName' => ['value' => $firstname, 'type' => PDO::PARAM_STR],
+            'LastName' => ['value' => $lastname, 'type' => PDO::PARAM_STR]
             ]; 
             // Exécution sécurisée de la requête préparée
             $prepareTemp =$this->queryPrepareExecute($query, $binds);
@@ -409,29 +410,73 @@
             // Exécution sécurisée de la requête
             $this->queryPrepareExecute($query, $binds);
         }
-
+        /**
+         * Fonction qui permet d'effectuer les différentes étapes d'ajout d'un vélo
+         */
+        public function NewBike($date, $place, $frameNumber, $color, $brand, $size, $commune, $FilesName)
+        {
+            // ajoute le vélo
+            $this->AddBike($date, $place, $frameNumber, $color, $brand, $size, $commune);
+            // récupère le dernier vélo ajouter
+            $idBike = $this->getLastInsertId($frameNumber);
+            // Ajouter les images liées au vélo 
+            foreach($FilesName as $key => $value)
+            {
+                $this->SaveDataBike($value, $idBike);
+            }
+        }
         /**
          * Fonction qui permet de sauver les informations d'un nouveau vélo
          */
         public function AddBike($date, $place, $frameNumber, $color, $brand, $size, $commune)
         {
-            // deuxième requête 
-            $query = "INSERT INTO t_bikes (bikDate, bikPlace, bikFrameNumber, FK_brand, FK_size, FK_color, FK_commune, FK_personne) VALUES 
-            (:FoundDate, :Place, :FrameNumber, :Brand, :Size, :Color, :Commune, NULL)";
+            // Première requête d'insertion du vélo
+            $query = "INSERT INTO t_bikes (bikDate, bikPlace, bikFrameNumber, FK_brand, FK_size, FK_color, FK_commune, FK_personne) 
+                      VALUES (:FoundDate, :Place, :FrameNumber, :Brand, :Size, :Color, :Commune, NULL)";
             // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
             $binds = [
-            'FoundDate' => ['value' => $date, 'type' => PDO::PARAM_STR],
-            'Place' => ['value' => $place, 'type' => PDO::PARAM_STR],
-            'FrameNumber' => ['value' => $frameNumber, 'type' => PDO::PARAM_STR],
-            'Brand' => ['value' => $brand, 'type' => PDO::PARAM_INT],
-            'Size' => ['value' => $size, 'type' => PDO::PARAM_INT],
-            'Color' => ['value' => $color, 'type' => PDO::PARAM_INT],
-            'Commune' => ['value' => $commune, 'type' => PDO::PARAM_INT]
-            ];    
+                'FoundDate' => ['value' => $date, 'type' => PDO::PARAM_STR],
+                'Place' => ['value' => $place, 'type' => PDO::PARAM_STR],
+                'FrameNumber' => ['value' => $frameNumber, 'type' => PDO::PARAM_STR],
+                'Brand' => ['value' => $brand, 'type' => PDO::PARAM_INT],
+                'Size' => ['value' => $size, 'type' => PDO::PARAM_INT],
+                'Color' => ['value' => $color, 'type' => PDO::PARAM_INT],
+                'Commune' => ['value' => $commune, 'type' => PDO::PARAM_INT]
+            ];   
             // Exécution sécurisée de la requête
             $this->queryPrepareExecute($query, $binds);
         }
-
+        /**
+         * Fonction qui permet de sauver les images lier à un nouveau vélo
+         */
+        public function getLastInsertId($frameNumber)
+        {
+            $query = "SELECT ID_Bike FROM t_bikes WHERE bikFrameNumber=:FrameNumber";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'FrameNumber' => ['value' => $frameNumber, 'type' => PDO::PARAM_STR]
+            ];    
+            // Exécution sécurisée de la requête préparée
+            $prepareTemp =$this->queryPrepareExecute($query, $binds);
+            // en fait un tableau lisible
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp[0]['ID_Bike'];
+        }
+        /**
+         * Fonction qui permet de sauver les images lier à un nouveau vélo
+         */
+        public function SaveDataBike($pathFileName, $idBike)
+        {
+            $query = "INSERT INTO t_bikedata ( bidPathFile, FK_bike) VALUES (:FileNames,:IdBike)";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'FileNames' => ['value' => $pathFileName, 'type' => PDO::PARAM_STR],
+                'IdBike' => ['value' => $idBike, 'type' => PDO::PARAM_STR]
+                ];    
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
+        }
         /**
          * Fonction qui valide l'inscription de la commune 
          */
@@ -495,16 +540,34 @@
         /**
          * Fonction qui valide l'inscription de la commune 
          */
-        public function RestitutionUpdate($firstname, $lastname, $adress, $city, $npa, $email, $tel, $dateofrestitution, $id)
+        public function RestitutionUpdate($firstname, $lastname, $adress, $city, $npa, $email, $tel, $dateofrestitution, $id, $FilesName)
         {
             // crée le nouvelle personne responsable du véloo
             $this->creatNewPeople($firstname, $lastname, $adress, $city, $npa, $email, $tel);
             // met à jour le vélo pour savoir qui est le propriètaire et ou il hanite
-            $personne = $this->GetLastPeople($firstname);
+            $personne = $this->GetLastPeople($firstname, $lastname);
             // met à jour le vélo pour savoir qui est le propriètaire et ou il hanite
             $this->updateBikeDate($dateofrestitution, $personne, $id);
+            // sauvegarde les documents de preuves
+            foreach($FilesName as $key => $value)
+            {
+                $this->SaveProof($value, $id);
+            }
         }
-
+        /**
+         * Fonction qui permet de sauver les images lier à un nouveau vélo
+         */
+        public function SaveProof($pathFileName, $idBike)
+        {
+            $query = "INSERT INTO t_dataproof ( proPathFile, FK_bike) VALUES (:FileNames,:IdBike)";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'FileNames' => ['value' => $pathFileName, 'type' => PDO::PARAM_STR],
+                'IdBike' => ['value' => $idBike, 'type' => PDO::PARAM_STR]
+                ];    
+            // Exécution sécurisée de la requête
+            $this->queryPrepareExecute($query, $binds);
+        }
         /**
          * Fonction qui permet de sauver une inscription
          */

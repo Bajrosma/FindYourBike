@@ -32,7 +32,6 @@ var_dump( $_SESSION["ErrorMessagePasswordConfirm"]);
         <title>FindYourBike</title>
     </head>
 <body>
-
   <div class="container">
     <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
     <h1>Création d'un compte</h1>

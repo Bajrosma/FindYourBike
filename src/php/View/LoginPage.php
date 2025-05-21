@@ -26,7 +26,7 @@
             ?>
         </div>
         <button type="submit" value="Login" class="btn">Se connecter</button>
-        <a href="src/php/View/FormulaireInsciptionPage.php">
+        <a href="src/php/View/Formulaires/FormulaireInsciptionPage.php">
             <div class="btn">S’inscrire...?</div>
         </a>  
     </form>

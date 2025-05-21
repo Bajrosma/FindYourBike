@@ -13,6 +13,7 @@ require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 // récupèrer toute les communes 
+$data = $db->GetAllDataBikes();
 $bikes = $db->GetAllBikesRendered();
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
@@ -85,6 +86,7 @@ $_SESSION["MessageAdd"] = "";
             <table>
                 <thead>
                     <tr>
+                        <th>Photos</th>
                         <th>Numéro de séries</th>
                         <th>Marque</th>
                         <th>Taille</th>
@@ -103,8 +105,50 @@ $_SESSION["MessageAdd"] = "";
                         {
                             if(!$bike["bikResitutionDate"] == NULL)
                             {
+                                 // Carrousel des images (réaliser à l'aide de ChatGPT)
+                                 echo '<tr><td>';
+                                 // Crée un ID unique pour le carrousel en fonction de l'ID du vélo
+                                 $carouselId = "carouselBike" . $bike["ID_bike"];
+                                 // Filtre les images pour ce vélo uniquement
+                                 $bikeImages = array_filter($data, fn($img) => $img["FK_bike"] == $bike["ID_bike"]);
+                                 // Si le vélo a des images
+                                 if (count($bikeImages) > 0) 
+                                 {
+                                     // Début du carrousel Bootstrap (manuel, pas automatique)
+                                     echo '<div id="' . $carouselId . '" class="carousel slide" data-bs-ride="false">';
+                                     // Conteneur des images du carrousel
+                                     echo '<div class="carousel-inner" style="max-width: 200px;">';
+                                     // Marque la première image comme active
+                                     $active = 'active';
+                                     // Affiche chaque image
+                                     foreach ($bikeImages as $img) 
+                                     {
+                                         echo '<div class="carousel-item ' . $active . '">';
+                                         echo '<img src="../../../../userContent/img/ImageBike/' . htmlspecialchars($img["bidPathFile"]) . '" class="d-block w-100" alt="Image vélo" style="object-fit: contain; max-height: 250px;">';
+                                         echo '</div>';
+                                         $active = ''; // Les suivantes ne doivent pas être "active"
+                                     }
+                                     echo '</div>'; // Fin des images
+                                     // Bouton précédent
+                                     echo '<button class="carousel-control-prev" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="prev">';
+                                     echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                                     echo '<span class="visually-hidden">Précédent</span>';
+                                     echo '</button>';
+                                     // Bouton suivant
+                                     echo '<button class="carousel-control-next" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="next">';
+                                     echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                                     echo '<span class="visually-hidden">Suivant</span>';
+                                     echo '</button>';
+                                     echo '</div>'; // Fin du carrousel
+                                 } 
+                                 else 
+                                 {
+                                     // Aucune image disponible
+                                     echo 'Aucune image';
+                                 }
+
                                 // Numéro de serie du cadre 
-                                echo '<tr><td>' . $bike["bikFrameNumber"] . '</td>';
+                                echo '<td>' . $bike["bikFrameNumber"] . '</td>';
                                 // Marque du vélo 
                                 echo '<td>' . $bike["braName"] . '</td>';
                                 // Taille du vélo 

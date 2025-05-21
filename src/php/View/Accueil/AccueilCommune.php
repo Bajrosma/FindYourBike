@@ -44,7 +44,7 @@ $_SESSION["MessageAdd"] = "";
       <?php 
         }
       ?>
-      <a class="btn">Statistiques</a>
+      <a class="btn" href="../ChooseStatistiquePage.php">Statistiques</a>
       <a class="btn" href="../Listes/ListeCommunePage.php">Liste des communes membres</a>
     </div>
     <a href="../../Controller/logout.php" class="logout">Déconnexion</a>

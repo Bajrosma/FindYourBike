@@ -3,7 +3,7 @@ session_start();
 
 /**
  * Auteur : Bajro Osmanovic
- * Date : 14.05.2025 → Modif : 
+ * Date : 14.05.2025 → Modif : 21.05.2025
  * Description : Vérification et enregistrer le formulaire de rendu
  */
 
@@ -14,9 +14,17 @@ require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 
+var_dump($_FILES);
+
 // Vérification si l'utilisateur a soumis le formulaire (paramètre "Update" non défini dans l'URL)
 if (!isset($_GET["Update"])) {
 
+    // Définir le répertoire de téléchargement des images
+    $uploadDir = '../../../../userContent/img/ImageProof/';
+    // Limite : maximum 3 fichiers
+    $maxFiles = 3;
+    // Types MIME autorisés
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
     // Configuration des champs à valider avec leurs expressions régulières et messages d'erreur
     $fields = [
         'perAdress' => [
@@ -48,12 +56,50 @@ if (!isset($_GET["Update"])) {
             'error' => 'Veuillez entrer un nom valide (lettres uniquement) !'
         ]
     ];
-    
-    
-
     // Variable de validation globale
-    $isValid = true;
+    $isValid = true;  
 
+    $filesCount = count($_FILES['images']['name']);
+
+    if($filesCount > $maxFiles)
+    {
+        $ErrorMessage = "vous ne pouvez qu'uploader jusqu'à 3 images maximum !";
+    }
+    else 
+    {
+        if(isset($_FILES))
+        {
+            $files = $_FILES['images'];
+
+            foreach($_FILES['images']['name'] as $i => $fileName)
+            {
+                $tmpName = $files['tmp_name'][$i];
+                $type = mime_content_type($tmpName);
+                $name = basename($fileName);
+                // vérifie si l'extension du fichier et compatible
+                if(!in_array($type, $allowedTypes))
+                {
+                    $ErrorMessage = "le fichier $name n'est pas une image valide !";
+                    $isValid = false;
+                    continue;
+                }
+                // préparation du chemin de stockage de l'image.
+                $uniqueName = uniqid()."-".$name;
+                $destination = $uploadDir . $name;
+                // si le déplacement réussi 
+                if(move_uploaded_file($tmpName, $destination))
+                {
+                    //echo "image $name enregistrée avec succès.";
+                    $FileNames[] = $uniqueName;
+                }
+                // si le déplacement ne réussi pas 
+                else 
+                {
+                    $ErrorMessage = "le fichier $name n'a pas pu être enregistrer !";
+                }
+            }
+        }
+    }
     // Boucle pour valider chaque champ
     foreach ($fields as $field => $config) {
         $value = $_POST[$field] ?? ''; // Récupère la valeur du champ, ou vide si non défini
@@ -77,6 +123,9 @@ if (!isset($_GET["Update"])) {
         }
     }
 
+
+    var_dump($_POST["bikRestitutionDate"]);
+
     // Si tous les champs sont valides
     if ($isValid) {
         // Appelle la méthode pour mettre à jour la BD 
@@ -88,8 +137,9 @@ if (!isset($_GET["Update"])) {
             $_POST["perNPA"],
             $_POST["perEmail"],
             $_POST["perTel"],
-            $_POST["bikDateRestitution"],
-            $_GET["ID"]
+            $_POST["bikRestitutionDate"],
+            $_GET["ID"],
+            $FileNames
         );
         // Message de confirmation d'ajout
         $_SESSION["MessageAdd"] = "vélo rendu avec succès !";
@@ -103,13 +153,13 @@ if (!isset($_GET["Update"])) {
     }
 
     // Redirection vers la page d'ajout de bâtiment avec le message approprié
-    header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
+    //header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
     exit;
 } else {
     // Si le paramètre "Update" est présent, cela signifie qu'aucune donnée n'a été reçue
     $_SESSION["ErrorMessage"] = "Aucune donnée reçue !";
     $_SESSION["MessageAdd"] = "";
     // Redirige l'utilisateur vers la page d'ajout de bâtiment 
-    header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
+    //header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
     exit;
 }

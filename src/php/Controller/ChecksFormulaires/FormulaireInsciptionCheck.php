@@ -99,7 +99,7 @@ if (!isset($_GET["Update"])) {
             $_POST["comFonction"]
         );
         // Message de confirmation d'ajout
-        $_SESSION["MessageAdd"] = "Bâtiment ajouté avec succès !";
+        $_SESSION["MessageAdd"] = "Inscription enregistré avec succès !";
         // Vider les données de la session après la mise à jour réussie
         foreach ($fields as $field => $config) {
             unset($_SESSION[$field]); // Supprime la donnée du champ de la session

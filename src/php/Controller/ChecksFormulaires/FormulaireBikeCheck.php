@@ -3,7 +3,7 @@ session_start();
 
 /**
  * Auteur : Bajro Osmanovic
- * Date : 09.05.2025 → Modif : 12.05.2025
+ * Date : 09.05.2025 → Modif : 21.05.2025
  * Description : Vérification et enregistrer le formulaire d'inscirption
  */
 
@@ -69,7 +69,8 @@ if (!isset($_GET["Update"])) {
                 // si le déplacement réussi 
                 if(move_uploaded_file($tmpName, $destination))
                 {
-                    echo "image $name enregistrée avec succès.";
+                    //echo "image $name enregistrée avec succès.";
+                    $FileNames[] = $uniqueName;
                 }
                 // si le déplacement ne réussi pas 
                 else 
@@ -79,7 +80,6 @@ if (!isset($_GET["Update"])) {
             }
         }
     }
-
 
     // Boucle pour valider chaque champ
     foreach ($fields as $field => $config) {
@@ -101,10 +101,11 @@ if (!isset($_GET["Update"])) {
             $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "";
         }
     }
+
     // Si tous les champs sont valides
     if ($isValid) {
         // Appelle la méthode pour ajouter un bâtiment dans la base de données
-        /*$db->AddBike(
+        $db->NewBike(
             $_POST["bikDate"],
             $_POST["bikPlace"],
             $_POST["bikFrameNumber"],
@@ -112,9 +113,8 @@ if (!isset($_GET["Update"])) {
             $_POST["FK_brand"],
             $_POST["FK_size"],
             $_POST["FK_commune"],
-            $uniqueName
+            $FileNames
         );
-        */
         // Message de confirmation d'ajout
         $_SESSION["MessageAdd"] = "vélo ajouté avec succès !";
         // Vider les données de la session après la mise à jour réussie
@@ -126,7 +126,7 @@ if (!isset($_GET["Update"])) {
         $_SESSION["MessageAdd"] = "";
     }
     // Redirection vers la page d'ajout d'un vélo avec le message approprié
-    //header("Location: ../../View/Formulaires/FormulaireBikePage.php");
+    header("Location: ../../View/Formulaires/FormulaireBikePage.php");
     exit;
 } 
 else 
@@ -135,6 +135,6 @@ else
     $_SESSION["ErrorMessage"] = "Aucune donnée reçue !";
     $_SESSION["MessageAdd"] = "";
     // Redirige l'utilisateur vers la page d'ajout d'un vélo
-    //header("Location: ../../View/Formulaires/FormulaireBikePage.php");
+    header("Location: ../../View/Formulaires/FormulaireBikePage.php");
     exit;
 }
