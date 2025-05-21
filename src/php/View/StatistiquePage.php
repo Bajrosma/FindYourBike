@@ -13,13 +13,19 @@
     // Création d'une instance de la classe Database pour l'accès à la base de données
     $db = Database::getInstance();
     // récupèrer toutes les informations pour l'affichage 
-    $bikes = $db->GetAllBikes();
-    // reinitialise le message après une action 
-    $_SESSION["MessageAdd"] = "";
-
+    if(isset($_POST["trimestre"]))
+    {
+      $bikes = $db->GetDataForStatistiqueTrimestre($_POST["Year"], $_POST["trimestre"]);
+    }
+    else
+    {
+      $bikes = $db->GetDataForStatistiqueYear($_POST["Year"]);
+    }
+    // Compte le nombre de vélos présent dans le tableau retournée
     $total = count($bikes);
+    // fixe le nombre de vélo non rendu à 0 
     $notRender = 0;
-
+    // repasse en revu tout les vélos et compte les vélos qui ne sont pas rendu
     foreach($bikes as $bike)
     {
         if($bike["bikResitutionDate"] == NULL)
@@ -27,18 +33,10 @@
             $notRender = $notRender + 1;
         }
     }
-    $rendered = $total - $notRender;    
-
-    $notRender = 100/$total * $notRender;
-
-    $notRender = round($notRender, 2);
-
-    echo $notRender . '<br>';
-
-    $rendered = 100/$total * $rendered;
-    $rendered = round($rendered, 2);
-    echo $rendered;
-
+    // calcule le pourcentage des vélos rendu
+    $rendered = round(100/$total * ($total - $notRender), 2);
+    // calcule le pourcentage des vélos non rendu
+    $notRender = round(100/$total * $notRender, 2);
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -59,14 +57,68 @@
         <link rel="icon" href="userContent/img/Logo2.png" type="image/x-icon">
     </head>
     <body>
-        <div class="container">
-        <h1>Page d'accueil</h1>
-            <div class="grid">
-            <a class="btn">Trimestre</a>
-            <a class="btn">Annuel</a>
-            </div>
+        <div class="table-container">
+          <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+          <h1>Statistique <?php 
+          if(isset($_POST["trimester"]))
+          {
+          echo $_POST["Year"] . ", Semestre" . $_POST["trimester"];
+          }
+          else 
+          {
+            echo $_POST["Year"];
+          }
+          
+          ?></h1>
+          <div id="graph"></div>
+          <br>
+          <table>
+                <thead>
+                    <tr>
+                        <th>Numéro de séries</th>
+                        <th>Marque</th>
+                        <th>Taille</th>
+                        <th>couleur</th>
+                        <th>Adresse où il a été retrouvé</th>
+                        <th>Date découverte</th>
+                        <th>Commune de référence</th>
+                        <th>Rendu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- données -->
+                    <?php
+                        foreach($bikes as $bike)
+                        {
+                                // Numéro de serie du cadre 
+                                echo '<tr><td>' . $bike["bikFrameNumber"] . '</td>';
+                                // Marque du vélo 
+                                echo '<td>' . $bike["braName"] . '</td>';
+                                // Taille du vélo 
+                                echo '<td>' . $bike["sizSize"] . '</td>';
+                                // Couleur du vélo 
+                                echo '<td>' . $bike["colName"] . '</td>';
+                                // lieu ou le vélo a été retrouvé
+                                echo '<td>' . $bike["bikPlace"] . '</td>';
+                                // date de la découverte du vélo 
+                                echo '<td>' . $bike["bikDate"] . '</td>';
+                                // Commune oû le vélo est stocker 
+                                echo '<td>' . $bike["comName"] . '</td>';
+                               // affiche si il a été rendu ou pas 
+                               if($bike["bikResitutionDate"] == NULL)
+                              {
+                                echo '<td>non Rendu</td>';
+                              } 
+                              else 
+                              {
+                                echo '<td>Rendu</td>';
+                              }
+                        }
+                    ?>
+                </tbody>
+            </table>          
         </div>
-    <div id="graph"></div>
+    
     </bod<>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -74,49 +126,26 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script>
-
-    // Build the chart
-Highcharts.chart('graph', {
-  chart: {
-    plotBackgroundColor: null,
-    plotBorderWidth: null,
-    plotShadow: false,
-    type: 'pie'
-  },
-  title: {
-    text: 'Browser market shares in January, 2018'
-  },
-  tooltip: {
-    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-  },
-  accessibility: {
-    point: {
-      valueSuffix: '%'
-    }
-  },
-  plotOptions: {
-    pie: {
-      allowPointSelect: true,
-      cursor: 'pointer',
-      dataLabels: {
-        enabled: false
-      },
-      showInLegend: true
-    }
-  },
-  series: [{
-    name: 'Vélo',
-    colorByPoint: true,
-    data: [{
-      name: 'Non-Rendu',
-      y: <?php echo $notRender; ?>,
-      sliced: true,
-      selected: true
-    }, {
-      name: 'Rendu',
-      y: <?php echo $rendered; ?>
+      // Script form Code Pen
+      Highcharts.chart('graph', {
+    chart: {
+      type: 'pie'
+    },
+    title: {
+      text: 'Répartition des vélos rendu ou pas'
+    },
+    series: [{
+      name: 'Statut',
+      colorByPoint: true,
+      data: [{
+        name: 'Non-Rendu',
+        y: <?php echo $notRender; ?>,
+        drilldown: 'nonRendu'
+      }, {
+        name: 'Rendu',
+        y: <?php echo $rendered; ?>,
+        drilldown: 'rendu'
+      }]
     }]
-  }]
-});
-
+  });
 </script>

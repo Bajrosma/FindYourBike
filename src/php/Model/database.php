@@ -1,7 +1,7 @@
 <?php
 /**
  * Auteur : Bajro Osmanovic
- * Date : 09.05.2025 → Modif : 12.05.2025
+ * Date : 09.05.2025 → Modif : 21.05.2025
  * Description : page contenant toute la logique derrière concernant les interactions direct avec la Base de données
  */
     class Database
@@ -64,7 +64,7 @@
         }
  
         /**
-         * TODO: à compléter
+         * fonction qui permet d'executer des requêtes simples
          */
         private function querySimpleExecute($query)
         {
@@ -73,7 +73,7 @@
         }
  
         /**
-         * TODO: à compléter
+         * fonction qui permet d'executer des requêtes qui doivent être vérifier
          */
         private function queryPrepareExecute($query, $binds)
         {
@@ -98,8 +98,8 @@
         }
  
         /**
-         * fonction qui récupère tout les Genres deja existant
-         * @return -- renvoie un tableau avec tout les genres
+         * fonction qui transforme les données reçu en tableau
+         * @return -- renvoie le tableau demandé
          */
         private function formatData($req)
         {
@@ -108,25 +108,26 @@
         }
 
         /**
-         * test
-         * @return -- renvoie un tableau avec tous les bâtiments
+         * fonction qui récupère les informations d'une personnes et leur mot de passes hashé
+         * @return -- renvoie un tableau avec toutes les utilisateurs et leur mot de passe
          */
         public function Getusers()
         {
+            // requête 
             $query = "SELECT useName, usePassword, usePrivilage FROM t_user ";
-   
+            // execution de la requête
             $prepareTemp = $this->querySimpleExecute($query);
+            // transformation des résultat en tableaux
             $prepareTabTemp = $this->formatData($prepareTemp);
-   
+            // retourne le tableau 
             return $prepareTabTemp;
         }
-
         /**
-         * recherche une commune
-         * @return -- renvoie un tableau avec tous les bâtiments
+         * fonction permettant la création d'un compte
          */
         public function CreateAccount($User, $password, $privilage)
         {
+            // requête 
             $query = "INSERT INTO t_user (useName, usePassword, usePrivilage) VALUES (:username, :passwords, :privilage)";
             // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
             $binds = [
@@ -136,6 +137,45 @@
             ];    
             // Exécution sécurisée de la requête préparée
             $this->queryPrepareExecute($query, $binds);
+        }
+        /**
+         * recherche les données pour les statistiques
+         * @return -- renvoie un tableau avec toutes les données nécessaire au statistique
+         */
+        public function GetDataForStatistiqueTrimestre($year, $trimestre)
+        {
+            // requête 
+            $query = "SELECT bikDate, bikResitutionDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune WHERE QUARTER(bikDate) = :Trimestre AND YEAR(bikDate) = :Years ";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'Trimestre' => ['value' => $trimestre, 'type' => PDO::PARAM_STR],
+                'Years' => ['value' => $year, 'type' => PDO::PARAM_STR]
+            ];  
+            // Exécution sécurisée de la requête préparée
+            $prepareTemp = $this->queryPrepareExecute($query, $binds);
+            // en fait un tableau lisible
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+        /**
+         * recherche les données pour les statistiques
+         * @return -- renvoie un tableau avec toutes les données nécessaire au statistique
+         */
+        public function GetDataForStatistiqueYear($year)
+        {
+            // requête 
+            $query = "SELECT bikDate, bikResitutionDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune WHERE YEAR(bikDate) = :Years ";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'Years' => ['value' => $year, 'type' => PDO::PARAM_STR]
+            ];  
+            // Exécution sécurisée de la requête préparée
+            $prepareTemp = $this->queryPrepareExecute($query, $binds);
+            // en fait un tableau lisible
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
         }
 
         /**

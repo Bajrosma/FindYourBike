@@ -12,33 +12,8 @@
     require_once('../Model/database.php');
     // Création d'une instance de la classe Database pour l'accès à la base de données
     $db = Database::getInstance();
-    // récupèrer toutes les informations pour l'affichage 
-    $bikes = $db->GetAllBikes();
     // reinitialise le message après une action 
     $_SESSION["MessageAdd"] = "";
-
-    $total = count($bikes);
-    $notRender = 0;
-
-    foreach($bikes as $bike)
-    {
-        if($bike["bikResitutionDate"] == NULL)
-        {  
-            $notRender = $notRender + 1;
-        }
-    }
-    $rendered = $total - $notRender;    
-
-    $notRender = 100/$total * $notRender;
-
-    $notRender = round($notRender, 2);
-
-    echo $notRender . '<br>';
-
-    $rendered = 100/$total * $rendered;
-    $rendered = round($rendered, 2);
-    echo $rendered;
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -60,10 +35,11 @@
     </head>
     <body>
         <div class="container">
-        <h1>Page d'accueil</h1>
+            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+            <h1>Choix de la durée des statistiques</h1>
             <div class="grid">
-            <a class="btn" href="Formulaires/FormulaireStatistiqueChoice.php?Choice=1">Trimestre</a>
-            <a class="btn" href="Formulaires/FormulaireStatistiqueChoice.php?Choice=0">Annuel</a>
+                <a class="btn" href="Formulaires/FormulaireStatistiqueChoice.php?Choice=1">Trimestre</a>
+                <a class="btn" href="Formulaires/FormulaireStatistiqueChoice.php?Choice=0">Annuel</a>
             </div>
         </div>
     <div id="graph"></div>

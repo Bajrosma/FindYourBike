@@ -25,8 +25,8 @@
     <body>
         <div class="container">
         <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
-        <h1>Création d'un compte</h1>
-        <form action="" method="post">
+        <h1>Choix de la durée des statistiques</h1>
+        <form action="../StatistiquePage.php" method="post">
             <div class='form-group row mb-3'>
                 <label for='Year' class='col-sm-4 col-form-label'>Année</label>
                 <div class='col-sm-8'>
@@ -56,7 +56,7 @@
                 }
             ?>          
             <div class="text-center">
-                <button type="submit" class="btn">Soumettre le formulaire</button>
+                <button type="submit" class="btn">Générer statistique</button>
             </div>
         </form>
     </body>

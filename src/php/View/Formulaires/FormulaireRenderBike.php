@@ -36,7 +36,7 @@ $communes = $db->GetAllCommunesDropDown();
     <body>
         <div class="container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
-            <h1>Restitution d'un vélo trouvé</h1>
+            <h1>Remise d'un vélo trouvé</h1>
             <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $_GET["ID"]?>" method="post" enctype="multipart/form-data">
                 <?php 
                     $Champs = [
