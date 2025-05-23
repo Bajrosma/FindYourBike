@@ -126,9 +126,11 @@ $communes = $db->GetAllCommunesDropDown();
                 // parcours le tableau des communes 
                 foreach($communes as $commune )
                 {
-                    // si les communes ont une inscription valide, alors il crée un choix de plus pour la liste déroulante.
+                    // si les communes ont une inscription valide, alors il 
+                    // crée un choix de plus pour la liste déroulante.
                     if($commune["comInscription"] == 1)
-                    echo '<option value="'. $commune["ID_commune"] .'">'. $commune["comName"] .'</option>"';
+                    echo '<option value="'. $commune["ID_commune"] .'">'. 
+                         $commune["comName"] .'</option>"';
                 }
             ?>
         </select>

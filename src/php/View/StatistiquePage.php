@@ -12,6 +12,10 @@
     require_once('../Model/database.php');
     // Création d'une instance de la classe Database pour l'accès à la base de données
     $db = Database::getInstance();
+    // information nécessaire au liste décourlantes 
+    $sizes = $db->GetAllSizes();
+    $brands = $db->GetAllBrands();
+    $colors = $db->GetAllColors();
     // récupèrer toutes les informations pour l'affichage 
     if(isset($_POST["trimestre"]))
     {
@@ -72,51 +76,92 @@
           ?></h1>
           <div id="graph"></div>
           <br>
-          <table>
-                <thead>
-                    <tr>
-                        <th>Numéro de séries</th>
-                        <th>Marque</th>
-                        <th>Taille</th>
-                        <th>couleur</th>
-                        <th>Adresse où il a été retrouvé</th>
-                        <th>Date découverte</th>
-                        <th>Commune de référence</th>
-                        <th>Rendu</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- données -->
-                    <?php
-                        foreach($bikes as $bike)
-                        {
-                                // Numéro de serie du cadre 
-                                echo '<tr><td>' . $bike["bikFrameNumber"] . '</td>';
-                                // Marque du vélo 
-                                echo '<td>' . $bike["braName"] . '</td>';
-                                // Taille du vélo 
-                                echo '<td>' . $bike["sizSize"] . '</td>';
-                                // Couleur du vélo 
-                                echo '<td>' . $bike["colName"] . '</td>';
-                                // lieu ou le vélo a été retrouvé
-                                echo '<td>' . $bike["bikPlace"] . '</td>';
-                                // date de la découverte du vélo 
-                                echo '<td>' . $bike["bikDate"] . '</td>';
-                                // Commune oû le vélo est stocker 
-                                echo '<td>' . $bike["comName"] . '</td>';
-                               // affiche si il a été rendu ou pas 
-                               if($bike["bikResitutionDate"] == NULL)
-                              {
-                                echo '<td>non Rendu</td>';
-                              } 
-                              else 
-                              {
-                                echo '<td>Rendu</td>';
-                              }
-                        }
-                    ?>
-                </tbody>
-            </table>          
+          <div style="margin-bottom: 15px;">
+              <label for="filterSerial">Numéro de série :</label>
+              <input type="text" id="filterSerial" oninput="filterTable()">
+              <label for="filterBrand">Marque :</label>
+              <select id="filterBrand" onchange="filterTable()">
+                  <option value="">Toutes</option>
+                  <?php 
+                      // parcours le tableau des marques 
+                      foreach($brands as $brand )
+                      {
+                          echo '<option value="'. $brand["braName"] .'">'. $brand["braName"] .'</option>"';
+                      }
+                  ?>
+              </select>
+
+              <label for="filterSize">Taille :</label>
+              <select id="filterSize" onchange="filterTable()">
+                  <option value="">Toutes</option>
+                  <?php 
+                      // parcours le tableau des tailles         
+                      foreach($sizes as $size )
+                      {
+                          echo '<option value="'. $size["sizSize"] .'">'. $size["sizSize"] .'</option>"';
+                      }
+                  ?>
+              </select>
+
+              <label for="filterColor">Couleur :</label>
+              <select id="filterColor" onchange="filterTable()">
+                  <option value="">Toutes</option>
+                  <?php 
+                      // parcours le tableau des couleurs
+                      foreach($colors as $color )
+                      {
+                          echo '<option value="'. $color["colName"] .'">'. $color["colName"] .'</option>"';
+                      }
+                  ?>
+              </select>
+          </div>
+          <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Numéro de séries</th>
+                          <th>Marque</th>
+                          <th>Taille</th>
+                          <th>couleur</th>
+                          <th>Adresse où il a été retrouvé</th>
+                          <th>Date découverte</th>
+                          <th>Commune de référence</th>
+                          <th>Rendu</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <!-- données -->
+                      <?php
+                          foreach($bikes as $bike)
+                          {
+                                  // Numéro de serie du cadre 
+                                  echo '<tr><td>' . $bike["bikFrameNumber"] . '</td>';
+                                  // Marque du vélo 
+                                  echo '<td>' . $bike["braName"] . '</td>';
+                                  // Taille du vélo 
+                                  echo '<td>' . $bike["sizSize"] . '</td>';
+                                  // Couleur du vélo 
+                                  echo '<td>' . $bike["colName"] . '</td>';
+                                  // lieu ou le vélo a été retrouvé
+                                  echo '<td>' . $bike["bikPlace"] . '</td>';
+                                  // date de la découverte du vélo 
+                                  echo '<td>' . $bike["bikDate"] . '</td>';
+                                  // Commune oû le vélo est stocker 
+                                  echo '<td>' . $bike["comName"] . '</td>';
+                                // affiche si il a été rendu ou pas 
+                                if($bike["bikResitutionDate"] == NULL)
+                                {
+                                  echo '<td>non Rendu</td>';
+                                } 
+                                else 
+                                {
+                                  echo '<td>Rendu</td>';
+                                }
+                          }
+                      ?>
+                  </tbody>
+              </table>
+            </div>          
         </div>
     
     </bod<>
@@ -126,26 +171,59 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script>
-      // Script form Code Pen
+  // Fonction qui filtre les lignes du tableau en fonction des filtres sélectionnés
+  function filterTable() 
+    {
+        // Récupère les valeurs des filtres (converties en minuscules pour éviter les problèmes de casse)
+        const serialFilter = document.getElementById("filterSerial").value.toLowerCase(); // numéro de série
+        const brandFilter = document.getElementById("filterBrand").value.toLowerCase();   // marque
+        const sizeFilter = document.getElementById("filterSize").value.toLowerCase();     // taille
+        const colorFilter = document.getElementById("filterColor").value.toLowerCase();   // couleur
+
+        // Sélectionne toutes les lignes du tableau (à l'intérieur du tbody)
+        const rows = document.querySelectorAll("table tbody tr");
+
+        // Parcours chaque ligne du tableau
+        rows.forEach(row => 
+        {
+            // Récupère les données des cellules correspondantes aux filtres
+            const serial = row.cells[0].textContent.toLowerCase(); // cellule 1 : numéro de série
+            const brand = row.cells[1].textContent.toLowerCase();  // cellule 2 : marque
+            const size = row.cells[2].textContent.toLowerCase();   // cellule 3 : taille
+            const color = row.cells[3].textContent.toLowerCase();  // cellule 4 : couleur
+
+            // Vérifie si la ligne correspond à tous les filtres
+            const show =
+                serial.includes(serialFilter) && // le numéro de série contient la chaîne recherchée
+                (brandFilter === "" || brand === brandFilter) && // si un filtre marque est défini, il doit correspondre
+                (sizeFilter === "" || size === sizeFilter) &&     // idem pour la taille
+                (colorFilter === "" || color === colorFilter);    // idem pour la couleur
+
+            // Affiche la ligne si elle correspond, sinon la masque
+            row.style.display = show ? "" : "none";
+        });
+    }
+
+      // Script venant de Code Pen
       Highcharts.chart('graph', {
-    chart: {
-      type: 'pie'
-    },
-    title: {
-      text: 'Répartition des vélos rendu ou pas'
-    },
-    series: [{
-      name: 'Statut',
-      colorByPoint: true,
-      data: [{
-        name: 'Non-Rendu',
-        y: <?php echo $notRender; ?>,
-        drilldown: 'nonRendu'
-      }, {
-        name: 'Rendu',
-        y: <?php echo $rendered; ?>,
-        drilldown: 'rendu'
-      }]
-    }]
-  });
+        chart: {
+          type: 'pie'
+        },
+        title: {
+          text: 'Répartition des vélos rendu ou pas'
+        },
+        series: [{
+          name: 'Statut',
+          colorByPoint: true,
+          data: [{
+            name: 'Non-Rendu',
+            y: <?php echo $notRender; ?>,
+            drilldown: 'nonRendu'
+          }, {
+            name: 'Rendu',
+            y: <?php echo $rendered; ?>,
+            drilldown: 'rendu'
+          }]
+        }]
+      });
 </script>

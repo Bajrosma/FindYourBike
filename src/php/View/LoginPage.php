@@ -1,7 +1,4 @@
 <?php
- //commence le système de session
- session_start();
-
  /**
  * Auteur : Bajro Osmanovic
  * Date : 09.05.2025 → Modif : 

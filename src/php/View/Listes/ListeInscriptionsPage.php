@@ -41,41 +41,43 @@ $_SESSION["MessageAdd"] = "";
         <div class="table-container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
             <h2>Liste des personnes inscrite</h2>
-            <table>
-                <tr>
-                    <th>Nom de la commune</th>
-                    <th>Adresse complète</th>
-                    <th>Email</th>
-                    <th>Téléphone</th>
-                    <th>Nom du responsable</th>
-                    <th>Options</th>
-                </tr>
-                <!-- données -->
-                <?php
-                    foreach ($communes as $commune) {
-                        if ($commune['comInscription'] == 0) 
-                        {
-                            // Nom de la commune
-                            echo '<tr><td>' . $commune["comName"] . '</td>';                    
-                            // Adresse complète
-                            echo "<td>" . $commune["comAdress"] . ", " .  $commune["comCity"] . " " .  $commune["comNPA"]. "</td>";                    
-                            // Email
-                            echo "<td>" . $commune["comEmail"] . "</td>";
-                    
-                            // Téléphone
-                            echo "<td>" . $commune["comTel"] . "</td>";
-                    
-                            echo "<td><em>Aucun responsable</em></td>";
-                            // options pour accepter ou refuser l'inscription
-                            echo '<td>
-                                    <a class="LinksOptions" href="../../Controller/AcceptInscription.php?ID=' . $commune["ID_commune"] . '"><img class="Logo" src="../../../../userContent/img/Logo/AcceptIcon.png" alt="Accepter"></a><br>
-                                    <a class="LinksOptionsDel" href="../../Controller/RefuseInscription.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/RefuseIcon.jpg" alt="Refuser"></a>
-                                  </td></tr>';
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Nom de la commune</th>
+                        <th>Adresse complète</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Nom du responsable</th>
+                        <th>Options</th>
+                    </tr>
+                    <!-- données -->
+                    <?php
+                        foreach ($communes as $commune) {
+                            if ($commune['comInscription'] == 0) 
+                            {
+                                // Nom de la commune
+                                echo '<tr><td>' . $commune["comName"] . '</td>';                    
+                                // Adresse complète
+                                echo "<td>" . $commune["comAdress"] . ", " .  $commune["comCity"] . " " .  $commune["comNPA"]. "</td>";                    
+                                // Email
+                                echo "<td>" . $commune["comEmail"] . "</td>";
+                        
+                                // Téléphone
+                                echo "<td>" . $commune["comTel"] . "</td>";
+                        
+                                echo "<td><em>Aucun responsable</em></td>";
+                                // options pour accepter ou refuser l'inscription
+                                echo '<td>
+                                        <a class="LinksOptions" href="../../Controller/AcceptInscription.php?ID=' . $commune["ID_commune"] . '"><img class="Logo" src="../../../../userContent/img/Logo/AcceptIcon.png" alt="Accepter"></a><br>
+                                        <a class="LinksOptionsDel" href="../../Controller/RefuseInscription.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/RefuseIcon.jpg" alt="Refuser"></a>
+                                    </td></tr>';
+                            }
                         }
-                    }
-                    
-                ?>
-            </table>
+                        
+                    ?>
+                </table>
+            </div>
         </div>
     </body>
 </html>

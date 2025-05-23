@@ -12,9 +12,6 @@ require_once('../../Model/config.php');
 require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
-
-var_dump( $_SESSION["ErrorMessagePasswordConfirm"]);
-
 ?>
 
 <html lang="fr">
@@ -65,6 +62,12 @@ var_dump( $_SESSION["ErrorMessagePasswordConfirm"]);
             </select>
             </div>
         </div>
+        <?php
+            if(isset( $_SESSION["ErrorMessagePasswordConfirm"]))
+            {
+                echo  $_SESSION["ErrorMessagePasswordConfirm"];
+            }
+        ?>
         <div class="text-center">
             <button type="submit" class="btn">Soumettre le formulaire</button>
         </div>

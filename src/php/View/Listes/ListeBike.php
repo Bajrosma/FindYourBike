@@ -84,103 +84,105 @@ $_SESSION["MessageAdd"] = "";
                     ?>
                 </select>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Images</th>
-                        <th>Numéro de séries</th>
-                        <th>Marque</th>
-                        <th>Taille</th>
-                        <th>couleur</th>
-                        <th>Adresse où il a été retrouvé</th>
-                        <th>Date découverte</th>
-                        <th>Commune de référence</th>
-                        <?php 
-                        // Affichage des options en fonctions de la sessions
-                        if($_SESSION["rights"] == 1)
-                        {
-                        ?>
-                        <th>Options</th>
-                        <?php 
-                        }
-                        ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- données -->
-                    <?php
-                        foreach($bikes as $bike)
-                        {
-                            if($bike["bikResitutionDate"] == NULL)
+            <div class="table-responsive">
+                <table class="table hide-image-column">
+                    <thead>
+                        <tr>
+                            <th>Images</th>
+                            <th>Numéro de séries</th>
+                            <th>Marque</th>
+                            <th>Taille</th>
+                            <th>couleur</th>
+                            <th>Adresse où il a été retrouvé</th>
+                            <th>Date découverte</th>
+                            <th>Commune de référence</th>
+                            <?php 
+                            // Affichage des options en fonctions de la sessions
+                            if($_SESSION["rights"] == 1)
                             {
-                                // Carrousel des images (réaliser à l'aide de ChatGPT)
-                                echo '<tr><td>';
-                                // Crée un ID unique pour le carrousel en fonction de l'ID du vélo
-                                $carouselId = "carouselBike" . $bike["ID_bike"];
-                                // Filtre les images pour ce vélo uniquement
-                                $bikeImages = array_filter($data, fn($img) => $img["FK_bike"] == $bike["ID_bike"]);
-                                // Si le vélo a des images
-                                if (count($bikeImages) > 0) 
+                            ?>
+                            <th>Options</th>
+                            <?php 
+                            }
+                            ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- données -->
+                        <?php
+                            foreach($bikes as $bike)
+                            {
+                                if($bike["bikResitutionDate"] == NULL)
                                 {
-                                    // Début du carrousel Bootstrap (manuel, pas automatique)
-                                    echo '<div id="' . $carouselId . '" class="carousel slide" data-bs-ride="false">';
-                                    // Conteneur des images du carrousel
-                                    echo '<div class="carousel-inner" style="max-width: 200px;">';
-                                    // Marque la première image comme active
-                                    $active = 'active';
-                                    // Affiche chaque image
-                                    foreach ($bikeImages as $img) 
+                                    // Carrousel des images (réaliser à l'aide de ChatGPT)
+                                    echo '<tr><td>';
+                                    // Crée un ID unique pour le carrousel en fonction de l'ID du vélo
+                                    $carouselId = "carouselBike" . $bike["ID_bike"];
+                                    // Filtre les images pour ce vélo uniquement
+                                    $bikeImages = array_filter($data, fn($img) => $img["FK_bike"] == $bike["ID_bike"]);
+                                    // Si le vélo a des images
+                                    if (count($bikeImages) > 0) 
                                     {
-                                        echo '<div class="carousel-item ' . $active . '">';
-                                        echo '<img src="../../../../userContent/img/ImageBike/' . htmlspecialchars($img["bidPathFile"]) . '" class="d-block w-100" alt="Image vélo" style="object-fit: contain; max-height: 250px;">';
-                                        echo '</div>';
-                                        $active = ''; // Les suivantes ne doivent pas être "active"
+                                        // Début du carrousel Bootstrap (manuel, pas automatique)
+                                        echo '<div id="' . $carouselId . '" class="carousel slide" data-bs-ride="false">';
+                                        // Conteneur des images du carrousel
+                                        echo '<div class="carousel-inner" style="max-width: 200px;">';
+                                        // Marque la première image comme active
+                                        $active = 'active';
+                                        // Affiche chaque image
+                                        foreach ($bikeImages as $img) 
+                                        {
+                                            echo '<div class="carousel-item ' . $active . '">';
+                                            echo '<img src="../../../../userContent/img/ImageBike/' . htmlspecialchars($img["bidPathFile"]) . '" class="d-block w-100" alt="Image vélo" style="object-fit: contain; max-height: 250px;">';
+                                            echo '</div>';
+                                            $active = ''; // Les suivantes ne doivent pas être "active"
+                                        }
+                                        echo '</div>'; // Fin des images
+                                        // Bouton précédent
+                                        echo '<button class="carousel-control-prev" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="prev">';
+                                        echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                                        echo '<span class="visually-hidden">Précédent</span>';
+                                        echo '</button>';
+                                        // Bouton suivant
+                                        echo '<button class="carousel-control-next" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="next">';
+                                        echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                                        echo '<span class="visually-hidden">Suivant</span>';
+                                        echo '</button>';
+                                        echo '</div>'; // Fin du carrousel
+                                    } 
+                                    else 
+                                    {
+                                        // Aucune image disponible
+                                        echo 'Aucune image';
                                     }
-                                    echo '</div>'; // Fin des images
-                                    // Bouton précédent
-                                    echo '<button class="carousel-control-prev" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="prev">';
-                                    echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
-                                    echo '<span class="visually-hidden">Précédent</span>';
-                                    echo '</button>';
-                                    // Bouton suivant
-                                    echo '<button class="carousel-control-next" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="next">';
-                                    echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
-                                    echo '<span class="visually-hidden">Suivant</span>';
-                                    echo '</button>';
-                                    echo '</div>'; // Fin du carrousel
-                                } 
-                                else 
-                                {
-                                    // Aucune image disponible
-                                    echo 'Aucune image';
-                                }
 
-                                // Numéro de serie du cadre 
-                                echo '<td>' . $bike["bikFrameNumber"] . '</td>';
-                                // Marque du vélo 
-                                echo '<td>' . $bike["braName"] . '</td>';
-                                // Taille du vélo 
-                                echo '<td>' . $bike["sizSize"] . '</td>';
-                                // Couleur du vélo 
-                                echo '<td>' . $bike["colName"] . '</td>';
-                                // lieu ou le vélo a été retrouvé
-                                echo '<td>' . $bike["bikPlace"] . '</td>';
-                                // date de la découverte du vélo 
-                                echo '<td>' . $bike["bikDate"] . '</td>';
-                                // Commune oû le vélo est stocker 
-                                echo '<td>' . $bike["comName"] . '</td>';
-                                // Affichage des options en fonctions de la sessions
-                                if($_SESSION["rights"] == 1)
-                                {
-                                echo '<td><a class="LinksOptions" href="../Modify/ModifyBikePage.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
-                                <a class="LinksOptions" href="../Formulaires/FormulaireRenderBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/Rendered.png" alt="Rendre"></a><br>
-                                <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteBike.php?ID=' . $bike["ID_bike"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                                    // Numéro de serie du cadre 
+                                    echo '<td>' . $bike["bikFrameNumber"] . '</td>';
+                                    // Marque du vélo 
+                                    echo '<td>' . $bike["braName"] . '</td>';
+                                    // Taille du vélo 
+                                    echo '<td>' . $bike["sizSize"] . '</td>';
+                                    // Couleur du vélo 
+                                    echo '<td>' . $bike["colName"] . '</td>';
+                                    // lieu ou le vélo a été retrouvé
+                                    echo '<td>' . $bike["bikPlace"] . '</td>';
+                                    // date de la découverte du vélo 
+                                    echo '<td>' . $bike["bikDate"] . '</td>';
+                                    // Commune oû le vélo est stocker 
+                                    echo '<td>' . $bike["comName"] . '</td>';
+                                    // Affichage des options en fonctions de la sessions
+                                    if($_SESSION["rights"] == 1)
+                                    {
+                                    echo '<td><a class="LinksOptions" href="../Modify/ModifyBikePage.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
+                                    <a class="LinksOptions" href="../Formulaires/FormulaireRenderBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/Rendered.png" alt="Rendre"></a><br>
+                                    <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteBike.php?ID=' . $bike["ID_bike"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                                    }
                                 }
                             }
-                        }
-                    ?>
-                </tbody>
-            </table>
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </body>
 </html>

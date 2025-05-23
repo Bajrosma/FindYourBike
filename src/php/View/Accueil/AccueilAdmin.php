@@ -7,8 +7,6 @@
  * Date : 09.05.2025 → Modif : 12.05.2025
  * Description : page d'accueil en tant qu'Admin
  */
-
- echo $_SESSION["rights"];
  $_SESSION["MessageAdd"] = "";
 ?>
 

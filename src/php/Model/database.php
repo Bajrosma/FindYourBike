@@ -580,7 +580,8 @@
         /**
          * Fonction qui valide l'inscription de la commune 
          */
-        public function RestitutionUpdate($firstname, $lastname, $adress, $city, $npa, $email, $tel, $dateofrestitution, $id, $FilesName)
+        public function RestitutionUpdate($firstname, $lastname, $adress, $city, $npa, $email, 
+                                          $tel, $dateofrestitution, $id, $FilesName)
         {
             // crée le nouvelle personne responsable du véloo
             $this->creatNewPeople($firstname, $lastname, $adress, $city, $npa, $email, $tel);

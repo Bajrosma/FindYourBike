@@ -39,39 +39,41 @@ $_SESSION["MessageAdd"] = "";
         <div class="table-container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
             <h2>Liste des personnes inscrite</h2>
-            <table>
-                <tr>
-                    <th>Nom de la personne</th>
-                    <th>Adresse complète</th>
-                    <th>Email</th>
-                    <th>Téléphone</th>
-                    <th>roles</th>
-                    <th>Options</th>
-                </tr>
-                <!-- données -->
-                <?php
-                    foreach($poeple as $person)
-                    {
-                        if($person['comInscription'] == 1)
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Nom de la personne</th>
+                        <th>Adresse complète</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>roles</th>
+                        <th>Options</th>
+                    </tr>
+                    <!-- données -->
+                    <?php
+                        foreach($poeple as $person)
                         {
-                        // Nom de la commune
-                        echo '<tr><td>' . $person["perFirstName"] . " " . $person["perLastName"] .'</td>';
-                        // commande pour afficher le l'adresse de l'communes
-                        echo "<td>" . $person["perAdress"] . ", " . $person["perCity"] . " " . $person["perNPA"] . "</td>";
-                        // affiche l'email des communes 
-                        echo "<td>" . $person["perEmail"] . "</td>";
-                        // affiche le numéro de telephone des communes
-                        echo "<td>" . $person["perTel"] . "</td>";
-                        //  défini son rôle à la commune ou pas
-                        echo "<td>" . $person["perRole"] . "</td>";
-                        // Affichage des options en fonctions de la sessions
-                        echo '<td><a href="../DetailPersonne.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/DetailIcon.png" alt="Détails"></a><br>
-                        <a class="LinksOptions" href="../Modify/ModifyPersonPage.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
-                        <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeletePerson.php?ID=' . $person["ID_personne"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                            if($person['comInscription'] == 1)
+                            {
+                            // Nom de la commune
+                            echo '<tr><td>' . $person["perFirstName"] . " " . $person["perLastName"] .'</td>';
+                            // commande pour afficher le l'adresse de l'communes
+                            echo "<td>" . $person["perAdress"] . ", " . $person["perCity"] . " " . $person["perNPA"] . "</td>";
+                            // affiche l'email des communes 
+                            echo "<td>" . $person["perEmail"] . "</td>";
+                            // affiche le numéro de telephone des communes
+                            echo "<td>" . $person["perTel"] . "</td>";
+                            //  défini son rôle à la commune ou pas
+                            echo "<td>" . $person["perRole"] . "</td>";
+                            // Affichage des options en fonctions de la sessions
+                            echo '<td><a href="../DetailPersonne.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/DetailIcon.png" alt="Détails"></a><br>
+                            <a class="LinksOptions" href="../Modify/ModifyPersonPage.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
+                            <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeletePerson.php?ID=' . $person["ID_personne"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                            }
                         }
-                    }
-                ?>
-            </table>
+                    ?>
+                </table>
+            </div>
         </div>
     </body>
 </html>

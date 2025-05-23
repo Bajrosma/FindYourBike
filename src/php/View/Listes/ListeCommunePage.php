@@ -39,47 +39,49 @@ $_SESSION["MessageAdd"] = "";
         <div class="table-container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
             <h2>Liste des communes membres</h2>
-            <table>
-                <tr>
-                    <th>Nom de la commune</th>
-                    <th>Adresse complète</th>
-                    <th>Email</th>
-                    <th>Téléphone</th>
-                    <?php 
-                        // Affichage des options en fonctions de la sessions
-                        if($_SESSION["rights"] == 2)
-                        {
-                    ?>
-                    <th>Options</th>
-                    <?php 
-                        }
-                    ?>
-                </tr>
-                <!-- données -->
-                <?php
-                    foreach($communes as $commune)
-                    {
-                        if($commune['comInscription'] == 1)
-                        {
-                            // Nom de la commune
-                            echo '<tr><td>' . $commune["comName"] . '</td>';
-                            // commande pour afficher le l'adresse de l'communes
-                            echo "<td>" . $commune["comAdress"] . ", " . $commune["comCity"] . " " . $commune["comNPA"] . "</td>";
-                            // affiche l'email des communes 
-                            echo "<td>" . $commune["comEmail"] . "</td>";
-                            // affiche le numéro de telephone des communes
-                            echo "<td>" . $commune["comTel"] . "</td>";
-                            // Affichage des options en fonctions de la sessions
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Nom de la commune</th>
+                        <th>Adresse complète</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <?php 
                             // Affichage des options en fonctions de la sessions
                             if($_SESSION["rights"] == 2)
                             {
-                                echo '<td><a class="LinksOptions" href="../Modify/ModifyCommunePage.php?ID=' . $commune["ID_commune"] .'"><img href="../../userContent/img/Logo/modificationIcon.jpg"></a><br>
-                                <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteCommune.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Supprimer"></a>';
-                            }    
+                        ?>
+                        <th>Options</th>
+                        <?php 
+                            }
+                        ?>
+                    </tr>
+                    <!-- données -->
+                    <?php
+                        foreach($communes as $commune)
+                        {
+                            if($commune['comInscription'] == 1)
+                            {
+                                // Nom de la commune
+                                echo '<tr><td>' . $commune["comName"] . '</td>';
+                                // commande pour afficher le l'adresse de l'communes
+                                echo "<td>" . $commune["comAdress"] . ", " . $commune["comCity"] . " " . $commune["comNPA"] . "</td>";
+                                // affiche l'email des communes 
+                                echo "<td>" . $commune["comEmail"] . "</td>";
+                                // affiche le numéro de telephone des communes
+                                echo "<td>" . $commune["comTel"] . "</td>";
+                                // Affichage des options en fonctions de la sessions
+                                // Affichage des options en fonctions de la sessions
+                                if($_SESSION["rights"] == 2)
+                                {
+                                    echo '<td><a class="LinksOptions" href="../Modify/ModifyCommunePage.php?ID=' . $commune["ID_commune"] .'"><img href="../../userContent/img/Logo/modificationIcon.jpg"></a><br>
+                                    <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteCommune.php?ID=' . $commune["ID_commune"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Supprimer"></a>';
+                                }    
+                            }
                         }
-                    }
-                ?>
-            </table>
+                    ?>
+                </table>
+            </div>
         </div>
     </body>
 </html>

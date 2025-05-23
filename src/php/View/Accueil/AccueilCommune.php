@@ -7,8 +7,6 @@
  * Date : 09.95.2025 → Modif : 
  * Description : page d'accueil en tant que membre de la commune
  */
-
-echo $_SESSION["rights"];
 $_SESSION["MessageAdd"] = "";
 ?>
 

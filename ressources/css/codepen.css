@@ -1,9 +1,13 @@
-body
+/* Styles pour les téléphones */
+@media (min-width: 768px)
 {
-	margin: 0;
-	font-family: Arial, sans-serif;
-	background-image: url("../../userContent/img/background-image.jpg");
-	background-size: cover;
+	body
+	{
+		margin: 0;
+		font-family: Arial, sans-serif;
+		background-image: url("../../userContent/img/background-image.jpg");
+		background-size: cover;
+	}
 }
 /* page de login */
 .login-container 
@@ -209,4 +213,63 @@ img.Logo
 {
 	height: 30px;
 	width: 30px;
+}
+
+/* Styles pour les téléphones */
+@media (max-width: 767px){
+	html, body {
+		height: 100%;
+		margin: 0;
+		font-family: Arial, sans-serif;
+		background-color: #d8f1e1; /* Même couleur que les conteneurs */
+		overflow-x: hidden;
+	}
+	
+	.login-container,
+	.container,
+	.details-container {
+		width: 90%;
+		margin: 20px auto;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		min-height: 100vh;
+	}
+
+	.grid {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+
+	.btn {
+		font-size: 18px;
+		padding: 20px;
+	}
+
+	.logout {
+		width: 100%;
+		padding: 15px;
+		font-size: 16px;
+	}
+
+	.table-container {
+		width: 95%;
+		padding: 15px;
+	}
+
+	.detail-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	img.Logo {
+		height: 24px;
+		width: 24px;
+	}
+
+	.hide-image-column th:first-child,
+	.hide-image-column td:first-child {
+		display: none;
+	}
 }

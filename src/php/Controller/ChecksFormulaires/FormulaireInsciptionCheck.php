@@ -70,7 +70,8 @@ if (!isset($_GET["Update"])) {
         if (empty($value)) {
             // Si le champ est vide, ajoute un message d'erreur dans la session
             $_SESSION["ErrorMessage" . ucfirst(str_replace("com", "", $field))] =
-                "<li>Veuillez ne pas laisser le champ " . ucfirst(str_replace("bui", "", $field)) . " vide !</li>";
+                      "<li>Veuillez ne pas laisser le champ " . 
+                      ucfirst(str_replace("bui", "", $field)) . " vide !</li>";
             $isValid = false;
         // Vérification de la correspondance avec l'expression régulière
         } elseif (!preg_match($config['regex'], $value)) {

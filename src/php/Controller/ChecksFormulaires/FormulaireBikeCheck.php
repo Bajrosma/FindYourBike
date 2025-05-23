@@ -85,7 +85,6 @@ if (!isset($_GET["Update"])) {
     foreach ($fields as $field => $config) {
         $value = $_POST[$field] ?? ''; // Récupère la valeur du champ, ou vide si non défini
         $_SESSION[$field] = $value; // Stocke la valeur dans la session pour réaffichage
-
         // Vérification si le champ est vide
         if (empty($value)) {
             // Si le champ est vide, ajoute un message d'erreur dans la session
