@@ -1,12 +1,10 @@
 <?php
- //commence le système de session
- session_start();
-
  /**
  * Auteur : Bajro Osmanovic
  * Date : 09.95.2025 → Modif : 
  * Description : page d'index/login
  */
+ $_SESSION["MessageAdd"] = "";
 ?>
 
 <!DOCTYPE html>

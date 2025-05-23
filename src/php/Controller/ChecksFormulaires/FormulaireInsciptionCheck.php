@@ -24,8 +24,8 @@ if (!isset($_GET["Update"])) {
             'error' => 'Veuillez entrer une commune valide (lettres, espaces, tirets ou apostrophes uniquement) !'
         ],
         'comAdress' => [
-            'regex' => '/^[A-Za-zÀ-ÿ0-9\s\-\,\.]{5,}$/u',
-            'error' => 'Veuillez entrer une adresse complète valide (minimum 5 caractères, lettres/chiffres autorisés) !'
+            'regex' => '/^[A-Za-zÀ-ÿ0-9\s\-\,\.]{3,}\s\d{2}$/u',
+            'error' => 'Veuillez entrer une adresse complète valide (minimum 5 caractères, lettres/chiffres autorisés ET le numéro de la rue) !'
         ],
         'comCity' => [
             'regex' => '/^[A-Za-zÀ-ÿ\s\-\'\.]{2,}$/u',
@@ -56,7 +56,18 @@ if (!isset($_GET["Update"])) {
             'error' => 'Veuillez entrer une fonction valide (lettres uniquement) !'
         ]
     ];
-    
+    $message = [
+        'Name' => 'nom de commune',
+        'Adress ' => 'adresse de la commune',
+        'City ' => 'localité',
+        'NPA' => 'NPA',
+        'Name' => 'nom de commune',
+        'Email' => 'email ',
+        'Tel' => 'tel ',
+        'LastName ' => 'nom du responsable ',
+        'FisrtName ' => 'prénom du responsable',
+        'Fonction ' => 'fonction',
+    ];
 
     // Variable de validation globale
     $isValid = true;
@@ -70,8 +81,8 @@ if (!isset($_GET["Update"])) {
         if (empty($value)) {
             // Si le champ est vide, ajoute un message d'erreur dans la session
             $_SESSION["ErrorMessage" . ucfirst(str_replace("com", "", $field))] =
-                      "<li>Veuillez ne pas laisser le champ " . 
-                      ucfirst(str_replace("bui", "", $field)) . " vide !</li>";
+                      "<li>Veuillez ne pas laisser le champ " . $message[
+                      ucfirst(str_replace("com", "", $field))] . " vide !</li>";
             $isValid = false;
         // Vérification de la correspondance avec l'expression régulière
         } elseif (!preg_match($config['regex'], $value)) {

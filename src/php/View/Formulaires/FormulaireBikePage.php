@@ -44,16 +44,26 @@ $communes = $db->GetAllCommunesDropDown();
             'bikPlace' => 'lieu de découverte (adresse complète)',
             'bikFrameNumber' => 'Numéro de série (cadre)'
         ];
+
+        $exemple = [
+            'bikPlace' => "exemple : Lausanne gare 10, 1004 Lausanne",
+            'bikFrameNumber' => 'exemple : PY98765432',
+        ];
         // parcours le tableau des champs de type text
         foreach ($Champs as $Champ => $label) 
         {
             // récolte les informations sur d'éventuelle message d'erreurs
-            $errorMessage = isset($_SESSION["ErrorMessage" . ucfirst($Champ)]) ? $_SESSION["ErrorMessage" . ucfirst($field)] : '';
+            if(isset($_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $Champ))]))
+                $errorMessage = $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $Champ))];
             // vérifie si une entrée a été sauvée dans la session, si oui le champ reprend le même texte et si non, il laisse vide
             $value = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
+            $example = $exemple[$Champ] ?? '';
             echo "
-            <div class='form-group row mb-3'>
-                <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>
+            <div class='form-group row mb-3 align-items-start'>
+                <div class='col-sm-4 text-start'>
+                    <label for='$Champ' class='form-label fw-bold''>$label</label><br>
+                    <small class='text-muted'>$example</small>
+                </div>
                 <div class='col-sm-8'>
                     <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
                     <p class='text-danger'>$errorMessage</p> <!-- Affichage du message d'erreur si présent -->
@@ -62,15 +72,21 @@ $communes = $db->GetAllCommunesDropDown();
         }
     ?>
     <!-- Date de découverte -->
-    <div class='form-group row mb-3'>
-        <label for="bikDate" class='col-sm-4 col-form-label'>Date de découverte</label>
+    <div class='form-group row mb-3 align-items-start'>
+        <div class='col-sm-4 text-start'>
+            <label for="bikDate" class='form-label fw-bold'>Date de découverte</label><br>
+            <small class='text-muted'>exemple : 22.01.2023</small>
+        </div>
         <div class='col-sm-8'>
             <input class='form-control' type="date" id="bikDate" name="bikDate">
         </div>
     </div>
     <!-- Liste des couleurs de vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_color" class='col-sm-4 col-form-label'>Couleur du vélo</label>
+    <div class='form-group row mb-3 align-items-start'>
+        <div class='col-sm-4 text-start'>
+            <label for="FK_color" class='form-label fw-bold'>Couleur du vélo</label><br>
+            <small class='text-muted'>exemple : Rouge</small>
+        </div>
         <div class='col-sm-8'>
         <select class='form-control' name="FK_color" id="FK_color">
             <option value=""></option>
@@ -85,8 +101,11 @@ $communes = $db->GetAllCommunesDropDown();
         </div>
     </div>
     <!-- Liste des marques de vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_brand" class='col-sm-4 col-form-label'>Marque du vélo</label>
+    <div class='form-group row mb-3 align-items-start'>
+        <div class='col-sm-4 text-start'>
+            <label for="FK_brand" class='form-label fw-bold'>Marque du vélo</label><br>
+            <small class='text-muted'>exemple : Canyon</small>
+        </div>
         <div class='col-sm-8'>
         <select class='form-control' name="FK_brand" id="FK_brand">
             <option value=""></option>
@@ -101,24 +120,30 @@ $communes = $db->GetAllCommunesDropDown();
         </div>
     </div>
     <!-- Liste des tailles de vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_size" class='col-sm-4 col-form-label'>Taille du vélo </label>
+    <div class='form-group row mb-3 align-items-start'>
+        <div class='col-sm-4 text-start'>
+            <label for="FK_size" class='form-label fw-bold'>Taille du vélo </label><br>
+            <small class='text-muted'>exemple : XL</small>
+        </div>
         <div class='col-sm-8'>
-        <select class='form-control' name="FK_size" id="FK_size">
-            <option value=""></option>
-            <?php 
-                // parcours le tableau des tailles         
-                foreach($sizes as $size )
-                {
-                    echo '<option value="'. $size["ID_size"] .'">'. $size["sizSize"] .'</option>"';
-                }
-            ?>
-        </select>
+            <select class='form-control' name="FK_size" id="FK_size">
+                <option value=""></option>
+                <?php 
+                    // parcours le tableau des tailles         
+                    foreach($sizes as $size )
+                    {
+                        echo '<option value="'. $size["ID_size"] .'">'. $size["sizSize"] .'</option>"';
+                    }
+                ?>
+            </select>
         </div>
     </div>
     <!-- Liste des communes pouvant acceuilir le vélo -->
-    <div class='form-group row mb-3'>
-        <label for="FK_commune" class='col-sm-4 col-form-label'>Commune</label>
+    <div class='form-group row mb-3 align-items-start'>
+        <div class='col-sm-4 text-start'>
+            <label for="FK_commune" class='form-label fw-bold'>Commune</label><br>
+            <small class='text-muted'>exemple : Commune de Payerne</small>
+        </div>
         <div class='col-sm-8'>
         <select class='form-control' name="FK_commune" id="FK_commune">
             <option value=""></option>
@@ -136,9 +161,12 @@ $communes = $db->GetAllCommunesDropDown();
         </select>
         </div>
     </div>
-    <div  class='form-group row mb-3'>
-        <!-- Champ permettant de sélectionner plusieurs fichiers images -->
-        <label for="bidPathFile" class='col-sm-4 col-form-label'>Choisir jusqu'à 3 images :</label>
+    <div class='form-group row mb-3 align-items-start'>
+        <div class='col-sm-4 text-start'>
+            <!-- Champ permettant de sélectionner plusieurs fichiers images -->
+            <label for="bidPathFile" class='form-label fw-bold'>Choisir jusqu'à 3 images :</label><br>
+            <small class='text-muted'>exemple : Image.jpg</small>
+        </div>
         <div class='col-sm-8'>
             <!-- Le nom "images[]" indique un tableau d'images, et "multiple" permet d'en sélectionner plusieurs -->
             <input class='form-control' id="bidPathFile" name="images[]" multiple required type="file">

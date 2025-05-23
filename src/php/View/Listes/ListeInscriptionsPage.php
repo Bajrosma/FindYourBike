@@ -4,7 +4,7 @@
 
  /**
  * Auteur : Bajro Osmanovic
- * Date : 12.05.2025 → Modif : 
+ * Date : 12.05.2025 → Modif : 23.05.2025
  * Description : page affichants toutes les communes qui n'ont pas encore été admise dans les membres 
  */
 // Inclusion des fichiers de configuration et de gestion de la base de données
@@ -40,7 +40,7 @@ $_SESSION["MessageAdd"] = "";
     <body>
         <div class="table-container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
-            <h2>Liste des personnes inscrite</h2>
+            <h2>Liste des inscription en cours</h2>
             <div class="table-responsive">
                 <table class="table">
                     <tr>
@@ -65,8 +65,11 @@ $_SESSION["MessageAdd"] = "";
                         
                                 // Téléphone
                                 echo "<td>" . $commune["comTel"] . "</td>";
-                        
-                                echo "<td><em>Aucun responsable</em></td>";
+                                foreach($Responsables as $key)
+                                if($commune["ID_commune"] == $key["FK_Commune"])
+                                {
+                                    echo "<td><em>". $key["perLastName"] . " " . $key["perFirstName"] ."</em></td>";
+                                }
                                 // options pour accepter ou refuser l'inscription
                                 echo '<td>
                                         <a class="LinksOptions" href="../../Controller/AcceptInscription.php?ID=' . $commune["ID_commune"] . '"><img class="Logo" src="../../../../userContent/img/Logo/AcceptIcon.png" alt="Accepter"></a><br>

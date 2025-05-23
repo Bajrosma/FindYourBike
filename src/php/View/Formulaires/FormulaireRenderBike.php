@@ -37,49 +37,90 @@ $communes = $db->GetAllCommunesDropDown();
         <div class="container">
             <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
             <h1>Remise d'un vélo trouvé</h1>
+            <small>information du propriétaire</small>
             <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $_GET["ID"]?>" method="post" enctype="multipart/form-data">
                 <?php 
                     $Champs = [
-                        'perFirstName' => 'prénom du propriètaire',
-                        'perLastName' => 'Nom du propriètaire',
-                        'perAdress' => 'Adress du propriètaire',
+                        'perLastName' => 'Nom ',
+                        'perFirstName' => 'prénom ',
+                        'perAdress' => 'Adress',
                         'perNPA' => 'NPA',
                         'perCity' => 'Ville',
-                        'perEmail' => 'Adresse email du propriètaire',
-                        'perTel' => 'Téléphone du propriètaire'
-
+                        'perEmail' => 'Adresse email',
+                        'perTel' => 'Téléphone'
                     ];
-                    // parcours le tableau des champs de type text
-                    foreach ($Champs as $Champ => $label) 
-                    {
-                        // vérifie si une entrée a été sauvée dans la session, si oui le champ reprend le même texte et si non, il laisse vide
-                        $value = isset($_SESSION[$Champ]) ? htmlspecialchars($_SESSION[$Champ]) : '';
+            
+                    $exemple = [
+                        'perFirstName' => 'exemple : Bernard',
+                        'perLastName' => 'exemple : Dupont',
+                        'perAdress' => 'exemple : Chemin des poissons 16',
+                        'perNPA' => 'exemple : 1860',
+                        'perCity' => 'exemple : Aigle',
+                        'perEmail' => 'exemple : toto@exemple.ch',
+                        'perTel' => 'exemple : +41 76 123 45 67'
+                    ];
+            
+                    foreach ($Champs as $Champ => $label) {
+                        $errorMessage = $_SESSION["ErrorMessage" . ucfirst(str_replace("per", "", $Champ))] ?? '';
+                        $value = htmlspecialchars($_SESSION[$Champ] ?? '');
+                        $example = $exemple[$Champ] ?? '';
+                        
                         echo "
-                        <div class='form-group row mb-3'>
-                            <label for='$Champ' class='col-sm-4 col-form-label'>$label</label>
+                        <div class='form-group row mb-3 align-items-start'>
+                            <div class='col-sm-4 text-start'>
+                                <label for='$Champ' class='form-label fw-bold'>$label</label><br>
+                                <small class='text-muted'>$example</small>
+                            </div>
                             <div class='col-sm-8'>
                                 <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
+                                <small class='text-danger'>$errorMessage</small>
                             </div>
                         </div>";
                     }
                 ?>
+                <small>information du vélo</small>
                 <!-- Date de rendu -->
-                <div class='form-group row mb-3'>
-                    <label for="bikRestitutionDate" class='col-sm-4 col-form-label'>Date de rendu</label>
+                <div class='form-group row mb-3 align-items-start'>
+                    <div class='col-sm-4 text-start'>
+                        <label for="bikRestitutionDate"  class='form-label fw-bold'>Date de rendu</label><br>
+                        <small class='text-muted'>22.01.2023</small>
+                    </div>
                     <div class='col-sm-8'>
                         <input class='form-control' type="date" id="bikRestitutionDate" name="bikRestitutionDate">
+                        <?php
+                            // si le message d'erreur pour image est présent alors affiché
+                            if(isset($_SESSION["ErrorMessageDate"]))
+                            {
+                                echo  "<small class='text-danger'>" .$_SESSION["ErrorMessageDate"] . "</small>";
+                            }
+                            
+                        ?>
                     </div>
                 </div>
-                <div  class='form-group row mb-3'>
-                    <!-- Champ permettant de sélectionner plusieurs fichiers images -->
-                    <label for="proPathFile" class='col-sm-4 col-form-label'>Choisir jusqu'à 3 images :</label>
+                <div class='form-group row mb-3 align-items-start'>
+                    <div class='col-sm-4 text-start'>
+                        <!-- Champ permettant de sélectionner plusieurs fichiers images -->
+                        <label for="proPathFile" class='form-label fw-bold'>Choisir jusqu'à 3 images :</label>
+                        <small class='text-muted'>Image.jpg</small>
+                    </div>
                     <div class='col-sm-8'>
                         <!-- Le nom "images[]" indique un tableau d'images, et "multiple" permet d'en sélectionner plusieurs -->
                         <input class='form-control' id="proPathFile" name="images[]" multiple required type="file">
+                        <?php
+                            // si le message d'erreur pour image est présent alors affiché
+                            if(isset($_SESSION["ErrorMessageImage"]))
+                            {
+                                echo  "<small class='text-danger'>" .$_SESSION["ErrorMessageImage"] . "</small>";
+                            }
+                        ?>
                     </div>
                 </div>
-                <?php 
-                    echo  $_SESSION["MessageAdd"];
+                <?php
+                    // sinon contrôler le message d'ajout 
+                    if(isset($_SESSION["MessageAdd"]))
+                    {
+                        echo  $_SESSION["MessageAdd"];
+                    }
                 ?>
                 <div class="text-center">
                     <button type="submit" class="btn">Soumettre le formulaire</button>

@@ -215,6 +215,11 @@ img.Logo
 	width: 30px;
 }
 
+a.OptionDetail
+{
+	display: none;	
+}
+
 /* Styles pour les téléphones */
 @media (max-width: 767px){
 	html, body {
@@ -271,5 +276,10 @@ img.Logo
 	.hide-image-column th:first-child,
 	.hide-image-column td:first-child {
 		display: none;
+	}
+
+	a.OptionDetail
+	{
+		display: block;	
 	}
 }

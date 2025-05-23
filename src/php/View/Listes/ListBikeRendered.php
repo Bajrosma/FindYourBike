@@ -166,6 +166,7 @@ $_SESSION["MessageAdd"] = "";
                                     echo '<td><a href="../DetailPersonne.php?ID=' . $bike["ID_personne"] . '">' . $bike["perLastName"] . " " . $bike["perFirstName"] . '</td>';
                                     // Affichage des options en fonctions de la sessions
                                     echo '<td><a class="LinksOptions" href=""><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
+                                    <a class="LinksOptions OptionDetail" href="../DetailFoundedBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/detailsIcon.jpg" alt="Suppression"></a>
                                     <a class="LinksOptionsDel" href="" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
                                 }
                             }

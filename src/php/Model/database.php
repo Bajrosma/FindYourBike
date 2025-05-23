@@ -298,16 +298,35 @@
         }
 
         /**
-         * Fonction qui recherche les personnes
+         * Fonction qui recherche les datas de tous les vélo
          * @return -- renvoie les informations des communes trouvé
          */
         public function GetAllDataBikes()
         { 
-            // requête pour récuperer les communes
+            // requête pour récuperer données liées aux vélos
             $query = "SELECT bidPathFile, FK_bike FROM t_bikedata";
             // execute la commande
             $prepareTemp = $this->querySimpleExecute($query);
             // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+        /**
+         * Fonction qui recherche les datas concernant un vélo
+         * @return -- renvoie les informations des communes trouvé
+         */
+        public function GetDataFromOneBike($id)
+        { 
+            // requête pour récuperer données liées à un vélo
+            $query = "SELECT bidPathFile, FK_bike FROM t_bikedata WHERE FK_bike = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+            'ID' => ['value' => $id, 'type' => PDO::PARAM_STR]
+            ];    
+            // Exécution sécurisée de la requête préparée
+            $prepareTemp =$this->queryPrepareExecute($query, $binds);
+            // en fait un tableau lisible
             $prepareTabTemp = $this->formatData($prepareTemp);
             // retourne le tableau
             return $prepareTabTemp;
@@ -669,7 +688,25 @@
         public function GetOneBike($id)
         {
             // requête pour récuperer les communes
-            $query = "SELECT bikDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON FK_commune=ID_commune WHERE ID_bike = :ID";
+            $query = "SELECT bikDate, bikResitutionDate, bikPlace, bikFrameNumber, braName, sizSize, colName, comName FROM t_bikes JOIN t_size on FK_size=ID_size JOIN t_brand ON FK_brand=ID_brand JOIN t_color ON FK_color=ID_color JOIN t_communes ON t_bikes.FK_commune=t_communes.ID_commune WHERE ID_bike = :ID";
+            // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
+            $binds = [
+                'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]
+            ];
+            // Exécution sécurisée de la requête
+            $prepareTemp = $this->queryPrepareExecute($query, $binds);
+            // transforme les données en tableau
+            $prepareTabTemp = $this->formatData($prepareTemp);
+            // retourne le tableau
+            return $prepareTabTemp;
+        }
+        /**
+         * récupere les information du propriétaire
+         */
+        public function GetOnwerFromBike($id)
+        {
+            // requête pour récuperer les communes
+            $query = "SELECT ID_Personne, perFirstName, perLastName FROM t_bikes JOIN t_personnes ON FK_personne=ID_personne WHERE ID_bike = :ID";
             // tableau qui permet de vérifier si les valeurs sont ok et de les rentrées les valeurs dans la requête
             $binds = [
                 'ID' => ['value' => $id, 'type' => PDO::PARAM_INT]

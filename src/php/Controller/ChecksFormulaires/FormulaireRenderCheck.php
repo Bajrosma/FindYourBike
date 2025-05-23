@@ -3,7 +3,7 @@ session_start();
 
 /**
  * Auteur : Bajro Osmanovic
- * Date : 14.05.2025 → Modif : 21.05.2025
+ * Date : 14.05.2025 → Modif : 23.05.2025
  * Description : Vérification et enregistrer le formulaire de rendu
  */
 
@@ -14,7 +14,7 @@ require_once('../../Model/database.php');
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
 
-var_dump($_FILES);
+var_dump($_POST);
 
 // Vérification si l'utilisateur a soumis le formulaire (paramètre "Update" non défini dans l'URL)
 if (!isset($_GET["Update"])) {
@@ -56,6 +56,16 @@ if (!isset($_GET["Update"])) {
             'error' => 'Veuillez entrer un nom valide (lettres uniquement) !'
         ]
     ];
+    // tableau pour modifier le message d'erreur
+    $message = [
+        'FirstName' => 'du nom du propriétaire',
+        'LastName' => 'du prénom du propriétaire',
+        'Adress' => "de l'adresse du propriétaire",
+        'NPA' => 'NPA',
+        'City' => 'de la localité',
+        'Email' => "de l'email du propriétaire",
+        'Tel' => 'du téléphone du propriétaire'
+    ];
     // Variable de validation globale
     $isValid = true;  
 
@@ -63,7 +73,7 @@ if (!isset($_GET["Update"])) {
 
     if($filesCount > $maxFiles)
     {
-        $ErrorMessage = "vous ne pouvez qu'uploader jusqu'à 3 images maximum !";
+        $_SESSION["ErrorMessageImage"] = "vous ne pouvez qu'uploader jusqu'à 3 images maximum !";
     }
     else 
     {
@@ -79,7 +89,7 @@ if (!isset($_GET["Update"])) {
                 // vérifie si l'extension du fichier et compatible
                 if(!in_array($type, $allowedTypes))
                 {
-                    $ErrorMessage = "le fichier $name n'est pas une image valide !";
+                    $_SESSION["ErrorMessageImage"] = "le fichier $name n'est pas une image valide !";
                     $isValid = false;
                     continue;
                 }
@@ -95,7 +105,7 @@ if (!isset($_GET["Update"])) {
                 // si le déplacement ne réussi pas 
                 else 
                 {
-                    $ErrorMessage = "le fichier $name n'a pas pu être enregistrer !";
+                    $_SESSION["ErrorMessageImage"] = "le fichier $name n'a pas pu être enregistrer !";
                 }
             }
         }
@@ -108,23 +118,27 @@ if (!isset($_GET["Update"])) {
         // Vérification si le champ est vide
         if (empty($value)) {
             // Si le champ est vide, ajoute un message d'erreur dans la session
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("com", "", $field))] =
-                "<li>Veuillez ne pas laisser le champ " . ucfirst(str_replace("bui", "", $field)) . " vide !</li>";
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("per", "", $field))] =
+                "<li>Veuillez ne pas laisser le champ " . $message[
+                    ucfirst(str_replace("per", "", $field))] . " vide !</li>";
             $isValid = false;
         // Vérification de la correspondance avec l'expression régulière
         } elseif (!preg_match($config['regex'], $value)) {
             // Si la validation échoue, ajoute un message d'erreur spécifique
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("com", "", $field))] =
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("per", "", $field))] =
                 "<li>{$config['error']}</li>";
             $isValid = false;
         } else {
             // Si la validation est réussie, efface le message d'erreur
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("com", "", $field))] = "";
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("per", "", $field))] = "";
         }
     }
 
-
-    var_dump($_POST["bikRestitutionDate"]);
+    if($_POST["bikRestitutionDate"] == "")
+    {
+        $_SESSION["ErrorMessageDate"] = "Veuillez selectionner une date !";
+        $isValid = false;
+    }
 
     // Si tous les champs sont valides
     if ($isValid) {
@@ -149,17 +163,17 @@ if (!isset($_GET["Update"])) {
         }
     } else {
         // Si des erreurs ont été détectées, le message d'ajout reste vide
-        $_SESSION["MessageAdd"] = "";
+        $_SESSION["MessageAdd"] = "Erreur trouvé";
     }
 
     // Redirection vers la page d'ajout de bâtiment avec le message approprié
-    //header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
+    header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
     exit;
 } else {
     // Si le paramètre "Update" est présent, cela signifie qu'aucune donnée n'a été reçue
     $_SESSION["ErrorMessage"] = "Aucune donnée reçue !";
     $_SESSION["MessageAdd"] = "";
     // Redirige l'utilisateur vers la page d'ajout de bâtiment 
-    //header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
+    header("Location: ../../View/Formulaires/FormulaireRenderBike.php?ID=" . $_GET["ID"]);
     exit;
 }

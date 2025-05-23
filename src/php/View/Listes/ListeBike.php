@@ -175,7 +175,9 @@ $_SESSION["MessageAdd"] = "";
                                     {
                                     echo '<td><a class="LinksOptions" href="../Modify/ModifyBikePage.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
                                     <a class="LinksOptions" href="../Formulaires/FormulaireRenderBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/Rendered.png" alt="Rendre"></a><br>
-                                    <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteBike.php?ID=' . $bike["ID_bike"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                                    <a class="LinksOptions OptionDetail" href="../DetailFoundedBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/detailsIcon.jpg" alt="Suppression"></a>
+                                    <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeleteBike.php?ID=' . $bike["ID_bike"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>
+                                    ';
                                     }
                                 }
                             }

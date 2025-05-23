@@ -4,7 +4,7 @@
 
     /**
     * Auteur :         Bajro Osmanovic
-    * Date :           14.05.2025
+    * Date :           14.05.2025 → Modif : 23.05.2025
     * Description :    fichier php qui permet de valider une inscription de commune
     */
 
@@ -17,5 +17,5 @@
     // accepte la commune en changeant la valeur d'inscription sur la BD
     $db->RefuseInscription($_GET["ID"]);
 
-    header(history.back());
+    header("Location: ../View/Listes/ListeInscriptionsPage.php");
     exit();
