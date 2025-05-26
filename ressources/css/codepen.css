@@ -105,6 +105,8 @@ h1
 .btn:hover 
 {
 	background-color: #b8dfb0;
+	color: black; 
+	text-decoration: none; 
 }
 
 .logout 
@@ -196,19 +198,6 @@ h2 {
 	margin-top: 30px;
 }
 
-.btn-back {
-	padding: 10px 20px;
-	background-color: #c8d6af;
-	border: 1px solid #82B366;
-	border-radius: 5px;
-	text-decoration: none;
-	color: black;
-}
-
-.btn-back:hover {
-	background-color: #b8dfb0;
-}
-
 img.Logo
 {
 	height: 30px;
@@ -218,6 +207,26 @@ img.Logo
 a.OptionDetail
 {
 	display: none;	
+}
+
+.btn-back{
+	display: inline-block;
+    font-size: 12px;
+    padding: 4px 10px;
+	margin-bottom: 20px;
+    background-color: #cdeac0;
+	border: 2px solid #a0c49d;
+	color: #333;
+    border-radius: 4px;
+    text-decoration: none;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+	background-color: #b8dfb0;
+	color: black; 
+	text-decoration: none; 
 }
 
 /* Styles pour les téléphones */

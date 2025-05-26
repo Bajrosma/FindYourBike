@@ -24,39 +24,41 @@
     </head>
     <body>
         <div class="container">
-        <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
-        <h1>Choix de la durée des statistiques</h1>
-        <form action="../StatistiquePage.php" method="post">
-            <div class='form-group row mb-3'>
-                <label for='Year' class='col-sm-4 col-form-label'>Année</label>
-                <div class='col-sm-8'>
-                    <input type='number' class='form-control' name='Year' id='Year'>
-                    <small>
-                        ex : 2024, 2025, 2026
-                    </small>
+            <a href="../ChooseStatistiquePage.php" class="btn-back">← Retour</a>
+            <h1>Choix de la durée des statistiques</h1>
+            <form action="../StatistiquePage.php" method="post">
+                <input type="hidden" name="Choice" value="<?php echo $_GET["Choice"];?>">
+                <div class='form-group row mb-3'>
+                    <label for='Year' class='col-sm-4 col-form-label'>Année</label>
+                    <div class='col-sm-8'>
+                        <input type='number' class='form-control' name='Year' id='Year'>
+                        <small>
+                            ex : 2024, 2025, 2026
+                        </small>
+                    </div>
                 </div>
-            </div>
-            <?php 
-                if($_GET["Choice"] == 1)
-                {
-            ?>
-            <div class='form-group row mb-3'>
-                <label for='trimester' class='col-sm-4 col-form-label'>Trimestre</label>
-                <div class='col-sm-8'>
-                    <input type='number' class='form-control' name='trimester' id='trimester'>
-                    <small>
-                        - Premier trimestre : Janvier, Février, Mars<br>
-                        - Deuxième trimestre : Avril, Mai, Juin<br>
-                        - Troisième trimestre : Juillet, Août, Septembre<br>
-                        - Quatrième trimestre : Octobre, Novembre, Décembre<br>
-                    </small>
+                <?php 
+                    if($_GET["Choice"] == 1)
+                    {
+                ?>
+                <div class='form-group row mb-3'>
+                    <label for='trimester' class='col-sm-4 col-form-label'>Trimestre</label>
+                    <div class='col-sm-8'>
+                        <input type='number' class='form-control' name='trimester' id='trimester'>
+                        <small>
+                            - Premier trimestre : Janvier, Février, Mars<br>
+                            - Deuxième trimestre : Avril, Mai, Juin<br>
+                            - Troisième trimestre : Juillet, Août, Septembre<br>
+                            - Quatrième trimestre : Octobre, Novembre, Décembre<br>
+                        </small>
+                    </div>
+                </div>  
+                <?php 
+                    }
+                ?>          
+                <div class="text-center">
+                    <button type="submit" class="btn">Générer statistique</button>
                 </div>
-            </div>  
-            <?php 
-                }
-            ?>          
-            <div class="text-center">
-                <button type="submit" class="btn">Générer statistique</button>
             </div>
         </form>
     </body>

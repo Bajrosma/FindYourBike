@@ -37,7 +37,7 @@ $_SESSION["MessageAdd"] = "";
     </head>
     <body>
         <div class="table-container">
-            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+            <button onclick="history.back()" class="btn-back">← Retour</button>
             <h2>Liste des personnes inscrite</h2>
             <div class="table-responsive">
                 <table class="table">
@@ -66,7 +66,7 @@ $_SESSION["MessageAdd"] = "";
                             //  défini son rôle à la commune ou pas
                             echo "<td>" . $person["perRole"] . "</td>";
                             // Affichage des options en fonctions de la sessions
-                            echo '<td><a href="../DetailPersonne.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/DetailIcon.png" alt="Détails"></a><br>
+                            echo '<td><a href="../Details/DetailPersonne.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/DetailIcon.png" alt="Détails"></a><br>
                             <a class="LinksOptions" href="../Modify/ModifyPersonPage.php?ID=' . $person["ID_personne"] . '"><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
                             <a class="LinksOptionsDel" href="../../Controller/DeletePages/DeletePerson.php?ID=' . $person["ID_personne"] . '" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
                             }

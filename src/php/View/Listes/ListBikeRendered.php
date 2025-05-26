@@ -42,7 +42,7 @@ $_SESSION["MessageAdd"] = "";
     </head>
     <body>
         <div class="table-container">
-            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button> 
+            <button onclick="history.back()" class="btn-back">← Retour</button> 
             <h2>Liste des vélos annoncé</h2>
             <div style="margin-bottom: 15px;">
                 <label for="filterSerial">Numéro de série :</label>
@@ -96,7 +96,15 @@ $_SESSION["MessageAdd"] = "";
                             <th>Date de rendu</th>
                             <th>Commune de référence</th>
                             <th>Propriètaire</th>
+                            <?php 
+                            // Affichage des options en fonctions de la sessions
+                            if($_SESSION["rights"] == 1)
+                            {
+                            ?>
                             <th>Options</th>
+                            <?php 
+                            }
+                            ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,9 +173,12 @@ $_SESSION["MessageAdd"] = "";
                                     // Commune oû le vélo est stocker 
                                     echo '<td><a href="../DetailPersonne.php?ID=' . $bike["ID_personne"] . '">' . $bike["perLastName"] . " " . $bike["perFirstName"] . '</td>';
                                     // Affichage des options en fonctions de la sessions
-                                    echo '<td><a class="LinksOptions" href=""><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
-                                    <a class="LinksOptions OptionDetail" href="../DetailFoundedBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/detailsIcon.jpg" alt="Suppression"></a>
-                                    <a class="LinksOptionsDel" href="" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                                    if($_SESSION["rights"] == 1)
+                                    {
+                                        echo '<td><a class="LinksOptions" href=""><img class="Logo" src="../../../../userContent/img/Logo/modificationIcon.jpg" alt="Modification"></a><br>
+                                        <a class="LinksOptions OptionDetail" href="../Details/DetailFoundedBike.php?ID=' . $bike["ID_bike"] . '"><img class="Logo" src="../../../../userContent/img/Logo/detailsIcon.jpg" alt="Suppression"></a>
+                                        <a class="LinksOptionsDel" href="" onclick="return deleteCheck();"><img class="Logo" src="../../../../userContent/img/Logo/TrashIcon.png" alt="Suppression"></a>';
+                                    }
                                 }
                             }
                         ?>
@@ -178,6 +189,7 @@ $_SESSION["MessageAdd"] = "";
     </body>
 </html>
 <script>
+    // ChatGPT
     // Fonction qui filtre les lignes du tableau en fonction des filtres sélectionnés
     function filterTable() 
     {

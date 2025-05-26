@@ -33,7 +33,7 @@ $displayErrors = true;
 <body>
 
   <div class="container">
-  <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+    <a href="../../../../index.php" class="btn-back">← Retour</a>
     <h1>Inscription d'une commune</h1>
     <small> * : indique les champs obligatoire</small>
     <form action="../../Controller/ChecksFormulaires/FormulaireInsciptionCheck.php" method="post">

@@ -17,9 +17,9 @@
     $brands = $db->GetAllBrands();
     $colors = $db->GetAllColors();
     // récupèrer toutes les informations pour l'affichage 
-    if(isset($_POST["trimestre"]))
+    if(isset($_POST["trimester"]))
     {
-      $bikes = $db->GetDataForStatistiqueTrimestre($_POST["Year"], $_POST["trimestre"]);
+      $bikes = $db->GetDataForStatistiqueTrimestre($_POST["Year"], $_POST["trimester"]);
     }
     else
     {
@@ -62,7 +62,7 @@
     </head>
     <body>
         <div class="table-container">
-          <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+          <a href="ChooseStatistiquePage.php" class="btn-back">← Retour</a>
           <h1>Statistique <?php 
           if(isset($_POST["trimester"]))
           {

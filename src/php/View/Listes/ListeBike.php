@@ -42,7 +42,7 @@ $_SESSION["MessageAdd"] = "";
     </head>
     <body>
         <div class="table-container">
-            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button> 
+            <button onclick="history.back()" class="btn-back">← Retour</button> 
             <button onclick="window.location.href='ListBikeRendered.php';" style="margin-bottom: 15px;">Vélos rendus</button>
             <h2>Liste des vélos annoncé</h2>
             <div style="margin-bottom: 15px;">
@@ -189,6 +189,7 @@ $_SESSION["MessageAdd"] = "";
     </body>
 </html>
 <script>
+    // ChatGPT
     // Fonction qui filtre les lignes du tableau en fonction des filtres sélectionnés
     function filterTable() 
     {

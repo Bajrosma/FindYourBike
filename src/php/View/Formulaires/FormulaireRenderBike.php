@@ -35,19 +35,20 @@ $communes = $db->GetAllCommunesDropDown();
     </head>
     <body>
         <div class="container">
-            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+            <a href="../Listes/ListeBike.php" class="btn-back">← Retour</a>
             <h1>Remise d'un vélo trouvé</h1>
+            <small> * : indique les champs obligatoire</small>
             <small>information du propriétaire</small>
             <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $_GET["ID"]?>" method="post" enctype="multipart/form-data">
                 <?php 
                     $Champs = [
-                        'perLastName' => 'Nom ',
-                        'perFirstName' => 'prénom ',
-                        'perAdress' => 'Adress',
-                        'perNPA' => 'NPA',
-                        'perCity' => 'Ville',
-                        'perEmail' => 'Adresse email',
-                        'perTel' => 'Téléphone'
+                        'perLastName' => 'Nom*',
+                        'perFirstName' => 'prénom*',
+                        'perAdress' => 'Adress*',
+                        'perNPA' => 'NPA*',
+                        'perCity' => 'Ville*',
+                        'perEmail' => 'Adresse email*',
+                        'perTel' => 'Téléphone*'
                     ];
             
                     $exemple = [
@@ -105,7 +106,7 @@ $communes = $db->GetAllCommunesDropDown();
                     </div>
                     <div class='col-sm-8'>
                         <!-- Le nom "images[]" indique un tableau d'images, et "multiple" permet d'en sélectionner plusieurs -->
-                        <input class='form-control' id="proPathFile" name="images[]" multiple required type="file">
+                        <input class='form-control' id="proPathFile" name="images[]" multiple  type="file">
                         <?php
                             // si le message d'erreur pour image est présent alors affiché
                             if(isset($_SESSION["ErrorMessageImage"]))

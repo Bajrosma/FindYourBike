@@ -39,7 +39,7 @@ $_SESSION["MessageAdd"] = "";
     </head>
     <body>
         <div class="table-container">
-            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+            <button onclick="history.back()" class="btn-back">← Retour</button>
             <h2>Liste des inscription en cours</h2>
             <div class="table-responsive">
                 <table class="table">

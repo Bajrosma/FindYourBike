@@ -35,7 +35,7 @@
     </head>
     <body>
         <div class="container">
-            <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+            <a href="Accueil/AccueilCommune.php" class="btn-back">← Retour</a>
             <h1>Choix de la durée des statistiques</h1>
             <div class="grid">
                 <a class="btn" href="Formulaires/FormulaireStatistiqueChoice.php?Choice=1">Trimestre</a>

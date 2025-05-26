@@ -43,7 +43,7 @@ if (!isset($_GET["Update"])) {
 
     if($filesCount > $maxFiles)
     {
-        $ErrorMessage = "vous ne pouvez qu'uploader jusqu'à 3 images maximum !";
+        $_SESSION["ErrorMessageImage"] = "vous ne pouvez qu'uploader jusqu'à 3 images maximum !";
     }
     else 
     {
@@ -59,7 +59,7 @@ if (!isset($_GET["Update"])) {
                 // vérifie si l'extension du fichier et compatible
                 if(!in_array($type, $allowedTypes))
                 {
-                    $ErrorMessage = "le fichier $name n'est pas une image valide !";
+                    $_SESSION["ErrorMessageImage"] = "le fichier $name n'est pas une image valide !";
                     $isValid = false;
                     continue;
                 }
@@ -75,9 +75,14 @@ if (!isset($_GET["Update"])) {
                 // si le déplacement ne réussi pas 
                 else 
                 {
-                    $ErrorMessage = "le fichier $name n'a pas pu être enregistrer !";
+                    $_SESSION["ErrorMessageImage"] = "le fichier $name n'a pas pu être enregistrer !";
                 }
             }
+        }
+        else
+        {
+            $isValid = false;
+            $_SESSION["ErrorMessageImage"] = "Aucun Fichier ajouté";
         }
     }
 
@@ -88,18 +93,68 @@ if (!isset($_GET["Update"])) {
         // Vérification si le champ est vide
         if (empty($value)) {
             // Si le champ est vide, ajoute un message d'erreur dans la session
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "<li>Veuillez ne pas laisser le champ " . ucfirst(str_replace("bui", "", $field)) . " vide !</li>";
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "Veuillez ne pas laisser le champ " . ucfirst(str_replace("bui", "", $field)) . " vide !";
             $isValid = false;
         // Vérification de la correspondance avec l'expression régulière
         } elseif (!preg_match($config['regex'], $value)) {
             // Si la validation échoue, ajoute un message d'erreur spécifique
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "<li>{$config['error']}</li>";
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "{$config['error']}";
             $isValid = false;
         } else {
             // Si la validation est réussie, efface le message d'erreur
             $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "";
         }
     }
+    // Vérification et sauvegarde du champ 'bikDate'
+    if (!isset($_POST["bikDate"]) || empty($_POST["bikDate"])) {
+        $isValid = false;
+        $_SESSION["ErrorMessageDate"] = "La date est requise.";
+        $_SESSION["bikDate"] = "";
+    } else {
+        $_SESSION["bikDate"] = $_POST["bikDate"];
+        $_SESSION["ErrorMessageDate"] = "";
+    }
+
+    // Vérification et sauvegarde du champ 'FK_color'
+    if (!isset($_POST["FK_color"]) || empty($_POST["FK_color"])) {
+        $isValid = false;
+        $_SESSION["ErrorMessageColor"] = "La couleur est requise.";
+        $_SESSION["FK_color"] = "";
+    } else {
+        $_SESSION["FK_color"] = $_POST["FK_color"];
+        $_SESSION["ErrorMessageColor"] = "";
+    }
+
+    // Vérification et sauvegarde du champ 'FK_brand'
+    if (!isset($_POST["FK_brand"]) || empty($_POST["FK_brand"])) {
+        $isValid = false;
+        $_SESSION["ErrorMessageBrand"] = "La marque est requise.";
+        $_SESSION["FK_brand"] = "";
+    } else {
+        $_SESSION["FK_brand"] = $_POST["FK_brand"];
+        $_SESSION["ErrorMessageBrand"] = "";
+    }
+
+    // Vérification et sauvegarde du champ 'FK_size'
+    if (!isset($_POST["FK_size"]) || empty($_POST["FK_size"])) {
+        $isValid = false;
+        $_SESSION["ErrorMessageSize"] = "La taille est requise.";
+        $_SESSION["FK_size"] = "";
+    } else {
+        $_SESSION["FK_size"] = $_POST["FK_size"];
+        $_SESSION["ErrorMessageSize"] = "";
+    }
+
+    // Vérification et sauvegarde du champ 'FK_commune'
+    if (!isset($_POST["FK_commune"]) || empty($_POST["FK_commune"])) {
+        $isValid = false;
+        $_SESSION["ErrorMessageCommune"] = "La commune est requise.";
+        $_SESSION["FK_commune"] = "";
+    } else {
+        $_SESSION["FK_commune"] = $_POST["FK_commune"];
+        $_SESSION["ErrorMessageCommune"] = "";
+    }
+
 
     // Si tous les champs sont valides
     if ($isValid) {

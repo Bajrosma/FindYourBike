@@ -30,7 +30,7 @@ $db = Database::getInstance();
     </head>
 <body>
   <div class="container">
-    <button onclick="history.back()" style="margin-bottom: 15px;">← Retour</button>
+    <a href="../Accueil/AccueilAdmin.php" class="btn-back">← Retour</a>
     <h1>Création d'un compte</h1>
     <form action="../../Controller/ChecksFormulaires/FormulaireCreateUserCheck.php" method="post">
         <div class='form-group row mb-3'>
