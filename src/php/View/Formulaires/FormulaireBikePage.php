@@ -1,10 +1,9 @@
 <?php
  //commence le système de session
  session_start();
-
  /**
  * Auteur : Bajro Osmanovic
- * Date : 12.95.2025 → Modif : 
+ * Date : 12.05.2025 → Modif : 27.05.2025
  * Description : page du formulaire d'ajout d'un vélo
  */
 // Inclusion des fichiers de configuration et de gestion de la base de données
@@ -27,10 +26,7 @@ $communes = $db->GetAllCommunesDropDown();
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
         <link rel="stylesheet" href="../../../../ressources/css/codepen.css">
         <!-- Inclure Bootstrap JS et jQuery -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-       
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>       
         <title>FindYourBike</title>
     </head>
 <body>
@@ -38,7 +34,7 @@ $communes = $db->GetAllCommunesDropDown();
   <div class="container">
     <a href="../Accueil/AccueilCommune.php" class="btn-back">← Retour</a>
     <h1>Ajout d'un vélo trouvé</h1>
-    <small> * : indique les champs obligatoire</small>
+    <small> * : indique les champs obligatoires</small>
     <form action="../../Controller/ChecksFormulaires/FormulaireBikeCheck.php" method="post" enctype="multipart/form-data">
     <?php 
         $Champs = [
@@ -115,17 +111,17 @@ $communes = $db->GetAllCommunesDropDown();
                         // permet de sauver le choix de l'utilisateurs
                         if($_SESSION["FK_color"] == $color["ID_color"])
                         {
-                            echo '<option value="'. $color["ID_color"] .'" selected>'. $color["colName"] .'</option>"';
+                            echo '<option value="'. $color["ID_color"] .'" selected>'. $color["colName"] .'</option>';
                         }
                         else
                         {
-                            echo '<option value="'. $color["ID_color"] .'">'. $color["colName"] .'</option>"';
+                            echo '<option value="'. $color["ID_color"] .'">'. $color["colName"] .'</option>';
                         }
                     }
                     // si la variable n'existe pas, alors crée le dropdown sans chercher a mettre une valeur en selected   
                     else
                     {
-                        echo '<option value="'. $color["ID_color"] .'">'. $color["colName"] .'</option>"';
+                        echo '<option value="'. $color["ID_color"] .'">'. $color["colName"] .'</option>';
                     }
                 }
             ?>
@@ -157,17 +153,17 @@ $communes = $db->GetAllCommunesDropDown();
                         // permet de sauver le choix de l'utilisateurs
                         if($_SESSION["FK_brand"] == $brand["ID_brand"])
                         {
-                            echo '<option value="'. $brand["ID_brand"] .'" selected>'. $brand["braName"] .'</option>"';
+                            echo '<option value="'. $brand["ID_brand"] .'" selected>'. $brand["braName"] .'</option>';
                         }
                         else
                         {
-                            echo '<option value="'. $brand["ID_brand"] .'">'. $brand["braName"] .'</option>"';
+                            echo '<option value="'. $brand["ID_brand"] .'">'. $brand["braName"] .'</option>';
                         }
                     }   
                     // si la variable n'existe pas, alors crée le dropdown sans chercher a mettre une valeur en selected
                     else
                     {
-                        echo '<option value="'. $brand["ID_brand"] .'">'. $brand["braName"] .'</option>"';
+                        echo '<option value="'. $brand["ID_brand"] .'">'. $brand["braName"] .'</option>';
                     }
                 }
             ?>
@@ -199,17 +195,17 @@ $communes = $db->GetAllCommunesDropDown();
                             // permet de sauver le choix de l'utilisateurs
                             if($_SESSION["FK_size"] == $size["ID_size"])
                             {
-                                echo '<option value="'. $size["ID_size"] .'" selected>'. $size["sizSize"] .'</option>"';
+                                echo '<option value="'. $size["ID_size"] .'" selected>'. $size["sizSize"] .'</option>';
                             }
                             else
                             {
-                                echo '<option value="'. $size["ID_size"] .'">'. $size["sizSize"] .'</option>"';
+                                echo '<option value="'. $size["ID_size"] .'">'. $size["sizSize"] .'</option>';
                             }
                         }  
                         // si la variable n'existe pas, alors crée le dropdown sans chercher a mettre une valeur en selected
                         else
                         {
-                            echo '<option value="'. $size["ID_size"] .'">'. $size["sizSize"] .'</option>"';
+                            echo '<option value="'. $size["ID_size"] .'">'. $size["sizSize"] .'</option>';
                         }
                     }
                 ?>
@@ -235,7 +231,7 @@ $communes = $db->GetAllCommunesDropDown();
                 // parcours le tableau des communes
                 foreach ($communes as $commune) 
                 {
-                    // si les communes ont une inscription valide, alors il crée un choix de plus pour la liste déroulante.
+                    // si les communes ont une inscription  valide, alors il crée un choix de plus pour la liste déroulante.
                     if ($commune["comInscription"] == 1) 
                     {
                         // contrôle si la variable existe
@@ -285,12 +281,18 @@ $communes = $db->GetAllCommunesDropDown();
         </div>
     </div>
     <?php 
-        echo  $_SESSION["MessageAdd"];
+        if (isset($_SESSION["MessageAdd"])) 
+        {
+            echo $_SESSION["MessageAdd"];
+        }
     ?>
     <div class="text-center">
         <button type="submit" class="btn">Soumettre le formulaire</button>
     </div>
 </form>
-
-</body>
+<?php 
+    // supprime les messages pour les prochaine ouverture de formulaire
+    unset($_SESSION["ErrorMessageColor"], $_SESSION["ErrorMessagePlace"], $_SESSION["ErrorMessageFrameNumber"], $_SESSION["ErrorMessageBrand"], $_SESSION["ErrorMessageDate"], $_SESSION["ErrorMessageCommune"], $_SESSION["MessageAdd"], $_SESSION["ErrorMessageImage"]); // etc.
+    ?>
+    </body>
 </html>
