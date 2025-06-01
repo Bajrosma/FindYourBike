@@ -1,10 +1,9 @@
 <?php
     //commence le système de session
     session_start();
-
     /**
      * Auteur : Bajro Osmanovic
-     * Date : 21.05.2025 → Modif : 
+     * Date : 21.05.2025 → Modif : 28.05.2025
      * Description : page affichants les statistiques 
      */
     // Inclusion des fichiers de configuration et de gestion de la base de données
@@ -16,6 +15,9 @@
     $sizes = $db->GetAllSizes();
     $brands = $db->GetAllBrands();
     $colors = $db->GetAllColors();
+    // Sécurisation des entrées utilisateur
+    $year = isset($_POST["Year"]) ? intval($_POST["Year"]) : null;
+    $trimester = isset($_POST["trimester"]) ? intval($_POST["trimester"]) : null;
     // récupèrer toutes les informations pour l'affichage 
     if(isset($_POST["trimester"]))
     {
@@ -29,18 +31,30 @@
     $total = count($bikes);
     // fixe le nombre de vélo non rendu à 0 
     $notRender = 0;
-    // repasse en revu tout les vélos et compte les vélos qui ne sont pas rendu
-    foreach($bikes as $bike)
+    // permet de savoir si des vélos sont présent à cette periode
+    $dataFounded = $total > 0;
+    //si des données sont présentes alors execute la suite sinon n'affiche rien.
+    if($total > 0)
     {
-        if($bike["bikResitutionDate"] == NULL)
-        {  
-            $notRender = $notRender + 1;
-        }
+      // permet l'affichage des données
+      $dataFounded = true;
+      // repasse en revu tout les vélos et compte les vélos qui ne sont pas rendu
+      foreach($bikes as $bike)
+      {
+          if($bike["bikResitutionDate"] == NULL)
+          {  
+              $notRender = $notRender + 1;
+          }
+      }
+      // calcule le pourcentage des vélos rendu
+      $rendered = round(100/$total * ($total - $notRender), 2);
+      // calcule le pourcentage des vélos non rendu
+      $notRender = round(100/$total * $notRender, 2);
     }
-    // calcule le pourcentage des vélos rendu
-    $rendered = round(100/$total * ($total - $notRender), 2);
-    // calcule le pourcentage des vélos non rendu
-    $notRender = round(100/$total * $notRender, 2);
+    else
+    {
+      $dataFounded = false;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -50,9 +64,6 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
         <link rel="stylesheet" href="../../../ressources/css/codepen.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Inclure Bootstrap JS et jQuery -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
        
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>FindYourBike</title>
@@ -66,14 +77,16 @@
           <h1>Statistique <?php 
           if(isset($_POST["trimester"]))
           {
-          echo $_POST["Year"] . ", Semestre" . $_POST["trimester"];
+            echo htmlspecialchars($_POST["Year"]) . ", Semestre" . htmlspecialchars($_POST["trimester"]);
           }
           else 
           {
-            echo $_POST["Year"];
+            echo htmlspecialchars($_POST["Year"]);
           }
           
-          ?></h1>
+          ?>
+          </h1>
+          <?php if ($dataFounded) { ?>
           <div id="graph"></div>
           <br>
           <div style="margin-bottom: 15px;">
@@ -86,7 +99,7 @@
                       // parcours le tableau des marques 
                       foreach($brands as $brand )
                       {
-                          echo '<option value="'. $brand["braName"] .'">'. $brand["braName"] .'</option>"';
+                          echo '<option value="'. $brand["braName"] .'">'. $brand["braName"] .'</option>';
                       }
                   ?>
               </select>
@@ -98,7 +111,7 @@
                       // parcours le tableau des tailles         
                       foreach($sizes as $size )
                       {
-                          echo '<option value="'. $size["sizSize"] .'">'. $size["sizSize"] .'</option>"';
+                          echo '<option value="'. $size["sizSize"] .'">'. $size["sizSize"] .'</option>';
                       }
                   ?>
               </select>
@@ -110,7 +123,7 @@
                       // parcours le tableau des couleurs
                       foreach($colors as $color )
                       {
-                          echo '<option value="'. $color["colName"] .'">'. $color["colName"] .'</option>"';
+                          echo '<option value="'. $color["colName"] .'">'. $color["colName"] .'</option>';
                       }
                   ?>
               </select>
@@ -135,19 +148,19 @@
                           foreach($bikes as $bike)
                           {
                                   // Numéro de serie du cadre 
-                                  echo '<tr><td>' . $bike["bikFrameNumber"] . '</td>';
+                                  echo '<tr><td>' .htmlspecialchars($bike["bikFrameNumber"]) . '</td>';
                                   // Marque du vélo 
-                                  echo '<td>' . $bike["braName"] . '</td>';
+                                  echo '<td>' . htmlspecialchars($bike["braName"]) . '</td>';
                                   // Taille du vélo 
-                                  echo '<td>' . $bike["sizSize"] . '</td>';
+                                  echo '<td>' . htmlspecialchars($bike["sizSize"]) . '</td>';
                                   // Couleur du vélo 
-                                  echo '<td>' . $bike["colName"] . '</td>';
+                                  echo '<td>' . htmlspecialchars($bike["colName"]) . '</td>';
                                   // lieu ou le vélo a été retrouvé
-                                  echo '<td>' . $bike["bikPlace"] . '</td>';
+                                  echo '<td>' . htmlspecialchars($bike["bikPlace"]) . '</td>';
                                   // date de la découverte du vélo 
-                                  echo '<td>' . $bike["bikDate"] . '</td>';
+                                  echo '<td>' . htmlspecialchars($bike["bikDate"]) . '</td>';
                                   // Commune oû le vélo est stocker 
-                                  echo '<td>' . $bike["comName"] . '</td>';
+                                  echo '<td>' . htmlspecialchars($bike["comName"]) . '</td>';
                                 // affiche si il a été rendu ou pas 
                                 if($bike["bikResitutionDate"] == NULL)
                                 {
@@ -161,11 +174,18 @@
                       ?>
                   </tbody>
               </table>
-            </div>          
+            </div>   
+            <?php 
+          }
+          else 
+          {
+            // affiche un message si aucune données est trouvé
+            echo '<p>Aucune donnée trouvée durant cette période</p>';
+          }
+           ?>       
         </div>
     
-    </bod<>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    </body>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
@@ -203,27 +223,23 @@
             row.style.display = show ? "" : "none";
         });
     }
-
       // Script venant de Code Pen
-      Highcharts.chart('graph', {
-        chart: {
-          type: 'pie'
-        },
-        title: {
-          text: 'Répartition des vélos rendu ou pas'
-        },
-        series: [{
-          name: 'Statut',
-          colorByPoint: true,
-          data: [{
-            name: 'Non-Rendu',
-            y: <?php echo $notRender; ?>,
-            drilldown: 'nonRendu'
-          }, {
-            name: 'Rendu',
-            y: <?php echo $rendered; ?>,
-            drilldown: 'rendu'
-          }]
-        }]
-      });
+      document.addEventListener("DOMContentLoaded", () => {
+            Highcharts.chart('graph', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Répartition des vélos rendus ou non'
+                },
+                series: [{
+                    name: 'Statut',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Non Rendu', y: <?= $notRender ?> },
+                        { name: 'Rendu', y: <?= $rendered ?> }
+                    ]
+                }]
+            });
+        });
 </script>
