@@ -7,8 +7,8 @@ session_start();
 * Description :    fichier php qui permet de supprimer une personne
 */
 //ajoute le fichier qui gère les requette SQL
-require_once('../Model/config.php');
-require_once('../Model/database.php');
+require_once('../../Model/config.php');
+require_once('../../Model/database.php');
 // supprime la personne selectionner
 Database::getInstance()->DeleteOnePerson($_GET["ID"]); 
 
