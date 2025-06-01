@@ -1,22 +1,18 @@
 <?php
+//démarrer une session
 session_start();
-
 /**
  * Auteur : Bajro Osmanovic
- * Date : 09.05.2025 → Modif : 21.05.2025
- * Description : Vérification et enregistrer le formulaire d'inscirption
+ * Date : 09.05.2025 → Modif : 28.05.2025
+ * Description : Vérification et enregistrer du formulaire d'annonce d'un vélo
  */
-
 // Inclusion des fichiers de configuration et de gestion de la base de données
 require_once('../../Model/config.php');
 require_once('../../Model/database.php');
-
 // Création d'une instance de la classe Database pour l'accès à la base de données
 $db = Database::getInstance();
-
 // Vérification si l'utilisateur a soumis le formulaire (paramètre "Update" non défini dans l'URL)
 if (!isset($_GET["Update"])) {
-
     // Définir le répertoire de téléchargement des images
     $uploadDir = '../../../../userContent/img/ImageBike/';
     // Limite : maximum 3 fichiers
@@ -28,57 +24,63 @@ if (!isset($_GET["Update"])) {
         'bikPlace' => [
             // Adresse complète : lettres, chiffres, espaces, virgules, tirets, points, minimum 5 caractères
             'regex' => '/^[A-Za-zÀ-ÿ0-9\s,\.\-]{5,}$/u',
+            'label' => 'lieu de découverte',
             'error' => 'Veuillez entrer une adresse complète valide (au moins 5 caractères).'
         ],
         'bikFrameNumber' => [
             // Numéro de cadre : exactement 15 caractères alphanumériques
             'regex' => '/^[A-Za-z0-9]{5,15}$/',
-            'error' => 'Veuillez entrer un numéro de cadre valide (15 lettres ou chiffres).'
+            'label' => 'numéro de serie du cadre',
+            'error' => 'Veuillez entrer un numéro de cadre valide (entre 5 et 15 lettres ou chiffres).'
         ]
     ];
-    // Variable de validation globale
-    $isValid = true;  
-
-    $filesCount = count($_FILES['images']['name']);
-
-    if($filesCount > $maxFiles)
-    {
-        $_SESSION["ErrorMessageImage"] = "vous ne pouvez qu'uploader jusqu'à 3 images maximum !";
-    }
-    else 
-    {
-        if(isset($_FILES))
-        {
+    // Variable de validation globale pour le formulaire
+    $isValid = true;
+    // Compte le nombre de fichiers sélectionnés dans le champ 'images'
+    $filesCount = isset($_FILES['images']['name']) ? count($_FILES['images']['name']) : 0;
+    // Initialise un tableau pour stocker les noms uniques des fichiers enregistrés
+    $FileNames = [];
+    // Vérifie si le nombre de fichiers dépasse la limite autorisée
+    if ($filesCount > $maxFiles) {
+        $_SESSION["ErrorMessageImage"] = "Vous ne pouvez uploader que 3 images maximum !";
+    } 
+    // Si le nombre de fichiers est dans les limites autorisées
+    else {
+        // Vérifie que l'utilisateur a bien sélectionné au moins un fichier
+        if (!empty($_FILES['images']['name'][0])) {
             $files = $_FILES['images'];
-
-            foreach($_FILES['images']['name'] as $i => $fileName)
-            {
+            // Parcourt chaque fichier téléchargé
+            foreach ($_FILES['images']['name'] as $i => $fileName) {
+                // Récupère le chemin temporaire du fichier
                 $tmpName = $files['tmp_name'][$i];
+                // Détermine le type MIME du fichier (ex: image/jpeg)
                 $type = mime_content_type($tmpName);
+                // Récupère le nom de base du fichier (sans le chemin)
                 $name = basename($fileName);
-                // vérifie si l'extension du fichier et compatible
-                if(!in_array($type, $allowedTypes))
-                {
-                    $_SESSION["ErrorMessageImage"] = "le fichier $name n'est pas une image valide !";
+                // Vérifie si le type MIME du fichier fait partie des types autorisés
+                if (!in_array($type, $allowedTypes)) {
+                    $_SESSION["ErrorMessageImage"] = "Le fichier $name n'est pas une image valide !";
                     $isValid = false;
-                    continue;
+                    continue; // Passe au fichier suivant
                 }
-                // préparation du chemin de stockage de l'image.
-                $uniqueName = uniqid()."-".$name;
-                $destination = $uploadDir . $name;
-                // si le déplacement réussi 
-                if(move_uploaded_file($tmpName, $destination))
-                {
-                    //echo "image $name enregistrée avec succès.";
+                // Génère un nom unique pour éviter les conflits (préfixe unique + nom original)
+                $uniqueName = uniqid() . "-" . $name;
+                // Définit le chemin de destination complet pour enregistrer l'image
+                $destination = $uploadDir . $uniqueName;
+                // Tente de déplacer le fichier depuis le dossier temporaire vers le dossier de destination
+                if (move_uploaded_file($tmpName, $destination)) {
+                    // Enregistrement réussi : ajoute le nom du fichier dans le tableau
                     $FileNames[] = $uniqueName;
-                }
-                // si le déplacement ne réussi pas 
-                else 
-                {
-                    $_SESSION["ErrorMessageImage"] = "le fichier $name n'a pas pu être enregistrer !";
+                    unset($_SESSION["ErrorMessageImage"]);
+                } 
+                // Si l'enregistrement échoue, stocke un message d'erreur en session
+                else {
+                    $_SESSION["ErrorMessageImage"] = "Le fichier $name n'a pas pu être enregistré !";
+                    $isValid = false;
                 }
             }
         }
+        // si aucune donnée trouvé
         else
         {
             $isValid = false;
@@ -88,73 +90,44 @@ if (!isset($_GET["Update"])) {
 
     // Boucle pour valider chaque champ
     foreach ($fields as $field => $config) {
-        $value = $_POST[$field] ?? ''; // Récupère la valeur du champ, ou vide si non défini
+        $value = trim($_POST[$field] ?? ''); // Récupère la valeur du champ, ou vide si non défini
         $_SESSION[$field] = $value; // Stocke la valeur dans la session pour réaffichage
+        $shortName = ucfirst(str_replace("bik", "", $field)); // Exemple : bikFrameNumber → FrameNumber
         // Vérification si le champ est vide
         if (empty($value)) {
             // Si le champ est vide, ajoute un message d'erreur dans la session
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "Veuillez ne pas laisser le champ " . ucfirst(str_replace("bui", "", $field)) . " vide !";
+            $_SESSION["ErrorMessage$shortName"] = "Veuillez ne pas laisser le champ {$config['label']} vide !";
             $isValid = false;
         // Vérification de la correspondance avec l'expression régulière
         } elseif (!preg_match($config['regex'], $value)) {
             // Si la validation échoue, ajoute un message d'erreur spécifique
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "{$config['error']}";
+            $_SESSION["ErrorMessage$shortName"] = "{$config['error']}";
             $isValid = false;
         } else {
             // Si la validation est réussie, efface le message d'erreur
-            $_SESSION["ErrorMessage" . ucfirst(str_replace("bik", "", $field))] = "";
+            unset($_SESSION["ErrorMessage$shortName"]);
         }
     }
-    // Vérification et sauvegarde du champ 'bikDate'
-    if (!isset($_POST["bikDate"]) || empty($_POST["bikDate"])) {
-        $isValid = false;
-        $_SESSION["ErrorMessageDate"] = "La date est requise.";
-        $_SESSION["bikDate"] = "";
-    } else {
-        $_SESSION["bikDate"] = $_POST["bikDate"];
-        $_SESSION["ErrorMessageDate"] = "";
+    // Vérification et sauvegarde des champs obligatoires liés au vélo (dont la date et les clés étrangères)
+    $requiredFields = ['bikDate', 'FK_color', 'FK_brand', 'FK_size', 'FK_commune'];
+    // Parcourt chaque champ requis pour effectuer la validation
+    foreach ($requiredFields as $field) {
+        // Vérifie si le champ est vide
+        if (empty($_POST[$field])) {
+            // Marque le formulaire comme invalide
+            $isValid = false;
+            // Enregistre un message d'erreur spécifique dans la session (ex: "Ce champ est requis.")
+            // Le nom de la clé est généré dynamiquement : FK_color devient "ErrorMessageColor"
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("FK_", "", $field))] = "Ce champ est requis.";
+            // Stocke une valeur vide dans la session pour le champ concerné
+            $_SESSION[$field] = "";
+        } else {
+            // Si le champ est rempli, on l'enregistre en session pour le réafficher dans le formulaire
+            $_SESSION[$field] = $_POST[$field];
+            // Réinitialise le message d'erreur pour ce champ (au cas où il y en avait un auparavant)
+            $_SESSION["ErrorMessage" . ucfirst(str_replace("FK_", "", $field))] = "";
+        }
     }
-
-    // Vérification et sauvegarde du champ 'FK_color'
-    if (!isset($_POST["FK_color"]) || empty($_POST["FK_color"])) {
-        $isValid = false;
-        $_SESSION["ErrorMessageColor"] = "La couleur est requise.";
-        $_SESSION["FK_color"] = "";
-    } else {
-        $_SESSION["FK_color"] = $_POST["FK_color"];
-        $_SESSION["ErrorMessageColor"] = "";
-    }
-
-    // Vérification et sauvegarde du champ 'FK_brand'
-    if (!isset($_POST["FK_brand"]) || empty($_POST["FK_brand"])) {
-        $isValid = false;
-        $_SESSION["ErrorMessageBrand"] = "La marque est requise.";
-        $_SESSION["FK_brand"] = "";
-    } else {
-        $_SESSION["FK_brand"] = $_POST["FK_brand"];
-        $_SESSION["ErrorMessageBrand"] = "";
-    }
-
-    // Vérification et sauvegarde du champ 'FK_size'
-    if (!isset($_POST["FK_size"]) || empty($_POST["FK_size"])) {
-        $isValid = false;
-        $_SESSION["ErrorMessageSize"] = "La taille est requise.";
-        $_SESSION["FK_size"] = "";
-    } else {
-        $_SESSION["FK_size"] = $_POST["FK_size"];
-        $_SESSION["ErrorMessageSize"] = "";
-    }
-
-    // Vérification et sauvegarde du champ 'FK_commune'
-    if (!isset($_POST["FK_commune"]) || empty($_POST["FK_commune"])) {
-        $isValid = false;
-        $_SESSION["ErrorMessageCommune"] = "La commune est requise.";
-        $_SESSION["FK_commune"] = "";
-    } else {
-        $_SESSION["FK_commune"] = $_POST["FK_commune"];
-        $_SESSION["ErrorMessageCommune"] = "";
-    }
-
 
     // Si tous les champs sont valides
     if ($isValid) {
@@ -174,6 +147,9 @@ if (!isset($_GET["Update"])) {
         // Vider les données de la session après la mise à jour réussie
         foreach ($fields as $field => $config) {
             unset($_SESSION[$field]); // Supprime la donnée du champ de la session
+        }
+        foreach ($requiredFields as $field) {
+            unset($_SESSION[$field]);
         }
     } else {
         // Si des erreurs ont été détectées, le message d'ajout reste vide
