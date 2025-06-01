@@ -30,9 +30,6 @@ $_SESSION["MessageAdd"] = "";
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
         <link rel="stylesheet" href="../../../../ressources/css/codepen.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Inclure Bootstrap JS et jQuery -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
        
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>FindYourBike</title>
@@ -42,8 +39,8 @@ $_SESSION["MessageAdd"] = "";
     </head>
     <body>
         <div class="table-container">
-            <button onclick="history.back()" class="btn-back">← Retour</button> 
-            <button onclick="window.location.href='ListBikeRendered.php';" style="margin-bottom: 15px;">Vélos rendus</button>
+            <a href="../Accueil/AccueilCommune.php" class="btn-back">← Retour</a>
+            <button onclick="window.location.href='ListBikeRenderedPage.php';" style="margin-bottom: 15px;">Vélos rendus</button>
             <h2>Liste des vélos annoncé</h2>
             <div style="margin-bottom: 15px;">
                 <label for="filterSerial">Numéro de série :</label>
@@ -140,12 +137,12 @@ $_SESSION["MessageAdd"] = "";
                                         echo '</div>'; // Fin des images
                                         // Bouton précédent
                                         echo '<button class="carousel-control-prev" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="prev">';
-                                        echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+                                        echo '<span class="carousel-icon-prev" aria-hidden="true"></span>';
                                         echo '<span class="visually-hidden">Précédent</span>';
                                         echo '</button>';
                                         // Bouton suivant
                                         echo '<button class="carousel-control-next" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="next">';
-                                        echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                                        echo '<img class="Logo" src="../../../../userContent/img/Logo/Arrow.webp">';
                                         echo '<span class="visually-hidden">Suivant</span>';
                                         echo '</button>';
                                         echo '</div>'; // Fin du carrousel
