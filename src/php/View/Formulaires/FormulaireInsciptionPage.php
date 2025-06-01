@@ -3,7 +3,7 @@
 session_start();
 /**
  * Auteur : Bajro Osmanovic
- * Date : 09.95.2025 → Modif : 12.05.2025
+ * Date : 09.05.2025 → Modif : 27.05.2025
  * Description : page du formulaire  d'inscription
  */
 
@@ -24,10 +24,7 @@ $displayErrors = true;
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
         <link rel="stylesheet" href="../../../../ressources/css/codepen.css">
         <!-- Inclure Bootstrap JS et jQuery -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-       
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>       
         <title>FindYourBike</title>
     </head>
 <body>
@@ -46,7 +43,7 @@ $displayErrors = true;
             'comEmail' => 'Email*',
             'comTel' => 'Tel*',
             'comLastName' => 'Nom du responsable*',
-            'comFisrtName' => 'Prénom du responsable*',
+            'comFirstName' => 'Prénom du responsable*',
             'comFonction' => 'Fonction*',
         ];
 
@@ -74,8 +71,8 @@ $displayErrors = true;
                     <small class='text-muted'>$example</small>
                 </div>
                 <div class='col-sm-8'>
-                    <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value'>
-                    <small class='text-danger'>$errorMessage</small>
+                    <input type='text' class='form-control' name='$Champ' id='$Champ' value='$value' aria-describedby='{$Champ}Help'>
+                    <small id='{$Champ}Help' class='text-danger'>$errorMessage</small>
                 </div>
             </div>";
         }
@@ -89,6 +86,12 @@ $displayErrors = true;
         <button type="submit" class="btn">Soumettre le formulaire</button>
     </div>
 </form>
-
+<?php
+    foreach ($Champs as $Champ => $_) {
+        unset($_SESSION["ErrorMessage" . ucfirst(str_replace("com", "", $Champ))]);
+        unset($_SESSION[$Champ]);
+    }
+    unset($_SESSION["MessageAdd"]);
+?>
 </body>
 </html>
