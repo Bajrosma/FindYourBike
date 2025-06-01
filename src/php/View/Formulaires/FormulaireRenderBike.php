@@ -4,8 +4,8 @@
 
  /**
  * Auteur : Bajro Osmanovic
- * Date : 12.95.2025 → Modif : 
- * Description : page du formulaire d'ajout d'un vélo
+ * Date : 12.05.2025 → Modif : 28.05.2025
+ * Description : page du formulaire de rendu d'un vélo
  */
 // Inclusion des fichiers de configuration et de gestion de la base de données
 require_once('../../Model/config.php');
@@ -17,13 +17,16 @@ $sizes = $db->GetAllSizes();
 $brands = $db->GetAllBrands();
 $colors = $db->GetAllColors();
 $communes = $db->GetAllCommunesDropDown();
+// contrôledes valeurs
+$id = isset($_GET["ID"]) ? htmlspecialchars($_GET["ID"]) : '';
+$dateValue = htmlspecialchars($_SESSION['bikRestitutionDate'] ?? '');
 ?>
 
 <html lang="fr">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--liens avec le css personnelle et css de bootstrap-->
+        <!--liens avec le CSS personnalisé et css de bootstrap-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"> 
         <link rel="stylesheet" href="../../../../ressources/css/codepen.css">
         <!-- Inclure Bootstrap JS et jQuery -->
@@ -35,16 +38,16 @@ $communes = $db->GetAllCommunesDropDown();
     </head>
     <body>
         <div class="container">
-            <a href="../Listes/ListeBike.php" class="btn-back">← Retour</a>
+            <a href="../Listes/ListeBikePage.php" class="btn-back">← Retour</a>
             <h1>Remise d'un vélo trouvé</h1>
-            <small> * : indique les champs obligatoire</small>
-            <small>information du propriétaire</small>
-            <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $_GET["ID"]?>" method="post" enctype="multipart/form-data">
+            <small> * : indique les champs obligatoires</small>
+            <small>Informations du propriétaire</small>
+            <form action="../../Controller/ChecksFormulaires/FormulaireRenderCheck.php?ID=<?php echo $id?>" method="post" enctype="multipart/form-data">
                 <?php 
                     $Champs = [
                         'perLastName' => 'Nom*',
                         'perFirstName' => 'prénom*',
-                        'perAdress' => 'Adress*',
+                        'perAdress' => 'Adresse*',
                         'perNPA' => 'NPA*',
                         'perCity' => 'Ville*',
                         'perEmail' => 'Adresse email*',
@@ -79,7 +82,7 @@ $communes = $db->GetAllCommunesDropDown();
                         </div>";
                     }
                 ?>
-                <small>information du vélo</small>
+                <small>Informations du vélo</small>
                 <!-- Date de rendu -->
                 <div class='form-group row mb-3 align-items-start'>
                     <div class='col-sm-4 text-start'>
@@ -87,7 +90,7 @@ $communes = $db->GetAllCommunesDropDown();
                         <small class='text-muted'>22.01.2023</small>
                     </div>
                     <div class='col-sm-8'>
-                        <input class='form-control' type="date" id="bikRestitutionDate" name="bikRestitutionDate">
+                        <input class='form-control' type="date" id="bikRestitutionDate" name="bikRestitutionDate" value="<?php echo $dateValue ?>">
                         <?php
                             // si le message d'erreur pour image est présent alors affiché
                             if(isset($_SESSION["ErrorMessageDate"]))
@@ -101,8 +104,8 @@ $communes = $db->GetAllCommunesDropDown();
                 <div class='form-group row mb-3 align-items-start'>
                     <div class='col-sm-4 text-start'>
                         <!-- Champ permettant de sélectionner plusieurs fichiers images -->
-                        <label for="proPathFile" class='form-label fw-bold'>Choisir jusqu'à 3 images :</label>
-                        <small class='text-muted'>Image.jpg</small>
+                        <label for="proPathFile" class='form-label fw-bold'>Choisir jusqu'à 3 preuves :</label>
+                        <small class='text-muted'>Image.jpg, ticketCaisse.pdf</small>
                     </div>
                     <div class='col-sm-8'>
                         <!-- Le nom "images[]" indique un tableau d'images, et "multiple" permet d'en sélectionner plusieurs -->
@@ -118,15 +121,26 @@ $communes = $db->GetAllCommunesDropDown();
                 </div>
                 <?php
                     // sinon contrôler le message d'ajout 
-                    if(isset($_SESSION["MessageAdd"]))
+                    if (isset($_SESSION["MessageAdd"])) 
                     {
-                        echo  $_SESSION["MessageAdd"];
+                        echo "<div class='alert alert-success'>" . $_SESSION["MessageAdd"] . "</div>";
                     }
                 ?>
                 <div class="text-center">
                     <button type="submit" class="btn">Soumettre le formulaire</button>
                 </div>
             </form>
+            <?php
+                foreach ($Champs as $Champ => $_) {
+                    unset($_SESSION["ErrorMessage" . ucfirst(str_replace("per", "", $Champ))]);
+                    unset($_SESSION[$Champ]);
+                }
+                unset($_SESSION["MessageAdd"]);
+                // unset les varibles de dates
+                unset($_SESSION['bikRestitutionDate'], $_SESSION["ErrorMessageDate"]);
+                // unset les varibles de fichiers
+                unset($_SESSION['proPathFile'], $_SESSION["ErrorMessageImage"]);
+            ?>
         </div>
     </body>
 </html>
