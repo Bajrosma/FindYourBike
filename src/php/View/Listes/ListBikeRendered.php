@@ -14,6 +14,7 @@ require_once('../../Model/database.php');
 $db = Database::getInstance();
 // récupèrer toute les communes 
 $data = $db->GetAllDataBikes();
+$proofs = $db->GetAllProofsBikes();
 $bikes = $db->GetAllBikesRendered();
 // information nécessaire au liste décourlantes 
 $sizes = $db->GetAllSizes();
@@ -91,6 +92,7 @@ $_SESSION["MessageAdd"] = "";
                             <th>Date de rendu</th>
                             <th>Commune de référence</th>
                             <th>Propriètaire</th>
+                            <th>Preuve</th>
                             <?php 
                             // Affichage des options en fonctions de la sessions
                             if($_SESSION["rights"] == 1)
@@ -140,7 +142,7 @@ $_SESSION["MessageAdd"] = "";
                                         echo '</button>';
                                         // Bouton suivant
                                         echo '<button class="carousel-control-next" type="button" data-bs-target="#' . $carouselId . '" data-bs-slide="next">';
-                                        echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+                                        echo '<img class="Logo" src="../../../../userContent/img/Logo/Arrow.webp">';
                                         echo '<span class="visually-hidden">Suivant</span>';
                                         echo '</button>';
                                         echo '</div>'; // Fin du carrousel
@@ -165,8 +167,24 @@ $_SESSION["MessageAdd"] = "";
                                     echo '<td>' . $bike["bikDate"] . '</td>';
                                     // Commune oû le vélo est stocker 
                                     echo '<td>' . $bike["comName"] . '</td>';
-                                    // Commune oû le vélo est stocker 
+                                    // personne à qui il a été rendu
                                     echo '<td><a href="../DetailPersonne.php?ID=' . $bike["ID_personne"] . '">' . $bike["perLastName"] . " " . $bike["perFirstName"] . '</td>';
+                                    // Affichage des preuves
+                                    if (!empty($proofs)) {
+                                        $proofFound = false;
+                                        foreach ($proofs as $proof) {
+                                            if ($proof["FK_bike"] == $bike["ID_bike"]) {
+                                                echo "<td><a href='../../../../userContent/img/ImageProof/" . $proof["proPathFile"] . 
+                                                "' target='_blank'>voir la preuve " . $proof["proPathFile"] . "</a></td>";
+                                                $proofFound = true;
+                                            }
+                                        }
+                                        if (!$proofFound) {
+                                            echo "<td>Pas de preuve trouvée</td>";
+                                        }
+                                    } else {
+                                        echo "<td>Pas de preuve trouvée</td>";
+                                    }
                                     // Affichage des options en fonctions de la sessions
                                     if($_SESSION["rights"] == 1)
                                     {
